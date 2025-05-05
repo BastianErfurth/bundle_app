@@ -11,6 +11,8 @@ abstract class AppTheme {
 
   static final darkTheme = ThemeData.from(
     colorScheme: ColorScheme.fromSeed(
-        brightness: Brightness.dark, seedColor: Palette.mediumGreenBlue),
+      brightness: Brightness.dark,
+      seedColor: Palette.mediumGreenBlue,
+    ),
   );
 }
