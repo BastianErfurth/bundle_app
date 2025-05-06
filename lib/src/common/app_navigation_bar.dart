@@ -20,31 +20,27 @@ class AppNavigationBar extends StatelessWidget {
           NavigationDestination(
               icon: Icon(
                 Icons.home,
-                color: Palette.buttonTextGreenBlue,
               ),
               label: "Home"),
           NavigationDestination(
               icon: Icon(
                 Icons.attach_file,
-                color: Palette.buttonTextGreenBlue,
               ),
               label: "Kosten"),
           NavigationDestination(
               icon: Icon(
                 Icons.euro,
-                color: Palette.buttonTextGreenBlue,
               ),
               label: "Verträge"),
           NavigationDestination(
               icon: Icon(
                 Icons.calendar_month_rounded,
-                color: Palette.buttonTextGreenBlue,
               ),
               label: "Kalender"),
           NavigationDestination(
               icon: Icon(
                 Icons.settings,
-                color: Palette.buttonTextGreenBlue,
+                size: 28,
               ),
               label: "Settings"),
         ],

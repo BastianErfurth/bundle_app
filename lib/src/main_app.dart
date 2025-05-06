@@ -1,4 +1,5 @@
 import 'package:bundle_app/src/feature/autentification/presentation/login_scree.dart';
+import 'package:bundle_app/src/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class MainApp extends StatelessWidget {
@@ -6,8 +7,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: LogInScreen(),
+    return MaterialApp(
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.light,
+      home: const LogInScreen(),
     );
   }
 }

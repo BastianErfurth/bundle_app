@@ -3,29 +3,32 @@ import 'package:flutter/material.dart';
 
 abstract class AppTheme {
   static final lightTheme = ThemeData(
+    iconTheme: IconThemeData(color: Palette.mediumGreenBlue),
     brightness: Brightness.light,
     colorScheme: ColorScheme.fromSeed(
       brightness: Brightness.light,
       seedColor: Palette.mediumGreenBlue,
     ),
-    scaffoldBackgroundColor: Palette.backgroundGreenBlue,
   ).copyWith(
-    textTheme: ThemeData.light().textTheme.copyWith(
-          displaySmall:
-              TextStyle(color: Palette.textWhite, fontWeight: FontWeight.bold),
+    textTheme: ThemeData.light().textTheme.apply(
+          bodyColor: Palette.textWhite,
+          displayColor: Palette.textWhite,
         ),
+    scaffoldBackgroundColor: Palette.backgroundGreenBlue,
   );
 
   static final darkTheme = ThemeData(
+    iconTheme: IconThemeData(color: Palette.mediumGreenBlue),
     brightness: Brightness.dark,
     colorScheme: ColorScheme.fromSeed(
       brightness: Brightness.dark,
       seedColor: Palette.mediumGreenBlue,
     ),
-    scaffoldBackgroundColor: Palette.backgroundGreenBlue,
   ).copyWith(
-    textTheme: ThemeData.dark().textTheme.copyWith(
-          displaySmall: TextStyle(color: Palette.textWhite),
+    textTheme: ThemeData.dark().textTheme.apply(
+          bodyColor: Palette.textWhite,
+          displayColor: Palette.textWhite,
         ),
+    scaffoldBackgroundColor: Palette.textWhite,
   );
 }
