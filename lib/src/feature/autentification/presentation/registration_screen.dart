@@ -1,23 +1,20 @@
-import 'package:bundle_app/src/common/app_navigation_bar.dart';
-import 'package:bundle_app/src/feature/autentification/presentation/registration_screen.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
-class LogInScreen extends StatefulWidget {
-  const LogInScreen({super.key});
+class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
 
   @override
-  State<LogInScreen> createState() => _LogInScreenState();
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
-class _LogInScreenState extends State<LogInScreen> {
-  final bool _isObscured = true;
+class _RegistrationScreenState extends State<RegistrationScreen> {
+  bool _isObscured = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: AppNavigationBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -37,43 +34,37 @@ class _LogInScreenState extends State<LogInScreen> {
               Text("Bundle", style: Theme.of(context).textTheme.titleMedium),
               SizedBox(height: 20),
               Text(
-                "Willkommen !",
+                "Nur kurz registriesen, dann gehts los...",
                 style: Theme.of(context)
                     .textTheme
-                    .displaySmall!
+                    .titleLarge!
                     .copyWith(fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: Column(
+                  spacing: 8,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormFieldWithoutIcon(
-                      labelText: "Email",
-                      hintText: "Emailadresse eingeben",
-                    ),
-                    SizedBox(height: 24),
+                        labelText: "Username", hintText: "Username"),
+                    TextFormFieldWithoutIcon(
+                        labelText: "Email", hintText: "Email"),
                     TextFormFieldWithIcon(
-                      isObscured: _isObscured,
-                      labelText: "Passwort",
-                      hintText: "Passwort eingeben",
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          "Passwort vergessen?",
-                        ),
-                      ),
-                    ),
+                        isObscured: _isObscured,
+                        labelText: "Passwort ",
+                        hintText: "Passwort"),
+                    TextFormFieldWithIcon(
+                        isObscured: _isObscured,
+                        labelText: "Passwort",
+                        hintText: "Passwort wiederholen"),
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton(
                         onPressed: () {},
                         child: Text(
-                          "Login",
+                          "Registrieren",
                         ),
                       ),
                     ),
@@ -125,18 +116,14 @@ class _LogInScreenState extends State<LogInScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 8,
                 children: [
-                  Text("Noch kein Konto?"),
+                  Text("Du bist bereits registriert?"),
                   TextButton(
                     onPressed: () {
                       setState(() {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => RegistrationScreen(),
-                          ),
-                        );
+                        Navigator.of(context).pop();
                       });
                     },
-                    child: Text("Registrieren"),
+                    child: Text("Login jetzt"),
                   ),
                 ],
               )
