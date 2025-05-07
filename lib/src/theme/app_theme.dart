@@ -30,5 +30,17 @@ abstract class AppTheme {
           displayColor: Palette.textWhite,
         ),
     scaffoldBackgroundColor: Palette.backgroundGreenBlue,
+    filledButtonTheme: FilledButtonThemeData(
+      style: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(Palette.textWhite),
+          foregroundColor: WidgetStatePropertyAll(Palette.darkGreenblue),
+          shadowColor: WidgetStatePropertyAll(Palette.textWhite),
+          elevation: WidgetStatePropertyAll(4),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          )),
+    ),
   );
 }

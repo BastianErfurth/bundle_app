@@ -17,7 +17,7 @@ class _LogInScreenState extends State<LogInScreen> {
       bottomNavigationBar: AppNavigationBar(),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(32.0),
+          padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
               Center(
@@ -104,6 +104,15 @@ class _LogInScreenState extends State<LogInScreen> {
                         onPressed: () {},
                         child: Text(
                           "Passwort vergessen?",
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton(
+                        onPressed: () {},
+                        child: Text(
+                          "Login",
                         ),
                       ),
                     ),
