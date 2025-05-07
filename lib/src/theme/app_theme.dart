@@ -35,7 +35,7 @@ abstract class AppTheme {
           backgroundColor: WidgetStatePropertyAll(Palette.textWhite),
           foregroundColor: WidgetStatePropertyAll(Palette.darkGreenblue),
           shadowColor: WidgetStatePropertyAll(Palette.textWhite),
-          elevation: WidgetStatePropertyAll(4),
+          elevation: WidgetStatePropertyAll(2),
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),

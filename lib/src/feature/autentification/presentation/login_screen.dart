@@ -119,6 +119,58 @@ class _LogInScreenState extends State<LogInScreen> {
                   ],
                 ),
               ),
+              SizedBox(height: 20),
+              Row(
+                spacing: 16,
+                children: [
+                  Expanded(
+                      child: Divider(
+                    color: Palette.textWhite,
+                  )),
+                  Text("Oder mit"),
+                  Expanded(
+                      child: Divider(
+                    color: Palette.textWhite,
+                  )),
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  FilledButton.icon(
+                      onPressed: () {},
+                      label: Center(
+                        child: Row(children: [
+                          Icon(Icons.apple),
+                          //Text("Login with Apple")
+                        ]),
+                      )),
+                  FilledButton(
+                      onPressed: () {},
+                      child: Center(
+                        child: Row(
+                          spacing: 4,
+                          children: [
+                            Icon(Icons.facebook),
+                            //Text("Login with Facebook")
+                          ],
+                        ),
+                      )),
+                ],
+              ),
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 8,
+                children: [
+                  Text("Noch kein Konto?"),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text("Registrieren"),
+                  ),
+                ],
+              )
             ],
           ),
         ),
