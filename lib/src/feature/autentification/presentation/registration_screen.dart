@@ -44,7 +44,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               SizedBox(
                 width: double.infinity,
                 child: Column(
-                  spacing: 10,
+                  spacing: 8,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormFieldWithoutIcon(
@@ -73,6 +73,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             },
                             icon: Icon(Icons.visibility_off)),
                         obscureText: _isObscured),
+                    SizedBox(height: 8),
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton(

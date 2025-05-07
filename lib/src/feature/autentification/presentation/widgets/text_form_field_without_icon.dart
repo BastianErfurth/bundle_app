@@ -13,6 +13,7 @@ class TextFormFieldWithoutIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 50,
       decoration: BoxDecoration(
         gradient: LinearGradient(
             colors: [Palette.lightGreenBlue, Palette.darkGreenblue]),
