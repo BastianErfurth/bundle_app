@@ -1,6 +1,6 @@
 import 'package:bundle_app/src/common/app_navigation_bar.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/registration_screen.dart';
-import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_with_icon.dart';
+import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
-  final bool _isObscured = true;
+  bool _isObscured = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,10 +54,20 @@ class _LogInScreenState extends State<LogInScreen> {
                       hintText: "Emailadresse eingeben",
                     ),
                     SizedBox(height: 24),
-                    TextFormFieldWithIcon(
-                      isObscured: _isObscured,
+                    TextFieldWithIcon(
                       labelText: "Passwort",
                       hintText: "Passwort eingeben",
+                      iconButton: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _isObscured = !_isObscured;
+                          });
+                        },
+                        icon: Icon(_isObscured
+                            ? Icons.visibility_off
+                            : Icons.visibility),
+                      ),
+                      obscureText: _isObscured,
                     ),
                     Align(
                       alignment: Alignment.centerRight,

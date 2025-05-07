@@ -1,4 +1,4 @@
-import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_with_icon.dart';
+import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Text("Bundle", style: Theme.of(context).textTheme.titleMedium),
               SizedBox(height: 20),
               Text(
-                "Nur kurz registriesen, dann gehts los...",
+                "Nur kurz registrieren, dann gehts los...",
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
@@ -44,21 +44,35 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               SizedBox(
                 width: double.infinity,
                 child: Column(
-                  spacing: 8,
+                  spacing: 10,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormFieldWithoutIcon(
                         labelText: "Username", hintText: "Username"),
                     TextFormFieldWithoutIcon(
                         labelText: "Email", hintText: "Email"),
-                    TextFormFieldWithIcon(
-                        isObscured: _isObscured,
-                        labelText: "Passwort ",
-                        hintText: "Passwort"),
-                    TextFormFieldWithIcon(
-                        isObscured: _isObscured,
-                        labelText: "Passwort",
-                        hintText: "Passwort wiederholen"),
+                    TextFieldWithIcon(
+                        labelText: "Passwort festlegen",
+                        hintText: "Passwort festlegen",
+                        iconButton: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isObscured = !_isObscured;
+                              });
+                            },
+                            icon: Icon(Icons.visibility_off)),
+                        obscureText: _isObscured),
+                    TextFieldWithIcon(
+                        labelText: "Passwort wiederholen",
+                        hintText: "Passwort wiederholen",
+                        iconButton: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isObscured = !_isObscured;
+                              });
+                            },
+                            icon: Icon(Icons.visibility_off)),
+                        obscureText: _isObscured),
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton(
