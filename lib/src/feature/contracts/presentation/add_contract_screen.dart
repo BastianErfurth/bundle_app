@@ -28,86 +28,155 @@ class _AddContractScreenState extends State<AddContractScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      FilledButton.icon(
-                          onPressed: () {},
-                          label: Row(
-                            children: [
-                              Icon(Icons.close),
-                              Text("Abbrechen"),
-                            ],
-                          )),
-                      FilledButton.icon(
-                          onPressed: () {},
-                          label: Row(
-                            children: [
-                              Icon(Icons.add_box_outlined),
-                              Text("Hinzufügen"),
-                            ],
-                          )),
-                    ],
-                  ),
-                  TopicHeadline(
-                      topicIcon: Icon(Icons.description_outlined),
-                      topicText: "Struktur"),
-                  ContractAttributes(
-                    textTopic: "Kategorie",
-                    iconButton: IconButton(
-                        onPressed: () {}, icon: Icon(Icons.expand_more)),
-                  ),
-                  SizedBox(height: 4),
-                  ContractAttributes(
-                    textTopic: "Stichwort eingeben",
-                    iconButton: IconButton(
-                        onPressed: () {}, icon: Icon(Icons.expand_more)),
-                  ),
-                  SizedBox(height: 16),
-                  TopicHeadline(
-                      topicIcon: Icon(Icons.description_outlined),
-                      topicText: "Vertragsparteien"),
-                  ContractAttributes(
-                    textTopic: "Profil",
-                    iconButton: IconButton(
-                        onPressed: () {}, icon: Icon(Icons.expand_more)),
-                  ),
-                  SizedBox(height: 4),
-                  ContractAttributes(
-                    textTopic: "Vertragspartner",
-                    iconButton: IconButton(
-                        onPressed: () {}, icon: Icon(Icons.expand_more)),
-                  ),
-                  SizedBox(height: 4),
-                  ContractAttributes(
-                    textTopic: "Vertragsnummer",
-                    iconButton: IconButton(
-                        onPressed: () {}, icon: Icon(Icons.expand_more)),
-                  ),
-                  SizedBox(height: 16),
-                  TopicHeadline(
-                      topicIcon: Icon(Icons.access_time_rounded),
-                      topicText: "Laufzeiten"),
-                  ContractAttributes(
-                    textTopic: "Vertragsstart",
-                    iconButton: IconButton(
-                        onPressed: () {}, icon: Icon(Icons.expand_more)),
-                  ),
-                  SizedBox(height: 4),
-                  ContractAttributes(
-                    textTopic: "Laufzeit",
-                    iconButton: IconButton(
-                        onPressed: () {}, icon: Icon(Icons.expand_more)),
-                  ),
-                  SizedBox(height: 4),
-                  ContractAttributes(
-                    textTopic: "Automatische Verlängerung",
-                    iconButton: IconButton(
-                        onPressed: () {}, icon: Icon(Icons.toggle_off)),
-                  ),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        FilledButton.icon(
+                            onPressed: () {},
+                            label: Row(
+                              children: [
+                                Icon(Icons.close),
+                                Text("Abbrechen"),
+                              ],
+                            )),
+                        FilledButton.icon(
+                            onPressed: () {},
+                            label: Row(
+                              children: [
+                                Icon(Icons.add_box_outlined),
+                                Text("Hinzufügen"),
+                              ],
+                            )),
+                      ],
+                    ),
+                    SizedBox(height: 24),
+                    TopicHeadline(
+                        topicIcon: Icon(Icons.description_outlined),
+                        topicText: "Struktur"),
+                    ContractAttributes(
+                      textTopic: "Kategorie",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                    ),
+                    SizedBox(height: 4),
+                    ContractAttributes(
+                      textTopic: "Stichwort eingeben",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                    ),
+                    SizedBox(height: 16),
+                    TopicHeadline(
+                        topicIcon: Icon(Icons.description_outlined),
+                        topicText: "Vertragsparteien"),
+                    ContractAttributes(
+                      textTopic: "Profil",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                    ),
+                    SizedBox(height: 4),
+                    ContractAttributes(
+                      textTopic: "Vertragspartner",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                    ),
+                    SizedBox(height: 4),
+                    ContractAttributes(
+                      textTopic: "Vertragsnummer",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                    ),
+                    SizedBox(height: 16),
+                    TopicHeadline(
+                        topicIcon: Icon(Icons.access_time_rounded),
+                        topicText: "Laufzeiten"),
+                    ContractAttributes(
+                      textTopic: "Vertragsstart",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                    ),
+                    SizedBox(height: 4),
+                    ContractAttributes(
+                      textTopic: "Laufzeit",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                    ),
+                    SizedBox(height: 4),
+                    ContractAttributes(
+                      textTopic: "Automatische Verlängerung",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.toggle_off)),
+                    ),
+                    SizedBox(height: 16),
+                    TopicHeadline(
+                        topicIcon: Icon(Icons.close), topicText: "Kündigung"),
+                    ContractAttributes(
+                      textTopic: "Kündigungsfrist",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                    ),
+                    SizedBox(height: 4),
+                    ContractAttributes(
+                      textTopic: "Kündigungserinnerung",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.toggle_off)),
+                    ),
+                    SizedBox(height: 16),
+                    TopicHeadline(
+                        topicIcon: Icon(Icons.euro_symbol_outlined),
+                        topicText: "Kosten"),
+                    ContractAttributes(
+                      textTopic: "Kosten",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                    ),
+                    SizedBox(height: 4),
+                    ContractAttributes(
+                      textTopic: "Intervall Abbuchung",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                    ),
+                    SizedBox(height: 4),
+                    ContractAttributes(
+                      textTopic: "Zahlungsintervall",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                    ),
+                    SizedBox(height: 16),
+                    TopicHeadline(
+                        topicIcon: Icon(Icons.add_box_outlined),
+                        topicText: "Sonstiges"),
+                    ContractAttributes(
+                      textTopic: "Zusatzinformationen",
+                      iconButton: IconButton(
+                          onPressed: () {}, icon: Icon(Icons.add_box_outlined)),
+                    ),
+                    SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        FilledButton.icon(
+                            onPressed: () {},
+                            label: Row(
+                              children: [
+                                Icon(Icons.upload_file_outlined),
+                                Text("Dokument hochladen"),
+                              ],
+                            )),
+                        FilledButton.icon(
+                            onPressed: () {},
+                            label: Row(
+                              children: [
+                                Icon(Icons.save_alt_outlined),
+                                Text("Speichern"),
+                              ],
+                            )),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             )
           ],

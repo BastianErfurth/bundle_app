@@ -14,7 +14,7 @@ class ContractAttributes extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 40,
+      height: 45,
       decoration: BoxDecoration(
           gradient: LinearGradient(
               colors: [Palette.lightGreenBlue, Palette.darkGreenblue]),
@@ -26,7 +26,7 @@ class ContractAttributes extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(textTopic, style: Theme.of(context).textTheme.titleMedium),
-            iconButton,
+            iconButton
           ],
         ),
       ),
