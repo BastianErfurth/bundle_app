@@ -1,7 +1,7 @@
-import 'package:bundle_app/src/common/app_navigation_bar.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/registration_screen.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
+import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,7 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: AppNavigationBar(),
+      //bottomNavigationBar: AppNavigationBar(),// brauch ich erst nach Login
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -81,7 +81,15 @@ class _LogInScreenState extends State<LogInScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => HomeScreen(),
+                              ),
+                            );
+                          });
+                        },
                         child: Text(
                           "Login",
                         ),

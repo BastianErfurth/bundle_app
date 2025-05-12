@@ -24,12 +24,12 @@ class AppNavigationBar extends StatelessWidget {
               label: "Home"),
           NavigationDestination(
               icon: Icon(
-                Icons.attach_file,
+                Icons.euro_outlined,
               ),
               label: "Kosten"),
           NavigationDestination(
               icon: Icon(
-                Icons.euro,
+                Icons.description_outlined,
               ),
               label: "Verträge"),
           NavigationDestination(
