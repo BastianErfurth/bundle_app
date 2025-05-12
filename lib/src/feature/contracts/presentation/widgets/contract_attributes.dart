@@ -19,7 +19,7 @@ class ContractAttributes extends StatelessWidget {
           gradient: LinearGradient(
               colors: [Palette.lightGreenBlue, Palette.darkGreenblue]),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Palette.textWhite, width: 0.3)),
+          border: Border.all(color: Palette.textWhite, width: 0.4)),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
         child: Row(
