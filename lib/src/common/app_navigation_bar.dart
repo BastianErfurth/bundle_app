@@ -16,8 +16,6 @@ class AppNavigationBar extends StatefulWidget {
 }
 
 class _AppNavigationBarState extends State<AppNavigationBar> {
-  int _pageIndex = 0;
-
   List<Widget> myScreens = [
     HomeScreen(),
     CostScreen(),
@@ -36,9 +34,7 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
       child: NavigationBar(
         backgroundColor: Palette.mediumGreenBlue,
         onDestinationSelected: (value) {
-          setState(() {
-            _pageIndex = value;
-          });
+          setState(() {});
         },
         destinations: [
           NavigationDestination(

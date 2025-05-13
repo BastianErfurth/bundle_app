@@ -6,8 +6,6 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: AppNavigationBar(),
-    );
+    return Scaffold();
   }
 }

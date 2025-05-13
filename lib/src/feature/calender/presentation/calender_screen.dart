@@ -6,8 +6,6 @@ class CalenderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: AppNavigationBar(),
-    );
+    return Scaffold();
   }
 }
