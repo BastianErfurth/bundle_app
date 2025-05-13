@@ -82,13 +82,11 @@ class _LogInScreenState extends State<LogInScreen> {
                       width: double.infinity,
                       child: FilledButton(
                         onPressed: () {
-                          setState(() {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => HomeScreen(),
-                              ),
-                            );
-                          });
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
+                            ),
+                          );
                         },
                         child: Text(
                           "Login",
