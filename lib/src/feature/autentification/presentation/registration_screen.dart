@@ -55,23 +55,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         labelText: "Passwort festlegen",
                         hintText: "Passwort festlegen",
                         iconButton: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _isObscured = !_isObscured;
-                              });
-                            },
-                            icon: Icon(Icons.visibility_off)),
+                          onPressed: () {
+                            setState(() {
+                              _isObscured = !_isObscured;
+                            });
+                          },
+                          icon: Icon(_isObscured
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                        ),
                         obscureText: _isObscured),
                     TextFieldWithIcon(
                         labelText: "Passwort wiederholen",
                         hintText: "Passwort wiederholen",
                         iconButton: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _isObscured = !_isObscured;
-                              });
-                            },
-                            icon: Icon(Icons.visibility_off)),
+                          onPressed: () {
+                            setState(() {
+                              _isObscured = !_isObscured;
+                            });
+                          },
+                          icon: Icon(_isObscured
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                        ),
                         obscureText: _isObscured),
                     SizedBox(height: 8),
                     SizedBox(
