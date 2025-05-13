@@ -40,7 +40,7 @@ class AppBottomNavigationBar extends StatelessWidget {
           NavigationDestination(icon: Icon(Icons.home), label: "Home"),
           NavigationDestination(icon: Icon(Icons.euro), label: "Kosten"),
           NavigationDestination(
-              icon: Icon(Icons.insert_drive_file), label: "Documents"),
+              icon: Icon(Icons.insert_drive_file), label: "Verträge"),
           NavigationDestination(
               icon: Icon(Icons.calendar_month), label: "Kalender"),
           NavigationDestination(icon: Icon(Icons.settings), label: "Settings"),

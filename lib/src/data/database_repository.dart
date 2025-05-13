@@ -5,7 +5,7 @@ import 'package:bundle_app/src/feature/contracts/domain/profile.dart';
 abstract class DatabaseRepository {
   // Vertraege
   void addContract(Contract newContract);
-  void modifyContract(Contract ContractName);
+  void modifyContract(Contract contractName);
   void deleteContract(Contract docDeleteName);
   List<Contract> getMyContracts();
 
