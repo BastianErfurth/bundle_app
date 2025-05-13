@@ -1,4 +1,4 @@
-import 'package:bundle_app/src/common/app_navigation_bar.dart';
+import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
 class SettingScreen extends StatelessWidget {
@@ -6,6 +6,16 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Center(
+      child: Container(
+        height: 250,
+        width: 250,
+        color: Palette.mediumGreenBlue,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(child: Text("Settings Screen Placeholder")),
+        ),
+      ),
+    );
   }
 }
