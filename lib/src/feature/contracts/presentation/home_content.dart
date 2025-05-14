@@ -63,6 +63,7 @@ class _HomeContentState extends State<HomeContent> {
               color: Palette.lightGreenBlue,
               width: 400,
               height: 100,
+              child: Center(child: Text("Placeholder Kategorien Diagramm")),
             ),
           ),
           Row(
@@ -79,6 +80,7 @@ class _HomeContentState extends State<HomeContent> {
               color: Palette.lightGreenBlue,
               width: 400,
               height: 100,
+              child: Center(child: Text("Placeholder Kosten Digramm")),
             ),
           ),
           Row(
@@ -97,6 +99,7 @@ class _HomeContentState extends State<HomeContent> {
               color: Palette.lightGreenBlue,
               width: 400,
               height: 100,
+              child: Center(child: Text("Placeholder Kalender")),
             ),
           ),
         ],
