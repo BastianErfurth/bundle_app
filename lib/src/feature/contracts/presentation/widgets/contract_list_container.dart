@@ -17,6 +17,7 @@ class ContractListContainer extends StatelessWidget {
       iconButton: IconButton(
         onPressed: () {},
         icon: Row(
+          spacing: 16,
           children: [
             Icon(Icons.visibility),
             Icon(Icons.delete),
