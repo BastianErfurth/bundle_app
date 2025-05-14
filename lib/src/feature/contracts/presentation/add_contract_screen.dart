@@ -1,4 +1,3 @@
-import 'package:bundle_app/src/common/app_navigation_bar.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/theme/palette.dart';
@@ -15,7 +14,6 @@ class _AddContractScreenState extends State<AddContractScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: AppNavigationBar(),
       body: SafeArea(
         child: Stack(
           children: [
@@ -35,7 +33,9 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         FilledButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
                             label: Row(
                               children: [
                                 Icon(Icons.close),

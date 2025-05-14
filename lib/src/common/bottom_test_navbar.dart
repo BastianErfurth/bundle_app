@@ -22,14 +22,14 @@ class AppBottomNavigationBar extends StatelessWidget {
           if (states.contains(WidgetState.selected)) {
             return const IconThemeData(color: Colors.white);
           }
-          return IconThemeData(color: Palette.buttonTextGreenBlue);
+          return IconThemeData(color: Palette.backgroundGreenBlue);
         }),
         labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((states) {
           if (states.contains(WidgetState.selected)) {
             return const TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w600);
           }
-          return TextStyle(color: Palette.buttonTextGreenBlue);
+          return TextStyle(color: Palette.backgroundGreenBlue);
         }),
       ),
       child: NavigationBar(
