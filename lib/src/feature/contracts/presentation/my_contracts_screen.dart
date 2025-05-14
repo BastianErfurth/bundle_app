@@ -1,4 +1,8 @@
+import 'package:bundle_app/src/data/database_repository.dart';
+import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
+import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_list_container.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/theme/palette.dart';
@@ -9,6 +13,8 @@ class MyContractsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DatabaseRepository db = MockDatabaseRepository();
+    List<Contract> contracts = db.getMyContracts();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -44,7 +50,7 @@ class MyContractsScreen extends StatelessWidget {
                   textTopic: "Meine Profile",
                   iconButton: IconButton(
                       onPressed: () {}, icon: Icon(Icons.expand_more))),
-              SizedBox(height: 8),
+              SizedBox(height: 4),
               TextFormFieldWithoutIcon(
                   labelText: "Suchbegriff eingeben",
                   hintText: "Suchbegriff eingeben"),
@@ -55,15 +61,27 @@ class MyContractsScreen extends StatelessWidget {
                       onPressed: () {}, icon: Icon(Icons.expand_more))),
               SizedBox(height: 16),
               Container(
-                  height: 250,
-                  width: 250,
+                  height: 150,
+                  width: 150,
                   color: Palette.mediumGreenBlue,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Center(child: Text("placeholder")),
+                    child: Center(child: Text("placeholder Diagramm")),
                   )),
-              //TODO ListVies.builder muss eingepflegt werden. Wie???
-              Spacer(), //TODO Platzhalter für Diagramm, welches und wie noch offen
+              SizedBox(height: 16),
+              Expanded(
+                  child: ListView.builder(
+                itemCount: contracts.length,
+                itemBuilder: (context, index) {
+                  final contract = contracts[index];
+                  return Column(
+                    children: [
+                      ContractListContainer(contract: contract),
+                      SizedBox(height: 4),
+                    ],
+                  );
+                },
+              )),
               FilledButton.icon(
                   onPressed: () {},
                   label: Padding(

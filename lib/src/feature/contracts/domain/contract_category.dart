@@ -1,1 +1,9 @@
-enum ContractCategory { insurance, housing, mobilePhone, leisure }
+enum ContractCategory {
+  insurance,
+  housing,
+  mobilePhone,
+  leisure,
+  sport,
+  business,
+  subscribtion
+}

@@ -16,8 +16,7 @@ class AppBottomNavigationBar extends StatelessWidget {
     return NavigationBarTheme(
       data: NavigationBarThemeData(
         backgroundColor: Palette.mediumGreenBlue,
-        indicatorColor:
-            Colors.white.withAlpha(20), // heller Hintergrund für aktiven Tab
+        indicatorColor: Colors.white.withAlpha(20),
         iconTheme: WidgetStateProperty.resolveWith<IconThemeData>((states) {
           if (states.contains(WidgetState.selected)) {
             return const IconThemeData(color: Colors.white);

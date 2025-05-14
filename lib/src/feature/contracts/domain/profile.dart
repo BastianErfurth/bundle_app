@@ -1,5 +1,9 @@
+import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
+
 abstract class Profile {
   //Attribute
+
+  List<Contract> contractList = [];
 
   String street;
   String houseNumber;
