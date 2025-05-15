@@ -167,19 +167,22 @@ class _HomeContentState extends State<HomeContent> {
             ),
             SizedBox(
               height: 400,
-              child: Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Palette.buttonTextGreenBlue,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: TableCalendar(
-                  firstDay: DateTime.utc(2010, 10, 16),
-                  lastDay: DateTime.utc(2030, 3, 14),
-                  focusedDay: DateTime.now(),
-                  daysOfWeekStyle: DaysOfWeekStyle(
-                    weekendStyle: TextStyle(color: Palette.lightGreenBlue),
-                    weekdayStyle: TextStyle(color: Palette.textWhite),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Palette.buttonTextGreenBlue,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: TableCalendar(
+                    firstDay: DateTime.utc(2010, 10, 16),
+                    lastDay: DateTime.utc(2030, 3, 14),
+                    focusedDay: DateTime.now(),
+                    daysOfWeekStyle: DaysOfWeekStyle(
+                      weekendStyle: TextStyle(color: Palette.lightGreenBlue),
+                      weekdayStyle: TextStyle(color: Palette.textWhite),
+                    ),
                   ),
                 ),
               ),
