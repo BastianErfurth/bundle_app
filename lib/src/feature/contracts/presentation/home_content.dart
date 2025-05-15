@@ -86,66 +86,61 @@ class _HomeContentState extends State<HomeContent> {
               FilledButton(onPressed: () {}, child: Icon(Icons.euro_outlined)),
             ],
           ),
+          SizedBox(height: 8),
           Expanded(
-            child: BarChart(
-              BarChartData(
-                barGroups: [
-                  BarChartGroupData(
-                    x: 1,
-                    barRods: [
-                      BarChartRodData(
-                        toY: 20,
-                        rodStackItems: [
-                          BarChartRodStackItem(0, 3, Palette.lightGreenBlue),
-                        ],
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SizedBox(
+                width: 800,
+                child: BarChart(
+                  BarChartData(
+                    maxY: 10,
+                    barGroups: List.generate(12, (index) {
+                      return BarChartGroupData(x: index, barRods: [
+                        BarChartRodData(toY: 5, color: Palette.lightGreenBlue),
+                      ]);
+                    }),
+                    titlesData: FlTitlesData(
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (value, meta) {
+                            var style = TextStyle(color: Palette.textWhite);
+                            const months = [
+                              "Jan",
+                              "Feb",
+                              "Mar",
+                              "Apr",
+                              "Mai",
+                              "Jun",
+                              "Jul",
+                              "Aug",
+                              "Sep",
+                              "Nov",
+                              "Dez",
+                            ];
+                            if (value.toInt() < months.length) {
+                              return Text(
+                                months[value.toInt()],
+                                style: style,
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        ),
                       ),
-                    ],
+                      leftTitles:
+                          AxisTitles(sideTitles: SideTitles(showTitles: true)),
+                      rightTitles:
+                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      topTitles:
+                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    ),
+                    borderData: FlBorderData(show: false),
+                    backgroundColor: Palette.darkGreenblue,
+                    gridData: FlGridData(show: false),
                   ),
-                  BarChartGroupData(
-                    x: 2,
-                    barRods: [
-                      BarChartRodData(
-                        toY: 20,
-                        rodStackItems: [
-                          BarChartRodStackItem(0, 3, Palette.lightGreenBlue),
-                        ],
-                      ),
-                    ],
-                  ),
-                  BarChartGroupData(
-                    x: 3,
-                    barRods: [
-                      BarChartRodData(
-                        toY: 20,
-                        rodStackItems: [
-                          BarChartRodStackItem(0, 3, Palette.lightGreenBlue),
-                        ],
-                      ),
-                    ],
-                  ),
-                  BarChartGroupData(
-                    x: 4,
-                    barRods: [
-                      BarChartRodData(
-                        toY: 20,
-                        rodStackItems: [
-                          BarChartRodStackItem(0, 3, Palette.lightGreenBlue),
-                        ],
-                      ),
-                    ],
-                  ),
-                  BarChartGroupData(
-                    x: 5,
-                    barRods: [
-                      BarChartRodData(
-                        toY: 20,
-                        rodStackItems: [
-                          BarChartRodStackItem(0, 3, Palette.lightGreenBlue),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                ),
               ),
             ),
           ),
