@@ -82,7 +82,7 @@ class MockDatabaseRepository implements DatabaseRepository {
           everyAgainIntervalNumber: 1,
           costRepeatInterval: CostRepeatInterval.month),
       extraContractInformations:
-          ExtraContractInformation("Sonderrabett  berücksichtigt", ""),
+          ExtraContractInformation("Sonderrabatt  berücksichtigt", ""),
     ),
   ];
   List<ContractPartnerProfile> myContractors = [];

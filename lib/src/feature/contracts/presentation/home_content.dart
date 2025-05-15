@@ -1,6 +1,7 @@
 import 'package:bundle_app/src/feature/contracts/presentation/add_contract_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/theme/palette.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class HomeContent extends StatefulWidget {
@@ -58,14 +59,24 @@ class _HomeContentState extends State<HomeContent> {
               ),
             ],
           ),
-          Placeholder(
-            child: Container(
-              color: Palette.lightGreenBlue,
-              width: 400,
-              height: 100,
-              child: Center(child: Text("Placeholder Kategorien Diagramm")),
+          Expanded(
+            child: PieChart(
+              PieChartData(sections: [
+                PieChartSectionData(value: 1),
+                //PieChartSectionData(value: 20),
+                //PieChartSectionData(value: 20),
+                //PieChartSectionData(value: 20),
+                //PieChartSectionData(value: 20),
+                //PieChartSectionData(value: 20),
+                //PieChartSectionData(value: 20),
+              ]
+                  // read about it in the PieChartData section
+                  ),
+              duration: Duration(milliseconds: 150), // Optional
+              curve: Curves.linear, // Optional
             ),
           ),
+          SizedBox(height: 16),
           Row(
             children: [
               TopicHeadline(
@@ -75,14 +86,70 @@ class _HomeContentState extends State<HomeContent> {
               FilledButton(onPressed: () {}, child: Icon(Icons.euro_outlined)),
             ],
           ),
-          Placeholder(
-            child: Container(
-              color: Palette.lightGreenBlue,
-              width: 400,
-              height: 100,
-              child: Center(child: Text("Placeholder Kosten Digramm")),
+          Expanded(
+            child: BarChart(
+              BarChartData(
+                barGroups: [
+                  BarChartGroupData(
+                    x: 1,
+                    barRods: [
+                      BarChartRodData(
+                        toY: 20,
+                        rodStackItems: [
+                          BarChartRodStackItem(0, 3, Palette.lightGreenBlue),
+                        ],
+                      ),
+                    ],
+                  ),
+                  BarChartGroupData(
+                    x: 2,
+                    barRods: [
+                      BarChartRodData(
+                        toY: 20,
+                        rodStackItems: [
+                          BarChartRodStackItem(0, 3, Palette.lightGreenBlue),
+                        ],
+                      ),
+                    ],
+                  ),
+                  BarChartGroupData(
+                    x: 3,
+                    barRods: [
+                      BarChartRodData(
+                        toY: 20,
+                        rodStackItems: [
+                          BarChartRodStackItem(0, 3, Palette.lightGreenBlue),
+                        ],
+                      ),
+                    ],
+                  ),
+                  BarChartGroupData(
+                    x: 4,
+                    barRods: [
+                      BarChartRodData(
+                        toY: 20,
+                        rodStackItems: [
+                          BarChartRodStackItem(0, 3, Palette.lightGreenBlue),
+                        ],
+                      ),
+                    ],
+                  ),
+                  BarChartGroupData(
+                    x: 5,
+                    barRods: [
+                      BarChartRodData(
+                        toY: 20,
+                        rodStackItems: [
+                          BarChartRodStackItem(0, 3, Palette.lightGreenBlue),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
+          SizedBox(height: 16),
           Row(
             children: [
               TopicHeadline(
