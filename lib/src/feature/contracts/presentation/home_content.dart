@@ -164,7 +164,7 @@ class _HomeContentState extends State<HomeContent> {
               ],
             ),
             SizedBox(
-              height: 400,
+              height: 250,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Container(
@@ -178,13 +178,18 @@ class _HomeContentState extends State<HomeContent> {
                     lastDay: DateTime.utc(2030, 3, 14),
                     focusedDay: DateTime.now(),
                     daysOfWeekStyle: DaysOfWeekStyle(
-                      weekendStyle: TextStyle(color: Palette.lightGreenBlue),
+                      weekendStyle: TextStyle(color: Palette.textWhite),
                       weekdayStyle: TextStyle(color: Palette.textWhite),
+                    ),
+                    rowHeight: 30,
+                    headerStyle: HeaderStyle(
+                      formatButtonVisible: true,
+                      titleTextStyle: TextStyle(fontSize: 14),
                     ),
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -4,7 +4,6 @@ import 'package:bundle_app/src/feature/contracts/presentation/home_content.dart'
 import 'package:bundle_app/src/feature/contracts/presentation/my_contracts_screen.dart';
 import 'package:bundle_app/src/feature/costs/presentation/cost_screen.dart';
 import 'package:bundle_app/src/feature/settings/presentation/setting_screen.dart';
-import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {

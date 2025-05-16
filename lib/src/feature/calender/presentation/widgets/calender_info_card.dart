@@ -1,13 +1,15 @@
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
-class ContractAttributes extends StatelessWidget {
+class CalenderInfoCard extends StatelessWidget {
   final String textTopic;
   final IconButton iconButton;
-  const ContractAttributes({
+  final String dateText;
+  const CalenderInfoCard({
     super.key,
     required this.textTopic,
     required this.iconButton,
+    required this.dateText,
   });
 
   @override
@@ -25,7 +27,8 @@ class ContractAttributes extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(textTopic, style: Theme.of(context).textTheme.titleMedium),
+            Text(dateText, style: TextStyle(color: Palette.textWhite)),
+            Text(textTopic, style: Theme.of(context).textTheme.titleSmall),
             iconButton
           ],
         ),
