@@ -74,11 +74,9 @@ class _HomeContentState extends State<HomeContent> {
                   //PieChartSectionData(value: 20),
                   //PieChartSectionData(value: 20),
                   //PieChartSectionData(value: 20),
-                ]
-                    // read about it in the PieChartData section
-                    ),
-                duration: Duration(milliseconds: 150), // Optional
-                curve: Curves.linear, // Optional
+                ]),
+                duration: Duration(milliseconds: 150),
+                curve: Curves.linear,
               ),
             ),
             SizedBox(height: 16),

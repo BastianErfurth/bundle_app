@@ -1,3 +1,5 @@
+import 'package:bundle_app/src/feature/contracts/presentation/home_content.dart';
+import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/theme/palette.dart';
@@ -43,7 +45,13 @@ class _AddContractScreenState extends State<AddContractScreen> {
                               ],
                             )),
                         FilledButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => HomeScreen(),
+                                ),
+                              );
+                            },
                             label: Row(
                               children: [
                                 Icon(Icons.add_box_outlined),
@@ -166,7 +174,13 @@ class _AddContractScreenState extends State<AddContractScreen> {
                               ],
                             )),
                         FilledButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => HomeScreen(),
+                                ),
+                              );
+                            },
                             label: Row(
                               children: [
                                 Icon(Icons.save_alt_outlined),
