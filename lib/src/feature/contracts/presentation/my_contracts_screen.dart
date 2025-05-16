@@ -2,6 +2,7 @@ import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
+import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_list_container.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
@@ -25,7 +26,13 @@ class MyContractsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   FilledButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => HomeScreen(),
+                          ),
+                        );
+                      },
                       label: Row(
                         children: [
                           Icon(Icons.close),
@@ -33,7 +40,13 @@ class MyContractsScreen extends StatelessWidget {
                         ],
                       )),
                   FilledButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => HomeScreen(),
+                          ),
+                        );
+                      },
                       label: Row(
                         children: [
                           Icon(Icons.close),

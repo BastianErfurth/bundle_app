@@ -1,5 +1,8 @@
+import 'package:bundle_app/src/feature/calender/presentation/calender_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/add_contract_screen.dart';
+import 'package:bundle_app/src/feature/contracts/presentation/my_contracts_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
+import 'package:bundle_app/src/feature/costs/presentation/cost_screen.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +60,13 @@ class _HomeContentState extends State<HomeContent> {
                     )),
                 SizedBox(width: 8),
                 FilledButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => MyContractsScreen(),
+                      ),
+                    );
+                  },
                   child: Icon(Icons.description_outlined),
                 ),
               ],
@@ -87,7 +96,14 @@ class _HomeContentState extends State<HomeContent> {
                     topicText: "Kosten"),
                 SizedBox(width: 8),
                 FilledButton(
-                    onPressed: () {}, child: Icon(Icons.euro_outlined)),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => CostScreen(),
+                        ),
+                      );
+                    },
+                    child: Icon(Icons.euro_outlined)),
               ],
             ),
             SizedBox(height: 8),
@@ -158,7 +174,13 @@ class _HomeContentState extends State<HomeContent> {
                     topicText: "Kalender"),
                 SizedBox(width: 8),
                 FilledButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CalenderScreen(),
+                      ),
+                    );
+                  },
                   child: Icon(Icons.calendar_month),
                 ),
               ],
