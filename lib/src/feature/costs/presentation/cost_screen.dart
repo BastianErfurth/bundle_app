@@ -1,3 +1,4 @@
+import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/theme/palette.dart';
@@ -5,7 +6,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class CostScreen extends StatelessWidget {
-  const CostScreen({super.key});
+  final DatabaseRepository db;
+  const CostScreen(this.db, {super.key});
 
   @override
   Widget build(BuildContext context) {

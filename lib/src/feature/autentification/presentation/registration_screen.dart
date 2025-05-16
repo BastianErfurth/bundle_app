@@ -1,3 +1,4 @@
+import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
@@ -5,7 +6,8 @@ import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({super.key});
+  final DatabaseRepository db;
+  const RegistrationScreen(this.db, {super.key});
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -86,7 +88,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       child: FilledButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
+                            builder: (context) => HomeScreen(widget.db),
                           ));
                         },
                         child: Text(

@@ -1,20 +1,21 @@
 import 'package:bundle_app/src/data/database_repository.dart';
-import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
+import 'package:bundle_app/src/feature/contracts/presentation/add_contract_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_list_container.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/theme/palette.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class MyContractsScreen extends StatelessWidget {
-  const MyContractsScreen({super.key});
+  final DatabaseRepository db;
+  const MyContractsScreen(this.db, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    DatabaseRepository db = MockDatabaseRepository();
     List<Contract> contracts = db.getMyContracts();
     return Scaffold(
       body: SafeArea(
@@ -29,7 +30,7 @@ class MyContractsScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
+                            builder: (context) => HomeScreen(db),
                           ),
                         );
                       },
@@ -43,7 +44,7 @@ class MyContractsScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
+                            builder: (context) => AddContractScreen(db),
                           ),
                         );
                       },
@@ -73,14 +74,22 @@ class MyContractsScreen extends StatelessWidget {
                   iconButton: IconButton(
                       onPressed: () {}, icon: Icon(Icons.expand_more))),
               SizedBox(height: 16),
-              Container(
-                  height: 150,
-                  width: 150,
-                  color: Palette.mediumGreenBlue,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(child: Text("placeholder Diagramm")),
-                  )),
+              SizedBox(
+                height: 100,
+                child: PieChart(
+                  PieChartData(sections: [
+                    PieChartSectionData(value: 1),
+                    //PieChartSectionData(value: 20),
+                    //PieChartSectionData(value: 20),
+                    //PieChartSectionData(value: 20),
+                    //PieChartSectionData(value: 20),
+                    //PieChartSectionData(value: 20),
+                    //PieChartSectionData(value: 20),
+                  ]),
+                  duration: Duration(milliseconds: 150),
+                  curve: Curves.linear,
+                ),
+              ),
               SizedBox(height: 16),
               Expanded(
                   child: ListView.builder(

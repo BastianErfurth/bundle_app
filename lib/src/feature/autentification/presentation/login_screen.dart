@@ -1,3 +1,4 @@
+import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/registration_screen.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
@@ -6,7 +7,8 @@ import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
 class LogInScreen extends StatefulWidget {
-  const LogInScreen({super.key});
+  final DatabaseRepository db;
+  const LogInScreen(this.db, {super.key});
 
   @override
   State<LogInScreen> createState() => _LogInScreenState();
@@ -84,7 +86,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
+                              builder: (context) => HomeScreen(widget.db),
                             ),
                           );
                         },
@@ -147,7 +149,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       setState(() {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => RegistrationScreen(),
+                            builder: (context) => RegistrationScreen(widget.db),
                           ),
                         );
                       });

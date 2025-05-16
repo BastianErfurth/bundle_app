@@ -1,3 +1,4 @@
+import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
@@ -5,7 +6,8 @@ import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
 class AddContractScreen extends StatefulWidget {
-  const AddContractScreen({super.key});
+  final DatabaseRepository db;
+  const AddContractScreen(this.db, {super.key});
 
   @override
   State<AddContractScreen> createState() => _AddContractScreenState();
@@ -47,7 +49,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => HomeScreen(),
+                                  builder: (context) => HomeScreen(widget.db),
                                 ),
                               );
                             },
@@ -176,7 +178,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => HomeScreen(),
+                                  builder: (context) => HomeScreen(widget.db),
                                 ),
                               );
                             },

@@ -1,3 +1,4 @@
+import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/calender/presentation/calender_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/add_contract_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/my_contracts_screen.dart';
@@ -9,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class HomeContent extends StatefulWidget {
-  const HomeContent({super.key});
+  final DatabaseRepository db;
+  const HomeContent(this.db, {super.key});
 
   @override
   State<HomeContent> createState() => _HomeContentState();
@@ -47,7 +49,7 @@ class _HomeContentState extends State<HomeContent> {
                       setState(() {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => AddContractScreen(),
+                            builder: (context) => AddContractScreen(widget.db),
                           ),
                         );
                       });
@@ -63,7 +65,7 @@ class _HomeContentState extends State<HomeContent> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => MyContractsScreen(),
+                        builder: (context) => MyContractsScreen(widget.db),
                       ),
                     );
                   },
@@ -96,10 +98,11 @@ class _HomeContentState extends State<HomeContent> {
                     topicText: "Kosten"),
                 SizedBox(width: 8),
                 FilledButton(
+                    style: ButtonStyle(),
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => CostScreen(),
+                          builder: (context) => CostScreen(widget.db),
                         ),
                       );
                     },
@@ -177,7 +180,7 @@ class _HomeContentState extends State<HomeContent> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => CalenderScreen(),
+                        builder: (context) => CalenderScreen(widget.db),
                       ),
                     );
                   },

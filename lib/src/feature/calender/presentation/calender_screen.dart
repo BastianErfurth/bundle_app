@@ -1,3 +1,4 @@
+import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/calender/presentation/widgets/calender_info_card.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/theme/palette.dart';
@@ -5,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalenderScreen extends StatelessWidget {
-  const CalenderScreen({super.key});
+  final DatabaseRepository db;
+  const CalenderScreen(this.db, {super.key});
 
   @override
   Widget build(BuildContext context) {
