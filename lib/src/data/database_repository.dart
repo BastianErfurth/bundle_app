@@ -4,14 +4,14 @@ import 'package:bundle_app/src/feature/contracts/domain/profile.dart';
 
 abstract class DatabaseRepository {
   // Vertraege
-  void addContract(Contract newContract);
-  void modifyContract(Contract contractName);
-  void deleteContract(Contract docDeleteName);
-  List<Contract> getMyContracts();
+  Future<void> addContract(Contract newContract);
+  Future<void> modifyContract(Contract contractName);
+  Future<void> deleteContract(Contract docDeleteName);
+  Future<List<Contract>> getMyContracts();
 
   // Vertragspartner
-  List<Profile> getProfiles();
+  Future<List<Profile>> getProfiles();
   void addProfile(Profile profile);
-  List<ContractPartnerProfile> getContractors();
+  Future<List<ContractPartnerProfile>> getContractors();
   void addContractPartnerProfile(ContractPartnerProfile profile);
 }

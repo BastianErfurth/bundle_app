@@ -6,12 +6,18 @@ class TextFieldWithIcon extends StatefulWidget {
   final String hintText;
   final Widget iconButton;
   final bool obscureText;
-  const TextFieldWithIcon(
-      {super.key,
-      required this.labelText,
-      required this.hintText,
-      required this.iconButton,
-      required this.obscureText});
+  final TextEditingController controller;
+  final String? Function(String?)? validator;
+
+  const TextFieldWithIcon({
+    super.key,
+    required this.labelText,
+    required this.hintText,
+    required this.iconButton,
+    required this.obscureText,
+    this.validator,
+    required this.controller,
+  });
 
   @override
   State<TextFieldWithIcon> createState() => _TextFieldWithIconState();
@@ -20,14 +26,23 @@ class TextFieldWithIcon extends StatefulWidget {
 class _TextFieldWithIconState extends State<TextFieldWithIcon> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 50,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              colors: [Palette.lightGreenBlue, Palette.darkGreenblue]),
-          borderRadius: BorderRadius.circular(8),
+    return Stack(
+      children: [
+        Container(
+          height: 50,
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Palette.lightGreenBlue, Palette.darkGreenblue],
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
-        child: TextFormField(
+        TextFormField(
+          controller: widget.controller,
+          validator: widget.validator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          keyboardType: TextInputType.emailAddress,
           obscureText: widget.obscureText,
           decoration: InputDecoration(
             suffixIcon: widget.iconButton,
@@ -39,6 +54,8 @@ class _TextFieldWithIconState extends State<TextFieldWithIcon> {
               borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
           ),
-        ));
+        ),
+      ],
+    );
   }
 }

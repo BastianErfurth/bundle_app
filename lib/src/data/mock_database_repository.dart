@@ -16,90 +16,107 @@ class MockDatabaseRepository implements DatabaseRepository {
       category: ContractCategory.insurance,
       keyword: "Kfz Versicherung Audi",
       userProfile: UserProfile(
-          lastName: "Müller",
-          firstName: "Max",
-          street: "Schlossallee",
-          houseNumber: "1",
-          zipCode: "10118",
-          city: "Berlin",
-          isPrivate: true),
+        lastName: "Müller",
+        firstName: "Max",
+        street: "Schlossallee",
+        houseNumber: "1",
+        zipCode: "10118",
+        city: "Berlin",
+        isPrivate: true,
+      ),
       contractPartnerProfile: ContractPartnerProfile(
-          companyName: "Allianz AG",
-          contactPersonName: "Frau Schmidt",
-          street: "Königsgasse",
-          houseNumber: "15a",
-          zipCode: "50608",
-          city: "Köln",
-          isInContractList: false),
+        companyName: "Allianz AG",
+        contactPersonName: "Frau Schmidt",
+        street: "Königsgasse",
+        houseNumber: "15a",
+        zipCode: "50608",
+        city: "Köln",
+        isInContractList: false,
+      ),
       contractNumber: "MM123456789",
       contractRuntime: ContractRuntime(
-          dt: DateTime.now(),
-          howManyinInterval: 2,
-          interval: Interval.year,
-          isAutomaticExtend: true),
+        dt: DateTime.now(),
+        howManyinInterval: 2,
+        interval: Interval.year,
+        isAutomaticExtend: true,
+      ),
       contractQuitInterval: ContractQuitInterval(
-          howManyInQuitUnits: 3,
-          quitInterval: QuitInterval.month,
-          isQuitReminderAlertSet: true),
+        howManyInQuitUnits: 3,
+        quitInterval: QuitInterval.month,
+        isQuitReminderAlertSet: true,
+      ),
       contractCostRoutine: ContractCostRoutine(
-          costsInCents: 7900,
-          everyAgainIntervalNumber: 6,
-          costRepeatInterval: CostRepeatInterval.month),
-      extraContractInformations:
-          ExtraContractInformation("Audi 80 rot", "B AA 007"),
+        costsInCents: 7900,
+        everyAgainIntervalNumber: 6,
+        costRepeatInterval: CostRepeatInterval.month,
+      ),
+      extraContractInformations: ExtraContractInformation(
+        "Audi 80 rot",
+        "B AA 007",
+      ),
     ),
     Contract(
       category: ContractCategory.sport,
       keyword: "Fitness First",
       userProfile: UserProfile(
-          lastName: "Müller",
-          firstName: "Max",
-          street: "Schlossallee",
-          houseNumber: "1",
-          zipCode: "10118",
-          city: "Berlin",
-          isPrivate: true),
+        lastName: "Müller",
+        firstName: "Max",
+        street: "Schlossallee",
+        houseNumber: "1",
+        zipCode: "10118",
+        city: "Berlin",
+        isPrivate: true,
+      ),
       contractPartnerProfile: ContractPartnerProfile(
-          companyName: "Fitness First GmbH",
-          contactPersonName: "n.a",
-          street: "Hauptstrasse",
-          houseNumber: "48",
-          zipCode: "10318",
-          city: "Berlin",
-          isInContractList: false),
+        companyName: "Fitness First GmbH",
+        contactPersonName: "n.a",
+        street: "Hauptstrasse",
+        houseNumber: "48",
+        zipCode: "10318",
+        city: "Berlin",
+        isInContractList: false,
+      ),
       contractNumber: "M250425/01",
       contractRuntime: ContractRuntime(
-          dt: DateTime.now(),
-          howManyinInterval: 2,
-          interval: Interval.year,
-          isAutomaticExtend: true),
+        dt: DateTime.now(),
+        howManyinInterval: 2,
+        interval: Interval.year,
+        isAutomaticExtend: true,
+      ),
       contractQuitInterval: ContractQuitInterval(
-          howManyInQuitUnits: 3,
-          quitInterval: QuitInterval.month,
-          isQuitReminderAlertSet: true),
+        howManyInQuitUnits: 3,
+        quitInterval: QuitInterval.month,
+        isQuitReminderAlertSet: true,
+      ),
       contractCostRoutine: ContractCostRoutine(
-          costsInCents: 2900,
-          everyAgainIntervalNumber: 1,
-          costRepeatInterval: CostRepeatInterval.month),
-      extraContractInformations:
-          ExtraContractInformation("Sonderrabatt  berücksichtigt", ""),
+        costsInCents: 2900,
+        everyAgainIntervalNumber: 1,
+        costRepeatInterval: CostRepeatInterval.month,
+      ),
+      extraContractInformations: ExtraContractInformation(
+        "Sonderrabatt  berücksichtigt",
+        "",
+      ),
     ),
   ];
   List<ContractPartnerProfile> myContractors = [];
   List<Profile> myProfiles = [];
 
   @override
-  void addContract(Contract newContract) {
+  Future<void> addContract(Contract newContract) async {
+    await Future.delayed(Duration(seconds: 5));
     myContracts.add(newContract);
   }
 
   @override
-  void deleteContract(Contract docDeleteName) {
+  Future<void> deleteContract(Contract docDeleteName) async {
+    await Future.delayed(Duration(seconds: 5));
     myContracts.remove(docDeleteName);
   }
 
   @override
-  void modifyContract(Contract updatedContract) {
+  Future<void> modifyContract(Contract updatedContract) async {
+    await Future.delayed(Duration(seconds: 5));
     for (Contract contract in myContracts) {
       // check if the contract number matches
       if (contract.contractNumber == updatedContract.contractNumber) {
@@ -112,27 +129,31 @@ class MockDatabaseRepository implements DatabaseRepository {
   }
 
   @override
-  List<Contract> getMyContracts() {
+  Future<List<Contract>> getMyContracts() async {
     return myContracts;
   }
 
   @override
-  void addContractPartnerProfile(ContractPartnerProfile profile) {
+  Future<void> addContractPartnerProfile(ContractPartnerProfile profile) async {
+    await Future.delayed(Duration(seconds: 5));
     myContractors.add(profile);
   }
 
   @override
-  void addProfile(Profile profile) {
+  Future<void> addProfile(Profile profile) async {
+    await Future.delayed(Duration(seconds: 5));
     myProfiles.add(profile);
   }
 
   @override
-  List<ContractPartnerProfile> getContractors() {
+  Future<List<ContractPartnerProfile>> getContractors() async {
+    await Future.delayed(Duration(seconds: 5));
     return myContractors;
   }
 
   @override
-  List<Profile> getProfiles() {
+  Future<List<Profile>> getProfiles() async {
+    await Future.delayed(Duration(seconds: 5));
     return myProfiles;
   }
 }
