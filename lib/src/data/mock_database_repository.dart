@@ -130,6 +130,7 @@ class MockDatabaseRepository implements DatabaseRepository {
 
   @override
   Future<List<Contract>> getMyContracts() async {
+    await Future.delayed(Duration(seconds: 5));
     return myContracts;
   }
 

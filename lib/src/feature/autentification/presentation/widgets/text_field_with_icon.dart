@@ -29,7 +29,7 @@ class _TextFieldWithIconState extends State<TextFieldWithIcon> {
     return Stack(
       children: [
         Container(
-          height: 50,
+          height: 55,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             gradient: LinearGradient(

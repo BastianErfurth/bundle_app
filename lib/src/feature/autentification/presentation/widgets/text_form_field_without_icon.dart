@@ -19,7 +19,7 @@ class TextFormFieldWithoutIcon extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: 50,
+          height: 48,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [Palette.lightGreenBlue, Palette.darkGreenblue],

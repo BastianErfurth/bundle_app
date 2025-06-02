@@ -36,164 +36,200 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         FilledButton.icon(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            label: Row(
-                              children: [
-                                Icon(Icons.close),
-                                Text("Abbrechen"),
-                              ],
-                            )),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          label: Row(
+                            children: [Icon(Icons.close), Text("Abbrechen")],
+                          ),
+                        ),
                         FilledButton.icon(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => HomeScreen(widget.db),
-                                ),
-                              );
-                            },
-                            label: Row(
-                              children: [
-                                Icon(Icons.add_box_outlined),
-                                Text("Hinzufügen"),
-                              ],
-                            )),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => HomeScreen(widget.db),
+                              ),
+                            );
+                          },
+                          label: Row(
+                            children: [
+                              Icon(Icons.add_box_outlined),
+                              Text("Hinzufügen"),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: 24),
                     TopicHeadline(
-                        topicIcon: Icon(Icons.description_outlined),
-                        topicText: "Struktur"),
+                      topicIcon: Icon(Icons.description_outlined),
+                      topicText: "Struktur",
+                    ),
                     ContractAttributes(
                       textTopic: "Kategorie",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                        onPressed: () {},
+                        icon: Icon(Icons.expand_more),
+                      ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 6),
                     ContractAttributes(
                       textTopic: "Stichwort eingeben",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                        onPressed: () {},
+                        icon: Icon(Icons.expand_more),
+                      ),
                     ),
                     SizedBox(height: 16),
                     TopicHeadline(
-                        topicIcon: Icon(Icons.description_outlined),
-                        topicText: "Vertragsparteien"),
+                      topicIcon: Icon(Icons.description_outlined),
+                      topicText: "Vertragsparteien",
+                    ),
                     ContractAttributes(
                       textTopic: "Profil",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                        onPressed: () {},
+                        icon: Icon(Icons.expand_more),
+                      ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 6),
                     ContractAttributes(
                       textTopic: "Vertragspartner",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                        onPressed: () {},
+                        icon: Icon(Icons.expand_more),
+                      ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 6),
                     ContractAttributes(
                       textTopic: "Vertragsnummer",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                        onPressed: () {},
+                        icon: Icon(Icons.expand_more),
+                      ),
                     ),
                     SizedBox(height: 16),
                     TopicHeadline(
-                        topicIcon: Icon(Icons.access_time_rounded),
-                        topicText: "Laufzeiten"),
+                      topicIcon: Icon(Icons.access_time_rounded),
+                      topicText: "Laufzeiten",
+                    ),
                     ContractAttributes(
                       textTopic: "Vertragsstart",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                        onPressed: () {},
+                        icon: Icon(Icons.expand_more),
+                      ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 6),
                     ContractAttributes(
                       textTopic: "Laufzeit",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                        onPressed: () {},
+                        icon: Icon(Icons.expand_more),
+                      ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 6),
                     ContractAttributes(
                       textTopic: "Automatische Verlängerung",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.toggle_off)),
+                        onPressed: () {},
+                        icon: Icon(Icons.toggle_off),
+                      ),
                     ),
                     SizedBox(height: 16),
                     TopicHeadline(
-                        topicIcon: Icon(Icons.close), topicText: "Kündigung"),
+                      topicIcon: Icon(Icons.close),
+                      topicText: "Kündigung",
+                    ),
                     ContractAttributes(
                       textTopic: "Kündigungsfrist",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                        onPressed: () {},
+                        icon: Icon(Icons.expand_more),
+                      ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 6),
                     ContractAttributes(
                       textTopic: "Kündigungserinnerung",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.toggle_off)),
+                        onPressed: () {},
+                        icon: Icon(Icons.toggle_off),
+                      ),
                     ),
                     SizedBox(height: 16),
                     TopicHeadline(
-                        topicIcon: Icon(Icons.euro_symbol_outlined),
-                        topicText: "Kosten"),
+                      topicIcon: Icon(Icons.euro_symbol_outlined),
+                      topicText: "Kosten",
+                    ),
                     ContractAttributes(
                       textTopic: "Kosten",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                        onPressed: () {},
+                        icon: Icon(Icons.expand_more),
+                      ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 6),
                     ContractAttributes(
                       textTopic: "Intervall Abbuchung",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                        onPressed: () {},
+                        icon: Icon(Icons.expand_more),
+                      ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 6),
                     ContractAttributes(
                       textTopic: "Zahlungsintervall",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.expand_more)),
+                        onPressed: () {},
+                        icon: Icon(Icons.expand_more),
+                      ),
                     ),
                     SizedBox(height: 16),
                     TopicHeadline(
-                        topicIcon: Icon(Icons.add_box_outlined),
-                        topicText: "Sonstiges"),
+                      topicIcon: Icon(Icons.add_box_outlined),
+                      topicText: "Sonstiges",
+                    ),
                     ContractAttributes(
                       textTopic: "Zusatzinformationen",
                       iconButton: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.add_box_outlined)),
+                        onPressed: () {},
+                        icon: Icon(Icons.add_box_outlined),
+                      ),
                     ),
                     SizedBox(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         FilledButton.icon(
-                            onPressed: () {},
-                            label: Row(
-                              children: [
-                                Icon(Icons.upload_file_outlined),
-                                Text("Dokument hochladen"),
-                              ],
-                            )),
+                          onPressed: () {},
+                          label: Row(
+                            children: [
+                              Icon(Icons.upload_file_outlined),
+                              Text("Dokument hochladen"),
+                            ],
+                          ),
+                        ),
                         FilledButton.icon(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => HomeScreen(widget.db),
-                                ),
-                              );
-                            },
-                            label: Row(
-                              children: [
-                                Icon(Icons.save_alt_outlined),
-                                Text("Speichern"),
-                              ],
-                            )),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => HomeScreen(widget.db),
+                              ),
+                            );
+                          },
+                          label: Row(
+                            children: [
+                              Icon(Icons.save_alt_outlined),
+                              Text("Speichern"),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
