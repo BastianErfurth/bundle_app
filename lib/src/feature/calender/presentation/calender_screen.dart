@@ -12,18 +12,16 @@ class CalenderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
             children: [
               TopicHeadline(
-                  topicIcon: Icon(Icons.calendar_month),
-                  topicText: "Mein Kalender"),
+                topicIcon: Icon(Icons.calendar_month),
+                topicText: "Mein Kalender",
+              ),
               SizedBox(height: 16),
               SizedBox(
                 height: 250,
@@ -54,24 +52,31 @@ class CalenderScreen extends StatelessWidget {
               ),
               // CalenderInfoCard nur Platzhaöter. später muss Listviewbuilder.
               CalenderInfoCard(
-                  textTopic: "KFZ Versicherung kündigen",
-                  iconButton: IconButton(
-                      onPressed: () {}, icon: Icon(Icons.visibility_off)),
-                  dateText: "21.5.2025"),
-              Spacer(),
-              FilledButton.icon(
+                textTopic: "KFZ Versicherung kündigen",
+                iconButton: IconButton(
                   onPressed: () {},
-                  label: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 4,
-                      children: [
-                        Icon(Icons.send_rounded),
-                        Text("Terminübersicht versenden"),
-                      ],
-                    ),
-                  )),
+                  icon: Icon(
+                    Icons.visibility_rounded,
+                    color: Palette.textWhite,
+                  ),
+                ),
+                dateText: "21.5.2025",
+              ),
+              SizedBox(height: 8),
+              FilledButton.icon(
+                onPressed: () {},
+                label: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 4,
+                    children: [
+                      Icon(Icons.send_rounded),
+                      Text("Terminübersicht versenden"),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),

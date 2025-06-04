@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class CalenderInfoCard extends StatelessWidget {
   final String textTopic;
-  final IconButton iconButton;
+  final IconButton? iconButton;
   final String dateText;
   const CalenderInfoCard({
     super.key,
@@ -18,10 +18,12 @@ class CalenderInfoCard extends StatelessWidget {
       width: double.infinity,
       height: 55,
       decoration: BoxDecoration(
-          gradient: LinearGradient(
-              colors: [Palette.lightGreenBlue, Palette.darkGreenblue]),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Palette.textWhite, width: 0.4)),
+        gradient: LinearGradient(
+          colors: [Palette.lightGreenBlue, Palette.darkGreenblue],
+        ),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Palette.textWhite, width: 0.4),
+      ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
         child: Row(
@@ -29,7 +31,7 @@ class CalenderInfoCard extends StatelessWidget {
           children: [
             Text(dateText, style: TextStyle(color: Palette.textWhite)),
             Text(textTopic, style: Theme.of(context).textTheme.titleSmall),
-            iconButton
+            iconButton ?? const SizedBox.shrink(),
           ],
         ),
       ),
