@@ -6,12 +6,14 @@ class TextFormFieldWithoutIcon extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
   final String? Function(String?)? validator;
+  final TextInputType? keyboardType;
   const TextFormFieldWithoutIcon({
     super.key,
     required this.labelText,
     required this.hintText,
     this.validator,
     required this.controller,
+    this.keyboardType,
   });
 
   @override
@@ -31,7 +33,7 @@ class TextFormFieldWithoutIcon extends StatelessWidget {
           controller: TextEditingController(),
           validator: validator,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          keyboardType: TextInputType.emailAddress,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
             labelText: labelText,
             isDense: true,
