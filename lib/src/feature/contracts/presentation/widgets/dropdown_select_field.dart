@@ -1,3 +1,4 @@
+import 'package:bundle_app/src/feature/contracts/domain/contract_category.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
@@ -24,13 +25,11 @@ class DropDownSelectField extends StatelessWidget {
             child: DropdownMenu(
               width: double.infinity,
               label: Text(
-                "Kategorie auswählen",
+                "Kategorie wählen",
                 style: TextStyle(color: Palette.textWhite),
               ),
               menuStyle: MenuStyle(
-                backgroundColor: WidgetStateProperty.all(
-                  Palette.buttonTextGreenBlue,
-                ),
+                backgroundColor: WidgetStateProperty.all(Palette.darkGreenblue),
                 maximumSize: WidgetStateProperty.all(Size(350, 200)),
 
                 shape: WidgetStateProperty.all(
@@ -41,10 +40,14 @@ class DropDownSelectField extends StatelessWidget {
               ),
               textStyle: TextStyle(color: Palette.textWhite),
 
-              dropdownMenuEntries: [
-                DropdownMenuEntry(value: 'Option 1', label: 'Option 1'),
-                DropdownMenuEntry(value: 'Option 2', label: 'Option 2'),
-              ],
+              dropdownMenuEntries: ContractCategory.values
+                  .map(
+                    (category) => DropdownMenuEntry(
+                      value: category,
+                      label: category.label,
+                    ),
+                  )
+                  .toList(),
             ),
           ),
         ],
