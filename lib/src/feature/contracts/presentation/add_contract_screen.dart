@@ -1,4 +1,6 @@
 import 'package:bundle_app/src/data/database_repository.dart';
+import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/dropdown_select_field.dart';
@@ -15,6 +17,14 @@ class AddContractScreen extends StatefulWidget {
 }
 
 class _AddContractScreenState extends State<AddContractScreen> {
+  final TextEditingController _keywordcontroller = TextEditingController();
+
+  @override
+  void dispose() {
+    _keywordcontroller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,6 +78,18 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     ),
                     DropDownSelectField(),
                     SizedBox(height: 6),
+                    TextFormFieldWithoutIcon(
+                      labelText: "Stichwort festelegen",
+                      hintText: "Stichwort",
+                      controller: _keywordcontroller,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Bitte Stichwort eingeben";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
                     ContractAttributes(
                       textTopic: "Kategorie",
                       iconButton: IconButton(
