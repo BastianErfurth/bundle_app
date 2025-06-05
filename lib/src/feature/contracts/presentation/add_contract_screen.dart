@@ -130,7 +130,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                         } else if (snapshot.hasData) {
                           _userProfiles = snapshot.data!;
                           return DropDownSelectField<UserProfile>(
-                            labelText: "Userprofil wählen",
+                            labelText: "Profil wählen",
                             values: _userProfiles,
                             itemLabel: (UserProfile profile) =>
                                 '${profile.firstName} ${profile.lastName}',
@@ -176,12 +176,16 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       },
                     ),
                     SizedBox(height: 6),
-                    ContractAttributes(
-                      textTopic: "Vertragsnummer",
-                      iconButton: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.expand_more),
-                      ),
+                    TextFormFieldWithoutIcon(
+                      labelText: "Vertragnummer eingeben",
+                      hintText: "Stichwort",
+                      controller: _keywordcontroller,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Bitte Vertragnummer eingeben";
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(height: 16),
                     TopicHeadline(
