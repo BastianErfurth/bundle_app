@@ -1,4 +1,3 @@
-import 'package:bundle_app/src/feature/contracts/domain/contract_category.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
@@ -43,11 +42,9 @@ class DropDownSelectField<T> extends StatelessWidget {
                 style: TextStyle(color: Palette.textWhite),
               ),
               menuStyle: MenuStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  Palette.darkGreenblue,
-                ),
-                maximumSize: MaterialStateProperty.all(const Size(350, 200)),
-                shape: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(Palette.darkGreenblue),
+                maximumSize: WidgetStateProperty.all(const Size(350, 200)),
+                shape: WidgetStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

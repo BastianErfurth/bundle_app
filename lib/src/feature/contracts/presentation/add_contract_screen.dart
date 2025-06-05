@@ -90,7 +90,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       topicText: "Struktur",
                     ),
                     DropDownSelectField<ContractCategory>(
-                      labelText: "Select Category",
+                      labelText: "Kategorie wählen",
                       values: ContractCategory.values,
                       itemLabel: (ContractCategory category) => category.label,
                       selectedValue: _selectedContractCategory,
@@ -130,7 +130,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                         } else if (snapshot.hasData) {
                           _userProfiles = snapshot.data!;
                           return DropDownSelectField<UserProfile>(
-                            labelText: "Select User Profile",
+                            labelText: "Userprofil wählen",
                             values: _userProfiles,
                             itemLabel: (UserProfile profile) =>
                                 '${profile.firstName} ${profile.lastName}',
@@ -159,7 +159,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                         } else if (snapshot.hasData) {
                           _contractPartnerProfiles = snapshot.data!;
                           return DropDownSelectField<ContractPartnerProfile>(
-                            labelText: "Select Contract Partner",
+                            labelText: "Vertragspartner wählen",
                             values: _contractPartnerProfiles,
                             itemLabel: (ContractPartnerProfile profile) =>
                                 profile.companyName,
