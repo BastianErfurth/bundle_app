@@ -1,5 +1,9 @@
 import 'package:bundle_app/src/data/database_repository.dart';
+import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract_category.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract_partner_profile.dart';
+import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/dropdown_select_field.dart';
@@ -17,6 +21,16 @@ class AddContractScreen extends StatefulWidget {
 
 class _AddContractScreenState extends State<AddContractScreen> {
   final TextEditingController _keywordcontroller = TextEditingController();
+  List<UserProfile> _userProfiles = [];
+  List<ContractPartnerProfile> _contractPartnerProfiles = [];
+  UserProfile? _selectedUserProfile;
+  ContractPartnerProfile? _selectedContractPartnerProfile;
+  ContractCategory? _selectedContractCategory;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -75,56 +89,91 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       topicIcon: Icon(Icons.description_outlined),
                       topicText: "Struktur",
                     ),
-                    DropDownSelectField(),
+                    DropDownSelectField<ContractCategory>(
+                      labelText: "Select Category",
+                      values: ContractCategory.values,
+                      itemLabel: (ContractCategory category) => category.label,
+                      selectedValue: _selectedContractCategory,
+                      onChanged: (ContractCategory? newValue) {
+                        setState(() {
+                          _selectedContractCategory = newValue;
+                        });
+                      },
+                    ), // Old implementation
                     SizedBox(height: 6),
                     TextFormFieldWithoutIcon(
                       labelText: "Stichwort eingeben",
                       hintText: "Stichwort",
                       controller: _keywordcontroller,
-
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Bitte Stichwort eingeben";
                         }
-
                         return null;
                       },
                     ),
-                    SizedBox(height: 16),
-                    ContractAttributes(
-                      textTopic: "Kategorie",
-                      iconButton: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.expand_more),
-                      ),
-                    ),
                     SizedBox(height: 6),
-                    ContractAttributes(
-                      textTopic: "Stichwort eingeben",
-                      iconButton: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.expand_more),
-                      ),
-                    ),
                     SizedBox(height: 16),
                     TopicHeadline(
                       topicIcon: Icon(Icons.description_outlined),
                       topicText: "Vertragsparteien",
                     ),
-                    ContractAttributes(
-                      textTopic: "Profil",
-                      iconButton: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.expand_more),
-                      ),
+                    FutureBuilder<List<UserProfile>>(
+                      future: (widget.db as MockDatabaseRepository)
+                          .getUserProfiles(), // Explicit cast to MockDatabaseRepository
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else if (snapshot.hasData) {
+                          _userProfiles = snapshot.data!;
+                          return DropDownSelectField<UserProfile>(
+                            labelText: "Select User Profile",
+                            values: _userProfiles,
+                            itemLabel: (UserProfile profile) =>
+                                '${profile.firstName} ${profile.lastName}',
+                            selectedValue: _selectedUserProfile,
+                            onChanged: (UserProfile? newValue) {
+                              setState(() {
+                                _selectedUserProfile = newValue;
+                              });
+                            },
+                          );
+                        } else {
+                          return Text('No user profiles found');
+                        }
+                      },
                     ),
                     SizedBox(height: 6),
-                    ContractAttributes(
-                      textTopic: "Vertragspartner",
-                      iconButton: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.expand_more),
-                      ),
+                    FutureBuilder<List<ContractPartnerProfile>>(
+                      future: (widget.db as MockDatabaseRepository)
+                          .getContractors(), // Explicit cast to MockDatabaseRepository
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else if (snapshot.hasData) {
+                          _contractPartnerProfiles = snapshot.data!;
+                          return DropDownSelectField<ContractPartnerProfile>(
+                            labelText: "Select Contract Partner",
+                            values: _contractPartnerProfiles,
+                            itemLabel: (ContractPartnerProfile profile) =>
+                                profile.companyName,
+                            selectedValue: _selectedContractPartnerProfile,
+                            onChanged: (ContractPartnerProfile? newValue) {
+                              setState(() {
+                                _selectedContractPartnerProfile = newValue;
+                              });
+                            },
+                          );
+                        } else {
+                          return Text('No contract partners found');
+                        }
+                      },
                     ),
                     SizedBox(height: 6),
                     ContractAttributes(

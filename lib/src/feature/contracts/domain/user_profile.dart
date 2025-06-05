@@ -16,4 +16,8 @@ class UserProfile extends Profile {
     required super.city,
     required this.isPrivate,
   });
+  @override
+  String toString() {
+    return "$firstName $lastName";
+  }
 }

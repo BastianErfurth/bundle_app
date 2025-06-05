@@ -2,8 +2,21 @@ import 'package:bundle_app/src/feature/contracts/domain/contract_category.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
-class DropDownSelectField extends StatelessWidget {
-  const DropDownSelectField({super.key});
+class DropDownSelectField<T> extends StatelessWidget {
+  final List<T> values;
+  final String Function(T) itemLabel;
+  final T? selectedValue;
+  final ValueChanged<T?>? onChanged;
+  final String labelText;
+
+  const DropDownSelectField({
+    Key? key,
+    required this.values,
+    required this.itemLabel,
+    this.selectedValue,
+    this.onChanged,
+    required this.labelText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,32 +35,34 @@ class DropDownSelectField extends StatelessWidget {
           ),
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: DropdownMenu(
+            child: DropdownMenu<T>(
               width: double.infinity,
+              initialSelection: selectedValue,
               label: Text(
-                "Kategorie wählen",
+                labelText,
                 style: TextStyle(color: Palette.textWhite),
               ),
               menuStyle: MenuStyle(
-                backgroundColor: WidgetStateProperty.all(Palette.darkGreenblue),
-                maximumSize: WidgetStateProperty.all(Size(350, 200)),
-
-                shape: WidgetStateProperty.all(
+                backgroundColor: MaterialStateProperty.all(
+                  Palette.darkGreenblue,
+                ),
+                maximumSize: MaterialStateProperty.all(const Size(350, 200)),
+                shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
-              textStyle: TextStyle(color: Palette.textWhite),
 
-              dropdownMenuEntries: ContractCategory.values
+              dropdownMenuEntries: values
                   .map(
-                    (category) => DropdownMenuEntry(
-                      value: category,
-                      label: category.label,
+                    (item) => DropdownMenuEntry<T>(
+                      value: item,
+                      label: itemLabel(item),
                     ),
                   )
                   .toList(),
+              onSelected: onChanged,
             ),
           ),
         ],

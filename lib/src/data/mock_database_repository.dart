@@ -100,7 +100,26 @@ class MockDatabaseRepository implements DatabaseRepository {
     ),
   ];
   List<ContractPartnerProfile> myContractors = [];
-  List<Profile> myProfiles = [];
+  List<UserProfile> myUserProfiles = [
+    UserProfile(
+      lastName: "Erfurth",
+      firstName: "Bastian",
+      street: "Teststrasse",
+      houseNumber: "8",
+      zipCode: "10318",
+      city: "Berlin",
+      isPrivate: true,
+    ),
+    UserProfile(
+      lastName: "Müller",
+      firstName: "Max",
+      street: "Schlossallee",
+      houseNumber: "1",
+      zipCode: "10118",
+      city: "Berlin",
+      isPrivate: true,
+    ),
+  ];
 
   @override
   Future<void> addContract(Contract newContract) async {
@@ -141,9 +160,9 @@ class MockDatabaseRepository implements DatabaseRepository {
   }
 
   @override
-  Future<void> addProfile(Profile profile) async {
+  Future<void> addProfile(UserProfile profile) async {
     await Future.delayed(Duration(seconds: 5));
-    myProfiles.add(profile);
+    myUserProfiles.add(profile);
   }
 
   @override
@@ -153,8 +172,8 @@ class MockDatabaseRepository implements DatabaseRepository {
   }
 
   @override
-  Future<List<Profile>> getProfiles() async {
+  Future<List<UserProfile>> getUserProfiles() async {
     await Future.delayed(Duration(seconds: 5));
-    return myProfiles;
+    return myUserProfiles;
   }
 }
