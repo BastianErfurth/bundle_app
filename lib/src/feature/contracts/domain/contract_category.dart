@@ -1,6 +1,6 @@
 enum ContractCategory {
   insurance('Versicherung'),
-  housing('Wohnen'),
+  housing('Wohnung / Haus'),
   mobilePhone('Mobilfunk'),
   leisure('Freizeit'),
   sport('Sport'),
