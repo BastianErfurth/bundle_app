@@ -6,7 +6,6 @@ import 'package:bundle_app/src/feature/contracts/domain/contract_partner_profile
 import 'package:bundle_app/src/feature/contracts/domain/contract_quit_interval.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_runtime.dart';
 import 'package:bundle_app/src/feature/contracts/domain/extra_contract_information.dart';
-import 'package:bundle_app/src/feature/contracts/domain/profile.dart';
 import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
 
 class MockDatabaseRepository implements DatabaseRepository {
@@ -99,7 +98,17 @@ class MockDatabaseRepository implements DatabaseRepository {
       ),
     ),
   ];
-  List<ContractPartnerProfile> myContractors = [];
+  List<ContractPartnerProfile> myContractors = [
+    ContractPartnerProfile(
+      companyName: "Allianz AG",
+      contactPersonName: "Faru Schneider",
+      street: "Kochstr",
+      houseNumber: "23a",
+      zipCode: "50608",
+      city: "Köln",
+      isInContractList: false,
+    ),
+  ];
   List<UserProfile> myUserProfiles = [
     UserProfile(
       lastName: "Erfurth",
@@ -160,7 +169,7 @@ class MockDatabaseRepository implements DatabaseRepository {
   }
 
   @override
-  Future<void> addProfile(UserProfile profile) async {
+  Future<void> addUserProfile(UserProfile profile) async {
     await Future.delayed(Duration(seconds: 5));
     myUserProfiles.add(profile);
   }

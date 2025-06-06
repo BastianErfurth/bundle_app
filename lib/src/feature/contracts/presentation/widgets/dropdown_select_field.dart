@@ -9,13 +9,13 @@ class DropDownSelectField<T> extends StatelessWidget {
   final String labelText;
 
   const DropDownSelectField({
-    Key? key,
+    super.key,
     required this.values,
     required this.itemLabel,
     this.selectedValue,
     this.onChanged,
     required this.labelText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
