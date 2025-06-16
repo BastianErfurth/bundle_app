@@ -28,6 +28,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
 
   DateTime? _startDate;
   String _laufzeit = "Laufzeit";
+  bool _autoVerlaengerung = false;
 
   List<UserProfile> _userProfiles = [];
   List<ContractPartnerProfile> _contractPartnerProfiles = [];
@@ -229,8 +230,19 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     ContractAttributes(
                       textTopic: "Automatische Verlängerung",
                       iconButton: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.toggle_off),
+                        icon: Icon(
+                          _autoVerlaengerung
+                              ? Icons.toggle_on
+                              : Icons.toggle_off,
+                          color: _autoVerlaengerung
+                              ? Palette.lightGreenBlue
+                              : Palette.textWhite,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _autoVerlaengerung = !_autoVerlaengerung;
+                          });
+                        },
                       ),
                     ),
                     SizedBox(height: 16),
