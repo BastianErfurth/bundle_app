@@ -10,6 +10,7 @@ import 'package:bundle_app/src/feature/contracts/presentation/widgets/dropdown_s
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AddContractScreen extends StatefulWidget {
   final DatabaseRepository db;
@@ -21,6 +22,11 @@ class AddContractScreen extends StatefulWidget {
 
 class _AddContractScreenState extends State<AddContractScreen> {
   final TextEditingController _keywordcontroller = TextEditingController();
+  final TextEditingController _contractNumberController =
+      TextEditingController();
+
+  DateTime? _startDate;
+
   List<UserProfile> _userProfiles = [];
   List<ContractPartnerProfile> _contractPartnerProfiles = [];
   UserProfile? _selectedUserProfile;
@@ -35,6 +41,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
   @override
   void dispose() {
     _keywordcontroller.dispose();
+    _contractNumberController.dispose();
     super.dispose();
   }
 
@@ -44,11 +51,13 @@ class _AddContractScreenState extends State<AddContractScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            Center(
-              child: Icon(
-                Icons.attach_file,
-                size: 400,
-                color: Palette.darkGreenblue,
+            IgnorePointer(
+              child: Center(
+                child: Icon(
+                  Icons.attach_file,
+                  size: 400,
+                  color: Palette.darkGreenblue,
+                ),
               ),
             ),
             Padding(
@@ -179,7 +188,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     TextFormFieldWithoutIcon(
                       labelText: "Vertragnummer eingeben",
                       hintText: "Stichwort",
-                      controller: _keywordcontroller,
+                      controller: _contractNumberController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Bitte Vertragnummer eingeben";
@@ -192,10 +201,16 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       topicIcon: Icon(Icons.access_time_rounded),
                       topicText: "Laufzeiten",
                     ),
+
                     ContractAttributes(
                       textTopic: "Vertragsstart",
+                      valueText: _startDate != null
+                          ? DateFormat('dd.MM.yyyy').format(_startDate!)
+                          : "Startdatum wählen",
                       iconButton: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          datePicking();
+                        },
                         icon: Icon(Icons.expand_more),
                       ),
                     ),
@@ -313,5 +328,30 @@ class _AddContractScreenState extends State<AddContractScreen> {
         ),
       ),
     );
+  }
+
+  void datePicking() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _startDate ?? DateTime.now(),
+      firstDate: DateTime(1970),
+      lastDate: DateTime(2101),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Palette.darkGreenblue,
+            hintColor: Palette.darkGreenblue,
+            colorScheme: ColorScheme.light(primary: Palette.darkGreenblue),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child ?? SizedBox.shrink(),
+        );
+      },
+    );
+    if (pickedDate != null) {
+      setState(() {
+        _startDate = pickedDate;
+      }); // Handle the picked date here
+    }
   }
 }

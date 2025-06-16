@@ -19,11 +19,15 @@ dependencies:
   shimmer: ^3.0.0
   table_calendar: ^3.2.0
   shared_preferences: ^2.5.3
+  intl: ^0.20.2
+  
+  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+ 
   
 flutter:
   uses-material-design: true

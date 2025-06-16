@@ -3,10 +3,7 @@ import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_a
 import 'package:flutter/material.dart';
 
 class ContractListContainer extends StatelessWidget {
-  const ContractListContainer({
-    super.key,
-    required this.contract,
-  });
+  const ContractListContainer({super.key, required this.contract});
 
   final Contract contract;
 
@@ -18,10 +15,7 @@ class ContractListContainer extends StatelessWidget {
         onPressed: () {},
         icon: Row(
           spacing: 16,
-          children: [
-            Icon(Icons.visibility),
-            Icon(Icons.delete),
-          ],
+          children: [Icon(Icons.visibility), Icon(Icons.delete)],
         ),
       ),
     );
