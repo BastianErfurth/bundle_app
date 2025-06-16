@@ -29,6 +29,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
   DateTime? _startDate;
   String _laufzeit = "Laufzeit";
   bool _autoVerlaengerung = false;
+  String _kuendigungsfrist = "Kündigungsfrist";
 
   List<UserProfile> _userProfiles = [];
   List<ContractPartnerProfile> _contractPartnerProfiles = [];
@@ -252,8 +253,11 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     ),
                     ContractAttributes(
                       textTopic: "Kündigungsfrist",
+                      valueText: _kuendigungsfrist,
                       iconButton: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showCancelPeriodPicker();
+                        },
                         icon: Icon(Icons.expand_more),
                       ),
                     ),
@@ -365,7 +369,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
       adapter: PickerDataAdapter<String>(
         pickerData: [
           List.generate(31, (index) => '${index + 1}'),
-          ['Tag', 'Woche', 'Monat', 'Jahr', 'Unbegrenzt'],
+          ['Tag(e)', 'Woche(n)', 'Monat(e)', 'Jahr(e)', 'Unbegrenzt'],
         ],
         isArray: true,
       ),
@@ -382,6 +386,50 @@ class _AddContractScreenState extends State<AddContractScreen> {
 
         setState(() {
           _laufzeit = einheit == 'Unbegrenzt' ? 'Unbegrenzt' : '$zahl $einheit';
+        });
+      },
+    );
+
+    // Zeige den Picker im Dialog manuell
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Palette.backgroundGreenBlue,
+          child: SizedBox(
+            height: 250, // oder gewünschte Höhe
+            child: picker.makePicker(),
+          ),
+        );
+      },
+    );
+  }
+
+  void showCancelPeriodPicker() {
+    Picker picker = Picker(
+      backgroundColor: Palette.backgroundGreenBlue,
+      adapter: PickerDataAdapter<String>(
+        pickerData: [
+          List.generate(31, (index) => '${index + 1}'),
+          ['Tag(e)', 'Woche(n)', 'Monat(e)', 'Jahr(e)', 'Unbegrenzt'],
+        ],
+        isArray: true,
+      ),
+      hideHeader: false,
+      title: Text(
+        'Laufzeit wählen',
+        style: TextStyle(color: Palette.textWhite),
+      ),
+      selecteds: [0, 2],
+      textStyle: TextStyle(color: Palette.textWhite, fontSize: 18),
+      onConfirm: (picker, selecteds) {
+        final zahl = picker.getSelectedValues()[0];
+        final einheit = picker.getSelectedValues()[1];
+
+        setState(() {
+          _kuendigungsfrist = einheit == 'Unbegrenzt'
+              ? 'Unbegrenzt'
+              : '$zahl $einheit';
         });
       },
     );
