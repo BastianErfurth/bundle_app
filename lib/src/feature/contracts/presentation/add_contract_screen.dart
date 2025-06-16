@@ -208,9 +208,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           ? DateFormat('dd.MM.yyyy').format(_startDate!)
                           : "Startdatum wählen",
                       iconButton: IconButton(
-                        onPressed: () {
-                          datePicking();
-                        },
+                        onPressed: datePicking,
                         icon: Icon(Icons.expand_more),
                       ),
                     ),
@@ -336,17 +334,6 @@ class _AddContractScreenState extends State<AddContractScreen> {
       initialDate: _startDate ?? DateTime.now(),
       firstDate: DateTime(1970),
       lastDate: DateTime(2101),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            primaryColor: Palette.darkGreenblue,
-            hintColor: Palette.darkGreenblue,
-            colorScheme: ColorScheme.light(primary: Palette.darkGreenblue),
-            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-          ),
-          child: child ?? SizedBox.shrink(),
-        );
-      },
     );
     if (pickedDate != null) {
       setState(() {
