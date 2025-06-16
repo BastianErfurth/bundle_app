@@ -219,7 +219,9 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       textTopic: "Laufzeit wählen",
                       valueText: _laufzeit,
                       iconButton: IconButton(
-                        onPressed: showLaufzeitPicker,
+                        onPressed: () {
+                          showLaufzeitPicker();
+                        },
                         icon: Icon(Icons.expand_more),
                       ),
                     ),
@@ -353,6 +355,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
           List.generate(31, (index) => '${index + 1}'),
           ['Tag', 'Woche', 'Monat', 'Jahr', 'Unbegrenzt'],
         ],
+        isArray: true,
       ),
       hideHeader: false,
       title: Text(
@@ -378,7 +381,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
         return Dialog(
           backgroundColor: Palette.backgroundGreenBlue,
           child: SizedBox(
-            height: 350, // oder gewünschte Höhe
+            height: 250, // oder gewünschte Höhe
             child: picker.makePicker(),
           ),
         );
