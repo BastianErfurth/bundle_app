@@ -2,7 +2,7 @@ import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
 class ContractAttributes extends StatelessWidget {
-  final String textTopic;
+  final String? textTopic;
   final IconButton iconButton;
   final String? valueText;
   const ContractAttributes({

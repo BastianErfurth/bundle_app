@@ -11,6 +11,7 @@ import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_head
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_picker_plus/flutter_picker_plus.dart';
 
 class AddContractScreen extends StatefulWidget {
   final DatabaseRepository db;
@@ -26,6 +27,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
       TextEditingController();
 
   DateTime? _startDate;
+  String _laufzeit = "Laufzeit";
 
   List<UserProfile> _userProfiles = [];
   List<ContractPartnerProfile> _contractPartnerProfiles = [];
@@ -214,9 +216,10 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     ),
                     SizedBox(height: 6),
                     ContractAttributes(
-                      textTopic: "Laufzeit",
+                      textTopic: "Laufzeit wählen",
+                      valueText: _laufzeit,
                       iconButton: IconButton(
-                        onPressed: () {},
+                        onPressed: showLaufzeitPicker,
                         icon: Icon(Icons.expand_more),
                       ),
                     ),
@@ -338,7 +341,48 @@ class _AddContractScreenState extends State<AddContractScreen> {
     if (pickedDate != null) {
       setState(() {
         _startDate = pickedDate;
-      }); // Handle the picked date here
+      });
     }
+  }
+
+  void showLaufzeitPicker() {
+    Picker picker = Picker(
+      backgroundColor: Palette.backgroundGreenBlue,
+      adapter: PickerDataAdapter<String>(
+        pickerData: [
+          List.generate(31, (index) => '${index + 1}'),
+          ['Tag', 'Woche', 'Monat', 'Jahr', 'Unbegrenzt'],
+        ],
+      ),
+      hideHeader: false,
+      title: Text(
+        'Laufzeit wählen',
+        style: TextStyle(color: Palette.textWhite),
+      ),
+      selecteds: [0, 2],
+      textStyle: TextStyle(color: Palette.textWhite, fontSize: 18),
+      onConfirm: (picker, selecteds) {
+        final zahl = picker.getSelectedValues()[0];
+        final einheit = picker.getSelectedValues()[1];
+
+        setState(() {
+          _laufzeit = einheit == 'Unbegrenzt' ? 'Unbegrenzt' : '$zahl $einheit';
+        });
+      },
+    );
+
+    // Zeige den Picker im Dialog manuell
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Palette.backgroundGreenBlue,
+          child: SizedBox(
+            height: 350, // oder gewünschte Höhe
+            child: picker.makePicker(),
+          ),
+        );
+      },
+    );
   }
 }

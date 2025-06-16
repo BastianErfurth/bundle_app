@@ -20,6 +20,7 @@ dependencies:
   table_calendar: ^3.2.0
   shared_preferences: ^2.5.3
   intl: ^0.20.2
+  flutter_picker_plus: ^1.5.2
   
   
 
