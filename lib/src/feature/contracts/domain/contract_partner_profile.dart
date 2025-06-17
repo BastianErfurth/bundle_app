@@ -16,4 +16,27 @@ class ContractPartnerProfile extends Profile {
     required super.city,
     required this.isInContractList,
   });
+
+  @override
+  String toString() => companyName;
+
+  ContractPartnerProfile copyWith({
+    String? companyName,
+    String? contactPersonName,
+    String? street,
+    String? houseNumber,
+    String? zipCode,
+    String? city,
+    bool? isInContractList,
+  }) {
+    return ContractPartnerProfile(
+      companyName: companyName ?? this.companyName,
+      contactPersonName: contactPersonName ?? this.contactPersonName,
+      street: street ?? this.street,
+      houseNumber: houseNumber ?? this.houseNumber,
+      zipCode: zipCode ?? this.zipCode,
+      city: city ?? this.city,
+      isInContractList: isInContractList ?? this.isInContractList,
+    );
+  }
 }

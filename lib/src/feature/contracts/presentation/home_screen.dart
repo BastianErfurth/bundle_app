@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
       CostScreen(widget.db),
       MyContractsScreen(widget.db),
       CalenderScreen(widget.db),
-      SettingScreen(),
+      SettingScreen(databaseRepository: widget.db),
     ];
   }
 
@@ -36,20 +36,20 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       //appBar: AppBar(backgroundColor: Palette.backgroundGreenBlue),
       bottomNavigationBar: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-          child: AppBottomNavigationBar(
-              selectedIndex: _pageIndex,
-              onItemSelected: (value) {
-                setState(() {
-                  _pageIndex = value;
-                });
-              })),
-      body: SafeArea(
-        child: myScreens[_pageIndex],
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+        child: AppBottomNavigationBar(
+          selectedIndex: _pageIndex,
+          onItemSelected: (value) {
+            setState(() {
+              _pageIndex = value;
+            });
+          },
+        ),
       ),
+      body: SafeArea(child: myScreens[_pageIndex]),
     );
   }
 }

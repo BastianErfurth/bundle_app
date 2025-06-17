@@ -1,20 +1,235 @@
-import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:bundle_app/src/theme/palette.dart';
+import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract_partner_profile.dart';
+import 'package:bundle_app/src/data/database_repository.dart';
 
-class SettingScreen extends StatelessWidget {
-  const SettingScreen({super.key});
+class SettingScreen extends StatefulWidget {
+  final DatabaseRepository databaseRepository;
+
+  const SettingScreen({super.key, required this.databaseRepository});
+
+  @override
+  State<SettingScreen> createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
+  final _userFormKey = GlobalKey<FormState>();
+  final _partnerFormKey = GlobalKey<FormState>();
+
+  List<UserProfile> _userProfiles = [];
+  List<ContractPartnerProfile> _contractPartners = [];
+
+  late UserProfile _newUser;
+  late ContractPartnerProfile _newPartner;
+
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfiles();
+  }
+
+  Future<void> _loadProfiles() async {
+    final users = await widget.databaseRepository.getUserProfiles();
+    final partners = await widget.databaseRepository.getContractors();
+    setState(() {
+      _userProfiles = users;
+      _contractPartners = partners;
+      _newUser = _emptyUserProfile();
+      _newPartner = _emptyPartnerProfile();
+      _loading = false;
+    });
+  }
+
+  UserProfile _emptyUserProfile() => UserProfile(
+    firstName: '',
+    lastName: '',
+    street: '',
+    houseNumber: '',
+    zipCode: '',
+    city: '',
+    isPrivate: false,
+  );
+
+  ContractPartnerProfile _emptyPartnerProfile() => ContractPartnerProfile(
+    companyName: '',
+    contactPersonName: '',
+    street: '',
+    houseNumber: '',
+    zipCode: '',
+    city: '',
+    isInContractList: false,
+  );
+
+  Future<void> _saveUserProfile() async {
+    if (_userFormKey.currentState!.validate()) {
+      _userFormKey.currentState!.save();
+      widget.databaseRepository.addUserProfile(_newUser);
+      _loadProfiles();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Benutzerprofil gespeichert")),
+      );
+    }
+  }
+
+  Future<void> _savePartnerProfile() async {
+    if (_partnerFormKey.currentState!.validate()) {
+      _partnerFormKey.currentState!.save();
+      widget.databaseRepository.addContractPartnerProfile(_newPartner);
+      _loadProfiles();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Partnerprofil gespeichert")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        height: 250,
-        width: 250,
-        color: Palette.mediumGreenBlue,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(child: Text("Settings Screen Placeholder")),
+    if (_loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return Scaffold(
+      appBar: AppBar(title: const Text("Einstellungen")),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Deine Profile",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            ..._userProfiles.map(
+              (user) => ListTile(title: Text(user.toString())),
+            ),
+
+            Form(
+              key: _userFormKey,
+              child: Column(
+                children: [
+                  const SizedBox(height: 16),
+                  _buildTextField(
+                    "Vorname",
+                    (val) => _newUser = _newUser.copyWith(firstName: val),
+                  ),
+                  _buildTextField(
+                    "Nachname",
+                    (val) => _newUser = _newUser.copyWith(lastName: val),
+                  ),
+                  _buildTextField(
+                    "Straße",
+                    (val) => _newUser = _newUser.copyWith(street: val),
+                  ),
+                  _buildTextField(
+                    "Hausnummer",
+                    (val) => _newUser = _newUser.copyWith(houseNumber: val),
+                  ),
+                  _buildTextField(
+                    "PLZ",
+                    (val) => _newUser = _newUser.copyWith(zipCode: val),
+                  ),
+                  _buildTextField(
+                    "Stadt",
+                    (val) => _newUser = _newUser.copyWith(city: val),
+                  ),
+                  SwitchListTile(
+                    title: const Text("Privates Profil"),
+                    value: _newUser.isPrivate,
+                    onChanged: (val) => setState(() {
+                      _newUser = _newUser.copyWith(isPrivate: val);
+                    }),
+                  ),
+                  ElevatedButton(
+                    onPressed: _saveUserProfile,
+                    child: const Text("Benutzerprofil hinzufügen"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Palette.mediumGreenBlue,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const Divider(height: 40),
+
+            const Text(
+              "Vertragspartnerprofile",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            ..._contractPartners.map(
+              (p) => ListTile(
+                title: Text(p.companyName),
+                subtitle: Text("Ansprechperson: ${p.contactPersonName}"),
+              ),
+            ),
+
+            Form(
+              key: _partnerFormKey,
+              child: Column(
+                children: [
+                  const SizedBox(height: 16),
+                  _buildTextField(
+                    "Firmenname",
+                    (val) =>
+                        _newPartner = _newPartner.copyWith(companyName: val),
+                  ),
+                  _buildTextField(
+                    "Ansprechperson",
+                    (val) => _newPartner = _newPartner.copyWith(
+                      contactPersonName: val,
+                    ),
+                  ),
+                  _buildTextField(
+                    "Straße",
+                    (val) => _newPartner = _newPartner.copyWith(street: val),
+                  ),
+                  _buildTextField(
+                    "Hausnummer",
+                    (val) =>
+                        _newPartner = _newPartner.copyWith(houseNumber: val),
+                  ),
+                  _buildTextField(
+                    "PLZ",
+                    (val) => _newPartner = _newPartner.copyWith(zipCode: val),
+                  ),
+                  _buildTextField(
+                    "Stadt",
+                    (val) => _newPartner = _newPartner.copyWith(city: val),
+                  ),
+                  SwitchListTile(
+                    title: const Text("Teil der Vertragsliste"),
+                    value: _newPartner.isInContractList,
+                    onChanged: (val) => setState(() {
+                      _newPartner = _newPartner.copyWith(isInContractList: val);
+                    }),
+                  ),
+                  ElevatedButton(
+                    onPressed: _savePartnerProfile,
+                    child: const Text("Partnerprofil hinzufügen"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Palette.mediumGreenBlue,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(String label, void Function(String) onSaved) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: TextFormField(
+        decoration: InputDecoration(labelText: label),
+        validator: (val) =>
+            (val == null || val.isEmpty) ? "Bitte $label eingeben" : null,
+        onSaved: (val) => onSaved(val!),
       ),
     );
   }

@@ -20,4 +20,31 @@ class UserProfile extends Profile {
   String toString() {
     return "$firstName $lastName";
   }
+
+  // Named Constructor für leere Instanz
+  UserProfile.empty()
+    : lastName = '',
+      firstName = '',
+      isPrivate = false,
+      super(street: '', houseNumber: '', zipCode: '', city: '');
+
+  UserProfile copyWith({
+    String? firstName,
+    String? lastName,
+    String? street,
+    String? houseNumber,
+    String? zipCode,
+    String? city,
+    bool? isPrivate,
+  }) {
+    return UserProfile(
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      street: street ?? this.street,
+      houseNumber: houseNumber ?? this.houseNumber,
+      zipCode: zipCode ?? this.zipCode,
+      city: city ?? this.city,
+      isPrivate: isPrivate ?? this.isPrivate,
+    );
+  }
 }
