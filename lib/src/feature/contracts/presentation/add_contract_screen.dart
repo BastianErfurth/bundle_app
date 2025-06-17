@@ -331,7 +331,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       textTopic: "Zahlungsintervall",
                       valueText: _firstPaymentDate != null
                           ? DateFormat('dd.MM.yyyy').format(_firstPaymentDate!)
-                          : "Zahlungsintervall wählen",
+                          : "wählen",
                       iconButton: IconButton(
                         onPressed: () {
                           showpayIntervalPicker();
@@ -366,13 +366,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           ),
                         ),
                         FilledButton.icon(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => HomeScreen(widget.db),
-                              ),
-                            );
-                          },
+                          onPressed: () {},
                           label: Row(
                             children: [
                               Icon(Icons.save_alt_outlined),
