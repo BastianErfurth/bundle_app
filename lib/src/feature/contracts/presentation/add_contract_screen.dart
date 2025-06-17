@@ -26,12 +26,16 @@ class _AddContractScreenState extends State<AddContractScreen> {
   final TextEditingController _contractNumberController =
       TextEditingController();
   final TextEditingController _costController = TextEditingController();
+  final TextEditingController _extraInformationController =
+      TextEditingController();
 
   DateTime? _startDate;
+  DateTime? _firstPaymentDate;
   String _laufzeit = "Laufzeit";
   bool _autoVerlaengerung = false;
   bool _kuendigungserinnerung = false;
   String _kuendigungsfrist = "Kündigungsfrist";
+  String _payInterval = "Zahlungsintervall";
 
   List<UserProfile> _userProfiles = [];
   List<ContractPartnerProfile> _contractPartnerProfiles = [];
@@ -49,6 +53,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
     _keywordcontroller.dispose();
     _contractNumberController.dispose();
     _costController.dispose();
+    _extraInformationController.dispose();
     super.dispose();
   }
 
@@ -215,7 +220,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           ? DateFormat('dd.MM.yyyy').format(_startDate!)
                           : "Startdatum wählen",
                       iconButton: IconButton(
-                        onPressed: datePicking,
+                        onPressed: datePickingStart,
                         icon: Icon(Icons.expand_more),
                       ),
                     ),
@@ -314,17 +319,24 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     ),
                     SizedBox(height: 6),
                     ContractAttributes(
-                      textTopic: "Intervall Abbuchung",
+                      textTopic: "erste Abbuchung",
                       iconButton: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          datePickingIntervall();
+                        },
                         icon: Icon(Icons.expand_more),
                       ),
                     ),
                     SizedBox(height: 6),
                     ContractAttributes(
                       textTopic: "Zahlungsintervall",
+                      valueText: _firstPaymentDate != null
+                          ? DateFormat('dd.MM.yyyy').format(_firstPaymentDate!)
+                          : "Zahlungsintervall wählen",
                       iconButton: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showpayIntervalPicker();
+                        },
                         icon: Icon(Icons.expand_more),
                       ),
                     ),
@@ -333,12 +345,11 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       topicIcon: Icon(Icons.add_box_outlined),
                       topicText: "Sonstiges",
                     ),
-                    ContractAttributes(
-                      textTopic: "Zusatzinformationen",
-                      iconButton: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.add_box_outlined),
-                      ),
+                    TextFormFieldWithoutIcon(
+                      labelText: "Zusatzinformationen eingeben",
+                      hintText: "Zusatzinformationen",
+                      controller: _extraInformationController,
+                      validator: (value) {},
                     ),
                     SizedBox(height: 24),
                     Row(
@@ -380,7 +391,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
     );
   }
 
-  void datePicking() async {
+  void datePickingStart() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: _startDate ?? DateTime.now(),
@@ -390,6 +401,20 @@ class _AddContractScreenState extends State<AddContractScreen> {
     if (pickedDate != null) {
       setState(() {
         _startDate = pickedDate;
+      });
+    }
+  }
+
+  void datePickingIntervall() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _startDate ?? DateTime.now(),
+      firstDate: DateTime(1970),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        _firstPaymentDate = pickedDate;
       });
     }
   }
@@ -475,6 +500,46 @@ class _AddContractScreenState extends State<AddContractScreen> {
             height: 250, // oder gewünschte Höhe
             child: picker.makePicker(),
           ),
+        );
+      },
+    );
+  }
+
+  void showpayIntervalPicker() {
+    final List<String> laufzeitOptionen = [
+      'täglich',
+      'wöchentlich',
+      'monatlich',
+      'vierteljährlich',
+      'halbjährlich',
+      'jährlich',
+    ];
+
+    Picker picker = Picker(
+      backgroundColor: Palette.backgroundGreenBlue,
+      adapter: PickerDataAdapter<String>(pickerData: laufzeitOptionen),
+      hideHeader: false,
+      title: Text(
+        'Laufzeit wählen',
+        style: TextStyle(color: Palette.textWhite),
+      ),
+      selecteds: [2], // z. B. "monatlich" vorausgewählt
+      textStyle: TextStyle(color: Palette.textWhite, fontSize: 18),
+      onConfirm: (picker, selecteds) {
+        final selectedLaufzeit = picker.getSelectedValues()[0];
+
+        setState(() {
+          _payInterval = selectedLaufzeit;
+        });
+      },
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Palette.backgroundGreenBlue,
+          child: SizedBox(height: 250, child: picker.makePicker()),
         );
       },
     );
