@@ -35,7 +35,6 @@ class _AddContractScreenState extends State<AddContractScreen> {
   bool _autoVerlaengerung = false;
   bool _kuendigungserinnerung = false;
   String _kuendigungsfrist = "Kündigungsfrist";
-  String _payInterval = "Zahlungsintervall";
 
   List<UserProfile> _userProfiles = [];
   List<ContractPartnerProfile> _contractPartnerProfiles = [];
@@ -349,7 +348,9 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       labelText: "Zusatzinformationen eingeben",
                       hintText: "Zusatzinformationen",
                       controller: _extraInformationController,
-                      validator: (value) {},
+                      validator: (value) {
+                        return null;
+                      },
                     ),
                     SizedBox(height: 24),
                     Row(
@@ -526,11 +527,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
       selecteds: [2], // z. B. "monatlich" vorausgewählt
       textStyle: TextStyle(color: Palette.textWhite, fontSize: 18),
       onConfirm: (picker, selecteds) {
-        final selectedLaufzeit = picker.getSelectedValues()[0];
-
-        setState(() {
-          _payInterval = selectedLaufzeit;
-        });
+        setState(() {});
       },
     );
 

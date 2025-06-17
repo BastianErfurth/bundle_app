@@ -46,7 +46,11 @@ class MockDatabaseRepository implements DatabaseRepository {
       ),
       contractCostRoutine: ContractCostRoutine(
         costsInCents: 7900,
-        everyAgainIntervalNumber: 6,
+        firstCostDate: DateTime(
+          2024,
+          6,
+          1,
+        ), // erstes Abbuchungsdatum muss hier hin
         costRepeatInterval: CostRepeatInterval.month,
       ),
       extraContractInformations: ExtraContractInformation(
@@ -89,7 +93,7 @@ class MockDatabaseRepository implements DatabaseRepository {
       ),
       contractCostRoutine: ContractCostRoutine(
         costsInCents: 2900,
-        everyAgainIntervalNumber: 1,
+        firstCostDate: DateTime(2024, 9, 1),
         costRepeatInterval: CostRepeatInterval.month,
       ),
       extraContractInformations: ExtraContractInformation(
