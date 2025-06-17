@@ -3,15 +3,23 @@ import 'package:bundle_app/src/feature/contracts/domain/contract_partner_profile
 import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
 
 abstract class DatabaseRepository {
-  // Vertraege
+  // Verträge
   Future<void> addContract(Contract newContract);
   Future<void> modifyContract(Contract contractName);
   Future<void> deleteContract(Contract docDeleteName);
   Future<List<Contract>> getMyContracts();
 
-  // Vertragspartner
+  // UserProfiles
   Future<List<UserProfile>> getUserProfiles();
-  void addUserProfile(UserProfile profile);
+  Future<void> addUserProfile(UserProfile profile); // async machen
+  Future<void> deleteUserProfile(UserProfile profile); // hinzufügen
+
+  // Vertragspartner
   Future<List<ContractPartnerProfile>> getContractors();
-  void addContractPartnerProfile(ContractPartnerProfile profile);
+  Future<void> addContractPartnerProfile(
+    ContractPartnerProfile profile,
+  ); // async machen
+  Future<void> deleteContractPartnerProfile(
+    ContractPartnerProfile profile,
+  ); // hinzufügen
 }

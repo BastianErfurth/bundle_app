@@ -144,10 +144,10 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   ElevatedButton(
                     onPressed: _saveUserProfile,
-                    child: const Text("Benutzerprofil hinzufügen"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Palette.mediumGreenBlue,
                     ),
+                    child: const Text("Benutzerprofil hinzufügen"),
                   ),
                 ],
               ),
@@ -208,10 +208,10 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   ElevatedButton(
                     onPressed: _savePartnerProfile,
-                    child: const Text("Partnerprofil hinzufügen"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Palette.mediumGreenBlue,
                     ),
+                    child: const Text("Partnerprofil hinzufügen"),
                   ),
                 ],
               ),

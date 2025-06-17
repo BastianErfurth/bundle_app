@@ -8,6 +8,7 @@ import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/dropdown_select_field.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
+import 'package:bundle_app/src/feature/settings/presentation/new_setting_screen.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -357,7 +358,15 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         FilledButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => NewSettingScreen(
+                                  databaseRepository: widget.db,
+                                ),
+                              ),
+                            );
+                          },
                           label: Row(
                             children: [
                               Icon(Icons.upload_file_outlined),
