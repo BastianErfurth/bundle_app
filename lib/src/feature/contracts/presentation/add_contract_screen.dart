@@ -25,10 +25,12 @@ class _AddContractScreenState extends State<AddContractScreen> {
   final TextEditingController _keywordcontroller = TextEditingController();
   final TextEditingController _contractNumberController =
       TextEditingController();
+  final TextEditingController _costController = TextEditingController();
 
   DateTime? _startDate;
   String _laufzeit = "Laufzeit";
   bool _autoVerlaengerung = false;
+  bool _kuendigungserinnerung = false;
   String _kuendigungsfrist = "Kündigungsfrist";
 
   List<UserProfile> _userProfiles = [];
@@ -46,6 +48,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
   void dispose() {
     _keywordcontroller.dispose();
     _contractNumberController.dispose();
+    _costController.dispose();
     super.dispose();
   }
 
@@ -191,7 +194,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     SizedBox(height: 6),
                     TextFormFieldWithoutIcon(
                       labelText: "Vertragnummer eingeben",
-                      hintText: "Stichwort",
+                      hintText: "Vertragsnummer",
                       controller: _contractNumberController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -237,7 +240,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                               : Icons.toggle_off,
                           color: _autoVerlaengerung
                               ? Palette.lightGreenBlue
-                              : Palette.textWhite,
+                              : Palette.buttonBackgroundUnused2,
                         ),
                         onPressed: () {
                           setState(() {
@@ -265,8 +268,19 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     ContractAttributes(
                       textTopic: "Kündigungserinnerung",
                       iconButton: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.toggle_off),
+                        onPressed: () {
+                          setState(() {
+                            _kuendigungserinnerung = !_kuendigungserinnerung;
+                          });
+                        },
+                        icon: Icon(
+                          _kuendigungserinnerung
+                              ? Icons.toggle_on
+                              : Icons.toggle_off,
+                          color: _kuendigungserinnerung
+                              ? Palette.lightGreenBlue
+                              : Palette.buttonBackgroundUnused2,
+                        ),
                       ),
                     ),
                     SizedBox(height: 16),
@@ -274,12 +288,29 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       topicIcon: Icon(Icons.euro_symbol_outlined),
                       topicText: "Kosten",
                     ),
-                    ContractAttributes(
-                      textTopic: "Kosten",
-                      iconButton: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.expand_more),
-                      ),
+                    TextFormFieldWithoutIcon(
+                      labelText: "Kosten eingeben",
+                      hintText: "Kosten in EUR",
+                      controller: _costController,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Bitte Kosten eingeben";
+                        } else if (double.tryParse(value) == null) {
+                          return "Bitte eine gültige Zahl eingeben";
+                        }
+                        final cost = double.parse(value);
+                        if (cost < 0) {
+                          return "Kosten dürfen nicht negativ sein";
+                        }
+                        if (cost > 1000000) {
+                          return "Kosten dürfen nicht mehr als 1.000.000 EUR betragen";
+                        }
+                        if (cost > 10000) {
+                          return "Kosten sollten realistisch sein";
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(height: 6),
                     ContractAttributes(
