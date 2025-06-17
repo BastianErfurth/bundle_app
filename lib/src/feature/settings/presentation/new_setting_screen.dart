@@ -1,4 +1,4 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
+// ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously
 
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:flutter/material.dart';
@@ -42,14 +42,14 @@ class _SettingScreenState extends State<NewSettingScreen>
   }
 
   Future<void> _addUserProfile(UserProfile profile) async {
-    widget.databaseRepository.addUserProfile(profile);
+    await widget.databaseRepository.addUserProfile(profile);
     await _loadData();
   }
 
   Future<void> _addContractPartnerProfile(
     ContractPartnerProfile profile,
   ) async {
-    widget.databaseRepository.addContractPartnerProfile(profile);
+    await widget.databaseRepository.addContractPartnerProfile(profile);
     await _loadData();
   }
 
@@ -188,6 +188,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
+                  SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Nachname",
                     hintText: "Nachname eingeben",
@@ -199,6 +200,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
+                  SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Straße",
                     hintText: "Straße eingeben",
@@ -210,6 +212,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
+                  SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Hausnummer",
                     hintText: "Hausnummer eingeben",
@@ -221,6 +224,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
+                  SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "PLZ",
                     hintText: "PLZ eingeben",
@@ -232,6 +236,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
+                  SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Stadt",
                     hintText: "Stadt eingeben",
@@ -263,7 +268,7 @@ class _SettingScreenState extends State<NewSettingScreen>
             ),
             ElevatedButton(
               child: const Text("Speichern"),
-              onPressed: () {
+              onPressed: () async {
                 if (formKey.currentState!.validate()) {
                   final newProfile = UserProfile(
                     firstName: _firstNameController.text,
@@ -274,7 +279,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                     city: _cityController.text,
                     isPrivate: isPrivate,
                   );
-                  _addUserProfile(newProfile);
+                  await _addUserProfile(newProfile);
                   Navigator.of(context).pop();
                 }
               },
@@ -322,6 +327,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
+                  SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Ansprechpartner",
                     hintText: "Ansprechpartner eingeben",
@@ -333,6 +339,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
+                  SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Straße",
                     hintText: "Straße eingeben",
@@ -344,6 +351,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
+                  SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Hausnummer",
                     hintText: "Hausnummer eingeben",
@@ -355,6 +363,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
+                  SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "PLZ",
                     hintText: "PLZ eingeben",
@@ -366,6 +375,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
+                  SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Stadt",
                     hintText: "Stadt eingeben",
