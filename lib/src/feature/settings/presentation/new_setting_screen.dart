@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
