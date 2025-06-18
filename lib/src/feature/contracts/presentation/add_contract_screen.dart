@@ -36,6 +36,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
   bool _autoVerlaengerung = false;
   bool _kuendigungserinnerung = false;
   String _kuendigungsfrist = "Kündigungsfrist";
+  String _zahlungsintervall = "Zahlungsintervall";
 
   List<UserProfile> _userProfiles = [];
   List<ContractPartnerProfile> _contractPartnerProfiles = [];
@@ -320,6 +321,9 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     SizedBox(height: 6),
                     ContractAttributes(
                       textTopic: "erste Abbuchung",
+                      valueText: _firstPaymentDate != null
+                          ? DateFormat('dd.MM.yyyy').format(_firstPaymentDate!)
+                          : "wählen",
                       iconButton: IconButton(
                         onPressed: () {
                           datePickingIntervall();
@@ -330,9 +334,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     SizedBox(height: 6),
                     ContractAttributes(
                       textTopic: "Zahlungsintervall",
-                      valueText: _firstPaymentDate != null
-                          ? DateFormat('dd.MM.yyyy').format(_firstPaymentDate!)
-                          : "wählen",
+                      valueText: _zahlungsintervall,
                       iconButton: IconButton(
                         onPressed: () {
                           showpayIntervalPicker();
@@ -419,6 +421,8 @@ class _AddContractScreenState extends State<AddContractScreen> {
     if (pickedDate != null) {
       setState(() {
         _firstPaymentDate = pickedDate;
+        // Hier kannst du auch das Zahlungsintervall setzen, falls nötig
+        // Zum Beispiel: _zahlungsintervall = 'monatlich';
       });
     }
   }
@@ -524,13 +528,21 @@ class _AddContractScreenState extends State<AddContractScreen> {
       adapter: PickerDataAdapter<String>(pickerData: laufzeitOptionen),
       hideHeader: false,
       title: Text(
-        'Laufzeit wählen',
+        'Zahlungsintervall wählen',
         style: TextStyle(color: Palette.textWhite),
       ),
-      selecteds: [2], // z. B. "monatlich" vorausgewählt
+      selecteds: [
+        laufzeitOptionen.contains(_zahlungsintervall)
+            ? laufzeitOptionen.indexOf(_zahlungsintervall)
+            : 2,
+      ], // Auswahl merken
       textStyle: TextStyle(color: Palette.textWhite, fontSize: 18),
       onConfirm: (picker, selecteds) {
-        setState(() {});
+        setState(() {
+          _zahlungsintervall = laufzeitOptionen[selecteds.first];
+          // Hier kannst du auch das Datum der ersten Abbuchung setzen, falls nötig
+          // Zum Beispiel: _firstPaymentDate = DateTime.now();
+        });
       },
     );
 
