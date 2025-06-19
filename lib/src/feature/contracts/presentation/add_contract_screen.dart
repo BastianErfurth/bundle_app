@@ -9,6 +9,7 @@ import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_a
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/dropdown_select_field.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/feature/settings/presentation/new_setting_screen.dart';
+import 'package:bundle_app/src/feature/settings/presentation/setting_screen.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -140,62 +141,117 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       topicIcon: Icon(Icons.description_outlined),
                       topicText: "Vertragsparteien",
                     ),
-                    FutureBuilder<List<UserProfile>>(
-                      future: (widget.db as MockDatabaseRepository)
-                          .getUserProfiles(), // Explicit cast to MockDatabaseRepository
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else if (snapshot.hasData) {
-                          _userProfiles = snapshot.data!;
-                          return DropDownSelectField<UserProfile>(
-                            labelText: "Profil wählen",
-                            values: _userProfiles,
-                            itemLabel: (UserProfile profile) =>
-                                '${profile.firstName} ${profile.lastName}',
-                            selectedValue: _selectedUserProfile,
-                            onChanged: (UserProfile? newValue) {
-                              setState(() {
-                                _selectedUserProfile = newValue;
-                              });
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FutureBuilder<List<UserProfile>>(
+                          future: (widget.db as MockDatabaseRepository)
+                              .getUserProfiles(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else if (snapshot.hasData) {
+                              _userProfiles = snapshot.data!;
+                              return DropDownSelectField<UserProfile>(
+                                labelText: "Profil wählen",
+                                values: _userProfiles,
+                                itemLabel: (UserProfile profile) =>
+                                    '${profile.firstName} ${profile.lastName}',
+                                selectedValue: _selectedUserProfile,
+                                onChanged: (UserProfile? newValue) {
+                                  setState(() {
+                                    _selectedUserProfile = newValue;
+                                  });
+                                },
+                              );
+                            } else {
+                              return Text('No user profiles found');
+                            }
+                          },
+                        ),
+                        SizedBox(height: 8),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton.icon(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .push(
+                                    MaterialPageRoute(
+                                      builder: (context) => SettingScreen(
+                                        databaseRepository: widget.db,
+                                      ),
+                                    ),
+                                  )
+                                  .then((_) {
+                                    // Nach Rückkehr: Liste neu laden, falls nötig
+                                    setState(() {});
+                                  });
                             },
-                          );
-                        } else {
-                          return Text('No user profiles found');
-                        }
-                      },
+                            icon: Icon(Icons.add),
+                            label: Text("Profil hinzufügen"),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 6),
-                    FutureBuilder<List<ContractPartnerProfile>>(
-                      future: (widget.db as MockDatabaseRepository)
-                          .getContractors(), // Explicit cast to MockDatabaseRepository
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else if (snapshot.hasData) {
-                          _contractPartnerProfiles = snapshot.data!;
-                          return DropDownSelectField<ContractPartnerProfile>(
-                            labelText: "Vertragspartner wählen",
-                            values: _contractPartnerProfiles,
-                            itemLabel: (ContractPartnerProfile profile) =>
-                                profile.companyName,
-                            selectedValue: _selectedContractPartnerProfile,
-                            onChanged: (ContractPartnerProfile? newValue) {
-                              setState(() {
-                                _selectedContractPartnerProfile = newValue;
-                              });
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FutureBuilder<List<ContractPartnerProfile>>(
+                          future: (widget.db as MockDatabaseRepository)
+                              .getContractors(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else if (snapshot.hasData) {
+                              _contractPartnerProfiles = snapshot.data!;
+                              return DropDownSelectField<
+                                ContractPartnerProfile
+                              >(
+                                labelText: "Vertragspartner wählen",
+                                values: _contractPartnerProfiles,
+                                itemLabel: (ContractPartnerProfile profile) =>
+                                    profile.companyName,
+                                selectedValue: _selectedContractPartnerProfile,
+                                onChanged: (ContractPartnerProfile? newValue) {
+                                  setState(() {
+                                    _selectedContractPartnerProfile = newValue;
+                                  });
+                                },
+                              );
+                            } else {
+                              return Text('Keine Vertragspartner gefunden');
+                            }
+                          },
+                        ),
+                        SizedBox(height: 8),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton.icon(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .push(
+                                    MaterialPageRoute(
+                                      builder: (context) => SettingScreen(
+                                        databaseRepository: widget.db,
+                                      ),
+                                    ),
+                                  )
+                                  .then((_) {
+                                    setState(() {}); // Liste neu laden
+                                  });
                             },
-                          );
-                        } else {
-                          return Text('No contract partners found');
-                        }
-                      },
+                            icon: Icon(Icons.add),
+                            label: Text("Vertragspartner hinzufügen"),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 6),
                     TextFormFieldWithoutIcon(

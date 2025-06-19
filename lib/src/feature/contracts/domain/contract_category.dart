@@ -5,7 +5,8 @@ enum ContractCategory {
   leisure('Freizeit'),
   sport('Sport'),
   business('Business'),
-  subscribtion('Abonnement');
+  subscribtion('Abonnement'),
+  other('Sonstiges');
 
   const ContractCategory(this.label);
   final String label;
