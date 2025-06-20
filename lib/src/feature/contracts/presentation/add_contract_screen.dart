@@ -516,7 +516,11 @@ class _AddContractScreenState extends State<AddContractScreen> {
         final einheit = picker.getSelectedValues()[1];
 
         setState(() {
-          _laufzeit = einheit == 'Unbegrenzt' ? 'Unbegrenzt' : '$zahl $einheit';
+          if (einheit == 'Unbegrenzt') {
+            _laufzeit = 'Unbegrenzt';
+          } else {
+            _laufzeit = '$zahl $einheit';
+          }
         });
       },
     );
@@ -645,12 +649,14 @@ class _AddContractScreenState extends State<AddContractScreen> {
     }
 
     // Laufzeit prüfen (z.B. "1 Jahr")
-    final laufzeitParts = _laufzeit.split(' ');
-    if (laufzeitParts.length != 2 || int.tryParse(laufzeitParts[0]) == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Bitte eine gültige Laufzeit auswählen.')),
-      );
-      return;
+    if (_laufzeit != "unbegrenzt") {
+      final laufzeitParts = _laufzeit.split(' ');
+      if (laufzeitParts.length != 2 || int.tryParse(laufzeitParts[0]) == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Bitte eine gültige Laufzeit auswählen.')),
+        );
+        return;
+      }
     }
 
     // Kündigungsfrist prüfen (z.B. "3 Monate")
@@ -695,15 +701,26 @@ class _AddContractScreenState extends State<AddContractScreen> {
     }
 
     // ContractRuntime zusammenbauen
-    final contractRuntime = ContractRuntime(
-      dt: _startDate!,
-      howManyinInterval: int.parse(laufzeitParts[0]),
-      interval: Interval.values.firstWhere(
-        (e) => e.label == laufzeitParts[1],
-        orElse: () => Interval.month,
-      ),
-      isAutomaticExtend: _autoVerlaengerung,
-    );
+
+    final contractRuntime = _laufzeit.toLowerCase().trim() == "unbegrenzt"
+        ? ContractRuntime(
+            dt: _startDate!,
+            howManyinInterval: 0,
+            interval: Interval.month,
+            isAutomaticExtend: _autoVerlaengerung,
+          )
+        : () {
+            final laufzeitParts = _laufzeit.split(' ');
+            return ContractRuntime(
+              dt: _startDate!,
+              howManyinInterval: int.parse(laufzeitParts[0]),
+              interval: Interval.values.firstWhere(
+                (e) => e.label == laufzeitParts[1],
+                orElse: () => Interval.month,
+              ),
+              isAutomaticExtend: _autoVerlaengerung,
+            );
+          }();
 
     // ContractQuitInterval zusammenbauen
     final contractQuitInterval = ContractQuitInterval(
