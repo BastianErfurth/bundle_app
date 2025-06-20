@@ -66,8 +66,8 @@ class _SettingScreenState extends State<SettingScreen> {
   Future<void> _saveUserProfile() async {
     if (_userFormKey.currentState!.validate()) {
       _userFormKey.currentState!.save();
-      widget.databaseRepository.addUserProfile(_newUser);
-      _loadProfiles();
+      await widget.databaseRepository.addUserProfile(_newUser);
+      await _loadProfiles();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Benutzerprofil gespeichert")),
       );
@@ -77,11 +77,71 @@ class _SettingScreenState extends State<SettingScreen> {
   Future<void> _savePartnerProfile() async {
     if (_partnerFormKey.currentState!.validate()) {
       _partnerFormKey.currentState!.save();
-      widget.databaseRepository.addContractPartnerProfile(_newPartner);
-      _loadProfiles();
+      await widget.databaseRepository.addContractPartnerProfile(_newPartner);
+      await _loadProfiles();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Partnerprofil gespeichert")),
       );
+    }
+  }
+
+  Future<void> _deleteUserProfile(UserProfile user) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Profil löschen"),
+        content: Text(
+          "Möchtest du das Profil von ${user.firstName} ${user.lastName} wirklich löschen?",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Abbrechen"),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Löschen"),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await widget.databaseRepository.deleteUserProfile(user);
+      await _loadProfiles();
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Benutzerprofil gelöscht")));
+    }
+  }
+
+  Future<void> _deletePartnerProfile(ContractPartnerProfile partner) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Partnerprofil löschen"),
+        content: Text(
+          "Möchtest du das Partnerprofil von ${partner.companyName} wirklich löschen?",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Abbrechen"),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Löschen"),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await widget.databaseRepository.deleteContractPartnerProfile(partner);
+      await _loadProfiles();
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Partnerprofil gelöscht")));
     }
   }
 
@@ -103,7 +163,16 @@ class _SettingScreenState extends State<SettingScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             ..._userProfiles.map(
-              (user) => ListTile(title: Text(user.toString())),
+              (user) => ListTile(
+                title: Text("${user.firstName} ${user.lastName}"),
+                subtitle: Text(
+                  "${user.street} ${user.houseNumber}, ${user.zipCode} ${user.city}",
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete, color: Colors.red),
+                  onPressed: () => _deleteUserProfile(user),
+                ),
+              ),
             ),
 
             Form(
@@ -163,6 +232,10 @@ class _SettingScreenState extends State<SettingScreen> {
               (p) => ListTile(
                 title: Text(p.companyName),
                 subtitle: Text("Ansprechperson: ${p.contactPersonName}"),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete, color: Colors.red),
+                  onPressed: () => _deletePartnerProfile(p),
+                ),
               ),
             ),
 
@@ -222,15 +295,23 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  Widget _buildTextField(String label, void Function(String) onSaved) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: TextFormField(
-        decoration: InputDecoration(labelText: label),
-        validator: (val) =>
-            (val == null || val.isEmpty) ? "Bitte $label eingeben" : null,
-        onSaved: (val) => onSaved(val!),
-      ),
+  Widget _buildTextField(
+    String label,
+    Function(String) onSaved, {
+    String? initialValue,
+  }) {
+    return TextFormField(
+      decoration: InputDecoration(labelText: label),
+      initialValue: initialValue,
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return '$label darf nicht leer sein';
+        }
+        return null;
+      },
+      onSaved: (newValue) {
+        if (newValue != null) onSaved(newValue);
+      },
     );
   }
 }
