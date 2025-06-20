@@ -1,10 +1,12 @@
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract_category.dart';
+import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/add_contract_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_list_container.dart';
-import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
+import 'package:bundle_app/src/feature/contracts/presentation/widgets/dropdown_select_field.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +22,24 @@ class MyContractsScreen extends StatefulWidget {
 class _MyContractsScreenState extends State<MyContractsScreen> {
   final TextEditingController _searchController = TextEditingController();
   Future<List<Contract>>? _myContracts;
+  ContractCategory? _selectedContractCategory;
+
+  List<UserProfile> _userProfiles = [];
+  UserProfile? _selectedUserProfile;
+
   @override
   void initState() {
     super.initState();
     _myContracts = widget.db.getMyContracts();
+    // Fetch user profiles from the database or set dummy data
+    widget.db.getUserProfiles().then((profiles) {
+      setState(() {
+        _userProfiles = profiles;
+        if (_userProfiles.isNotEmpty) {
+          _selectedUserProfile = _userProfiles.first;
+        }
+      });
+    });
   }
 
   @override
@@ -69,27 +85,55 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                 topicIcon: Icon(Icons.description),
                 topicText: "Meine Verträge",
               ),
-              ContractAttributes(
-                textTopic: "Meine Profile",
-                iconButton: IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.expand_more),
-                ),
+              FutureBuilder<List<UserProfile>>(
+                future: widget.db.getUserProfiles(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("Fehler: ${snapshot.error}"));
+                  } else if (snapshot.hasData) {
+                    final profiles = snapshot.data ?? [];
+                    return DropDownSelectField<UserProfile>(
+                      labelText: "Profil wählen",
+                      values: profiles,
+                      itemLabel: (UserProfile profile) =>
+                          '${profile.firstName} ${profile.lastName}',
+                      selectedValue: _selectedUserProfile,
+                      onChanged: (UserProfile? newValue) {
+                        setState(() {
+                          _selectedUserProfile = newValue;
+                        });
+                      },
+                    );
+                  } else {
+                    return Center(child: Text("Keine Profile gefunden"));
+                  }
+                },
               ),
               SizedBox(height: 4),
               TextFormFieldWithoutIcon(
-                controller: _searchController,
                 labelText: "Suchbegriff eingeben",
-                hintText: "Suchbegriff eingeben",
+                hintText: "Stichwort",
+                controller: _searchController,
+                validator: (value) {
+                  return null;
+                },
               ),
-              SizedBox(height: 16),
-              ContractAttributes(
-                textTopic: "Alle Verträge",
-                iconButton: IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.expand_more),
-                ),
+              SizedBox(height: 4),
+              DropDownSelectField<ContractCategory?>(
+                labelText: "Kategorie wählen",
+                values: [null, ...ContractCategory.values],
+                itemLabel: (ContractCategory? category) =>
+                    category == null ? "Alle Kategorien" : category.label,
+                selectedValue: _selectedContractCategory,
+                onChanged: (ContractCategory? newValue) {
+                  setState(() {
+                    _selectedContractCategory = newValue;
+                  });
+                },
               ),
+
               SizedBox(height: 16),
               SizedBox(
                 height: 100,

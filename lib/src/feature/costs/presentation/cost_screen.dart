@@ -1,13 +1,31 @@
 import 'package:bundle_app/src/data/database_repository.dart';
+import 'package:bundle_app/src/data/mock_database_repository.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract_category.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
+import 'package:bundle_app/src/feature/contracts/presentation/widgets/dropdown_select_field.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_picker_plus/picker.dart';
 
-class CostScreen extends StatelessWidget {
+class CostScreen extends StatefulWidget {
   final DatabaseRepository db;
   const CostScreen(this.db, {super.key});
+
+  @override
+  State<CostScreen> createState() => _CostScreenState();
+}
+
+class _CostScreenState extends State<CostScreen> {
+  String _zahlungsintervall = "Zahlungsintervall wählen";
+  ContractCategory? _selectedContractCategory;
+
+  String itemLabel(List<Contract> contracts) {
+    // Customize this as needed for your UI
+    return "Verträge (${contracts.length})";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +41,59 @@ class CostScreen extends StatelessWidget {
                 topicText: "Meine Kosten",
               ),
               SizedBox(height: 16),
-              ContractAttributes(
-                textTopic: "Verträge auswählen",
-                iconButton: IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.expand_more),
-                ),
+              DropDownSelectField<ContractCategory?>(
+                labelText: "Kategorie wählen",
+                values: [null, ...ContractCategory.values],
+                itemLabel: (ContractCategory? category) =>
+                    category == null ? "Alle Kategorien" : category.label,
+                selectedValue: _selectedContractCategory,
+                onChanged: (ContractCategory? newValue) {
+                  setState(() {
+                    _selectedContractCategory = newValue;
+                  });
+                },
+              ),
+              SizedBox(height: 8),
+              FutureBuilder<List<Contract>>(
+                future: (widget.db as MockDatabaseRepository)
+                    .getMyContracts(), // Use the mock repository for testing
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Fehler beim Laden der Verträge');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Text('Keine Verträge gefunden');
+                  } else {
+                    // Use a dropdown for a single Contract selection
+                    return DropDownSelectField<Contract>(
+                      values: _selectedContractCategory == null
+                          ? snapshot.data! // Alle Verträge anzeigen
+                          : snapshot.data!
+                                .where(
+                                  (contract) =>
+                                      contract.category ==
+                                      _selectedContractCategory,
+                                )
+                                .toList(), // Nur gefilterte Verträge
+                      labelText: "Vertrag auswählen",
+                      itemLabel: (Contract contract) =>
+                          '${contract.keyword} - ${contract.contractPartnerProfile.companyName}',
+                      onChanged: (Contract? newValue) {
+                        setState(() {
+                          // Falls du den ausgewählten Vertrag speichern willst, hier speichern
+                        });
+                      },
+                    );
+                  }
+                },
               ),
               SizedBox(height: 4),
               ContractAttributes(
-                textTopic: "Intervall auswählen",
+                textTopic: "wähle",
+                valueText: _zahlungsintervall,
                 iconButton: IconButton(
-                  onPressed: () {},
+                  onPressed: showpayIntervalPicker,
                   icon: Icon(Icons.expand_more),
                 ),
               ),
@@ -159,6 +218,48 @@ class CostScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void showpayIntervalPicker() {
+    final List<String> laufzeitOptionen = [
+      'täglich',
+      'wöchentlich',
+      'monatlich',
+      'vierteljährlich',
+      'halbjährlich',
+      'jährlich',
+    ];
+
+    Picker picker = Picker(
+      backgroundColor: Palette.backgroundGreenBlue,
+      adapter: PickerDataAdapter<String>(pickerData: laufzeitOptionen),
+      hideHeader: false,
+      title: Text(
+        'Zahlungsintervall wählen',
+        style: TextStyle(color: Palette.textWhite),
+      ),
+      selecteds: [
+        laufzeitOptionen.contains(_zahlungsintervall)
+            ? laufzeitOptionen.indexOf(_zahlungsintervall)
+            : 2,
+      ], // Auswahl merken
+      textStyle: TextStyle(color: Palette.textWhite, fontSize: 18),
+      onConfirm: (picker, selecteds) {
+        setState(() {
+          _zahlungsintervall = laufzeitOptionen[selecteds.first];
+        });
+      },
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Palette.backgroundGreenBlue,
+          child: SizedBox(height: 250, child: picker.makePicker()),
+        );
+      },
     );
   }
 }

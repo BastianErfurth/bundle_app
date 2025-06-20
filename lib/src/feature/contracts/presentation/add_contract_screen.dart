@@ -122,7 +122,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           _selectedContractCategory = newValue;
                         });
                       },
-                    ), // Old implementation
+                    ),
                     SizedBox(height: 6),
                     TextFormFieldWithoutIcon(
                       labelText: "Stichwort eingeben",
@@ -596,8 +596,6 @@ class _AddContractScreenState extends State<AddContractScreen> {
       onConfirm: (picker, selecteds) {
         setState(() {
           _zahlungsintervall = laufzeitOptionen[selecteds.first];
-          // Hier kannst du auch das Datum der ersten Abbuchung setzen, falls nötig
-          // Zum Beispiel: _firstPaymentDate = DateTime.now();
         });
       },
     );
