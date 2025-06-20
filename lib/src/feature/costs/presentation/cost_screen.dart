@@ -90,7 +90,7 @@ class _CostScreenState extends State<CostScreen> {
               ),
               SizedBox(height: 4),
               ContractAttributes(
-                textTopic: "wähle",
+                textTopic: "Zahlungsintervall",
                 valueText: _zahlungsintervall,
                 iconButton: IconButton(
                   onPressed: showpayIntervalPicker,
