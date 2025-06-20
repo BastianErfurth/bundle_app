@@ -169,7 +169,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   "${user.street} ${user.houseNumber}, ${user.zipCode} ${user.city}",
                 ),
                 trailing: IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
+                  icon: Icon(Icons.delete, color: Palette.lightGreenBlue),
                   onPressed: () => _deleteUserProfile(user),
                 ),
               ),
@@ -233,7 +233,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 title: Text(p.companyName),
                 subtitle: Text("Ansprechperson: ${p.contactPersonName}"),
                 trailing: IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
+                  icon: Icon(Icons.delete, color: Palette.lightGreenBlue),
                   onPressed: () => _deletePartnerProfile(p),
                 ),
               ),
