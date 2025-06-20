@@ -1,4 +1,25 @@
-enum Interval { day, week, month, year, unlimited }
+enum Interval {
+  day,
+  week,
+  month,
+  year,
+  unlimited;
+
+  String get label {
+    switch (this) {
+      case Interval.day:
+        return 'Day';
+      case Interval.week:
+        return 'Week';
+      case Interval.month:
+        return 'Month';
+      case Interval.year:
+        return 'Year';
+      case Interval.unlimited:
+        return 'Unlimited';
+    }
+  }
+}
 
 class ContractRuntime {
   //Attribute

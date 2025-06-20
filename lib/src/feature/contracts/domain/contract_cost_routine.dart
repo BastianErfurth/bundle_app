@@ -1,4 +1,14 @@
-enum CostRepeatInterval { day, week, month, quarter, halfyear, year }
+enum CostRepeatInterval {
+  day('Day'),
+  week('Week'),
+  month('Month'),
+  quarter('Quarter'),
+  halfyear('Half Year'),
+  year('Year');
+
+  final String label;
+  const CostRepeatInterval(this.label);
+}
 
 class ContractCostRoutine {
   //Attribute

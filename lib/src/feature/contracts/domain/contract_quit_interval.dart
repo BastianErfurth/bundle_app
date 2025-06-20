@@ -1,4 +1,22 @@
-enum QuitInterval { day, week, month, year }
+enum QuitInterval {
+  day,
+  week,
+  month,
+  year;
+
+  String get label {
+    switch (this) {
+      case QuitInterval.day:
+        return 'Day';
+      case QuitInterval.week:
+        return 'Week';
+      case QuitInterval.month:
+        return 'Month';
+      case QuitInterval.year:
+        return 'Year';
+    }
+  }
+}
 
 class ContractQuitInterval {
   //Attribute

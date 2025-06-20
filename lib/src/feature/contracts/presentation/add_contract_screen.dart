@@ -1,8 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_category.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract_cost_routine.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_partner_profile.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract_quit_interval.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract_runtime.dart';
+import 'package:bundle_app/src/feature/contracts/domain/extra_contract_information.dart';
 import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
@@ -11,7 +18,7 @@ import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_head
 import 'package:bundle_app/src/feature/settings/presentation/new_setting_screen.dart';
 import 'package:bundle_app/src/feature/settings/presentation/setting_screen.dart';
 import 'package:bundle_app/src/theme/palette.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Interval;
 import 'package:intl/intl.dart';
 import 'package:flutter_picker_plus/flutter_picker_plus.dart';
 
@@ -31,6 +38,11 @@ class _AddContractScreenState extends State<AddContractScreen> {
   final TextEditingController _extraInformationController =
       TextEditingController();
 
+  UserProfile? _selectedUserProfile;
+  ContractRuntime? _contractRuntime;
+  ContractQuitInterval? _contractQuitInterval;
+  ContractCostRoutine? _contractCostRoutine;
+
   DateTime? _startDate;
   DateTime? _firstPaymentDate;
   String _laufzeit = "Laufzeit";
@@ -41,7 +53,6 @@ class _AddContractScreenState extends State<AddContractScreen> {
 
   List<UserProfile> _userProfiles = [];
   List<ContractPartnerProfile> _contractPartnerProfiles = [];
-  UserProfile? _selectedUserProfile;
   ContractPartnerProfile? _selectedContractPartnerProfile;
   ContractCategory? _selectedContractCategory;
 
@@ -150,7 +161,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return CircularProgressIndicator();
+                              return Center(child: CircularProgressIndicator());
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else if (snapshot.hasData) {
@@ -206,7 +217,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return CircularProgressIndicator();
+                              return Center(child: CircularProgressIndicator());
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else if (snapshot.hasData) {
@@ -433,7 +444,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           ),
                         ),
                         FilledButton.icon(
-                          onPressed: () {},
+                          onPressed: _addContract,
                           label: Row(
                             children: [
                               Icon(Icons.save_alt_outlined),
@@ -609,5 +620,74 @@ class _AddContractScreenState extends State<AddContractScreen> {
         );
       },
     );
+  }
+
+  void _addContract() async {
+    // Validierung: Prüfe, ob alle erforderlichen Felder befüllt sind
+    if (_selectedContractCategory == null ||
+        _selectedUserProfile == null ||
+        _selectedContractPartnerProfile == null ||
+        _contractNumberController.text.trim().isEmpty ||
+        _keywordcontroller.text.trim().isEmpty ||
+        _contractRuntime == null ||
+        _contractQuitInterval == null ||
+        _contractCostRoutine == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Bitte alle Pflichtfelder ausfüllen.')),
+      );
+      return;
+    }
+
+    // Erstelle das Contract-Objekt
+    final newContract = Contract(
+      category: _selectedContractCategory!,
+      userProfile: _selectedUserProfile!,
+      contractPartnerProfile: _selectedContractPartnerProfile!,
+      keyword: _keywordcontroller.text.trim(),
+      contractNumber: _contractNumberController.text.trim(),
+      contractRuntime: ContractRuntime(
+        dt: _startDate ?? DateTime.now(),
+        howManyinInterval: int.parse(_laufzeit.split(' ')[0]),
+        interval: Interval.values.firstWhere(
+          (e) => e.label == _laufzeit.split(' ')[1],
+          orElse: () => Interval.month,
+        ),
+        isAutomaticExtend: _autoVerlaengerung,
+      ),
+      contractQuitInterval: ContractQuitInterval(
+        howManyInQuitUnits: int.parse(_kuendigungsfrist.split(' ')[0]),
+        quitInterval: QuitInterval.values.firstWhere(
+          (e) => e.label == _kuendigungsfrist.split(' ')[1],
+          orElse: () => QuitInterval.month,
+        ),
+        isQuitReminderAlertSet: _kuendigungserinnerung,
+      ),
+      contractCostRoutine: ContractCostRoutine(
+        costsInCents: (double.parse(_costController.text.trim()) * 100).toInt(),
+        firstCostDate: _firstPaymentDate ?? DateTime.now(),
+        costRepeatInterval: CostRepeatInterval.values.firstWhere(
+          (e) => e.label == _zahlungsintervall,
+          orElse: () => CostRepeatInterval.month,
+        ),
+      ),
+      extraContractInformations: ExtraContractInformation(
+        _extraInformationController.text.trim(),
+        "",
+      ),
+    );
+
+    try {
+      await widget.db.addContract(newContract);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Vertrag erfolgreich hinzugefügt.')),
+      );
+
+      Navigator.of(context).pop(); // Zurück zur vorherigen Ansicht
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Fehler beim Speichern des Vertrags: $e')),
+      );
+    }
   }
 }
