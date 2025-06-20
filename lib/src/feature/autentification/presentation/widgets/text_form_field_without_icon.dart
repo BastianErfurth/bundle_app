@@ -30,7 +30,7 @@ class TextFormFieldWithoutIcon extends StatelessWidget {
           ),
         ),
         TextFormField(
-          controller: TextEditingController(),
+          controller: controller,
           validator: validator,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType: keyboardType,

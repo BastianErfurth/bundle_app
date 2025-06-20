@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
@@ -41,7 +39,6 @@ class _AddContractScreenState extends State<AddContractScreen> {
   UserProfile? _selectedUserProfile;
   ContractRuntime? _contractRuntime;
   ContractQuitInterval? _contractQuitInterval;
-  ContractCostRoutine? _contractCostRoutine;
 
   DateTime? _startDate;
   DateTime? _firstPaymentDate;
@@ -52,6 +49,8 @@ class _AddContractScreenState extends State<AddContractScreen> {
   String _zahlungsintervall = "Zahlungsintervall";
 
   List<UserProfile> _userProfiles = [];
+  Future<List<UserProfile>>? _userProfilesFuture;
+  Future<List<ContractPartnerProfile>>? _contractPartnerProfilesFuture;
   List<ContractPartnerProfile> _contractPartnerProfiles = [];
   ContractPartnerProfile? _selectedContractPartnerProfile;
   ContractCategory? _selectedContractCategory;
@@ -59,6 +58,11 @@ class _AddContractScreenState extends State<AddContractScreen> {
   @override
   void initState() {
     super.initState();
+    _userProfilesFuture = (widget.db as MockDatabaseRepository)
+        .getUserProfiles();
+    _contractPartnerProfilesFuture = (widget.db as MockDatabaseRepository)
+        .getContractors(); // Future für Vertragspartner laden
+    // Future für UserProfile laden
   }
 
   @override
@@ -156,8 +160,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         FutureBuilder<List<UserProfile>>(
-                          future: (widget.db as MockDatabaseRepository)
-                              .getUserProfiles(),
+                          future: _userProfilesFuture,
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -165,10 +168,9 @@ class _AddContractScreenState extends State<AddContractScreen> {
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else if (snapshot.hasData) {
-                              _userProfiles = snapshot.data!;
                               return DropDownSelectField<UserProfile>(
                                 labelText: "Profil wählen",
-                                values: _userProfiles,
+                                values: snapshot.data!, // Hier direkt verwenden
                                 itemLabel: (UserProfile profile) =>
                                     '${profile.firstName} ${profile.lastName}',
                                 selectedValue: _selectedUserProfile,
@@ -212,8 +214,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         FutureBuilder<List<ContractPartnerProfile>>(
-                          future: (widget.db as MockDatabaseRepository)
-                              .getContractors(),
+                          future: _contractPartnerProfilesFuture,
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -221,12 +222,11 @@ class _AddContractScreenState extends State<AddContractScreen> {
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else if (snapshot.hasData) {
-                              _contractPartnerProfiles = snapshot.data!;
                               return DropDownSelectField<
                                 ContractPartnerProfile
                               >(
                                 labelText: "Vertragspartner wählen",
-                                values: _contractPartnerProfiles,
+                                values: snapshot.data!,
                                 itemLabel: (ContractPartnerProfile profile) =>
                                     profile.companyName,
                                 selectedValue: _selectedContractPartnerProfile,
@@ -581,32 +581,35 @@ class _AddContractScreenState extends State<AddContractScreen> {
   }
 
   void showpayIntervalPicker() {
-    final List<String> laufzeitOptionen = [
+    final List<String> zahlungsintervallOptionen = [
       'täglich',
       'wöchentlich',
       'monatlich',
       'vierteljährlich',
       'halbjährlich',
       'jährlich',
+      'einmalig',
     ];
 
     Picker picker = Picker(
       backgroundColor: Palette.backgroundGreenBlue,
-      adapter: PickerDataAdapter<String>(pickerData: laufzeitOptionen),
+      adapter: PickerDataAdapter<String>(pickerData: zahlungsintervallOptionen),
       hideHeader: false,
       title: Text(
         'Zahlungsintervall wählen',
         style: TextStyle(color: Palette.textWhite),
       ),
       selecteds: [
-        laufzeitOptionen.contains(_zahlungsintervall)
-            ? laufzeitOptionen.indexOf(_zahlungsintervall)
-            : 2,
-      ], // Auswahl merken
+        zahlungsintervallOptionen.contains(_zahlungsintervall)
+            ? zahlungsintervallOptionen.indexOf(_zahlungsintervall)
+            : 2, // Default 'monatlich'
+      ],
       textStyle: TextStyle(color: Palette.textWhite, fontSize: 18),
       onConfirm: (picker, selecteds) {
         setState(() {
-          _zahlungsintervall = laufzeitOptionen[selecteds.first];
+          _zahlungsintervall = zahlungsintervallOptionen[selecteds.first]
+              .trim()
+              .toLowerCase();
         });
       },
     );
@@ -623,57 +626,122 @@ class _AddContractScreenState extends State<AddContractScreen> {
   }
 
   void _addContract() async {
-    // Validierung: Prüfe, ob alle erforderlichen Felder befüllt sind
+    // Validierung der Eingaben
     if (_selectedContractCategory == null ||
         _selectedUserProfile == null ||
         _selectedContractPartnerProfile == null ||
         _contractNumberController.text.trim().isEmpty ||
         _keywordcontroller.text.trim().isEmpty ||
-        _contractRuntime == null ||
-        _contractQuitInterval == null ||
-        _contractCostRoutine == null) {
+        _startDate == null ||
+        _firstPaymentDate == null ||
+        _costController.text.trim().isEmpty ||
+        _laufzeit == "Laufzeit" ||
+        _kuendigungsfrist == "Kündigungsfrist" ||
+        _zahlungsintervall == "Zahlungsintervall") {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Bitte alle Pflichtfelder ausfüllen.')),
+        SnackBar(content: Text('Bitte alle Pflichtfelder korrekt ausfüllen.')),
       );
       return;
     }
 
-    // Erstelle das Contract-Objekt
+    // Laufzeit prüfen (z.B. "1 Jahr")
+    final laufzeitParts = _laufzeit.split(' ');
+    if (laufzeitParts.length != 2 || int.tryParse(laufzeitParts[0]) == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Bitte eine gültige Laufzeit auswählen.')),
+      );
+      return;
+    }
+
+    // Kündigungsfrist prüfen (z.B. "3 Monate")
+    final kuendigungsfristParts = _kuendigungsfrist.split(' ');
+    if (kuendigungsfristParts.length != 2 ||
+        int.tryParse(kuendigungsfristParts[0]) == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Bitte eine gültige Kündigungsfrist auswählen.'),
+        ),
+      );
+      return;
+    }
+
+    // Kosten prüfen
+    final cost = double.tryParse(_costController.text.trim());
+    if (cost == null || cost < 0 || cost > 1000000) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Bitte gültige Kosten eingeben (0 - 1.000.000 EUR).'),
+        ),
+      );
+      return;
+    }
+
+    print('Alle CostRepeatInterval labels:');
+    for (var e in CostRepeatInterval.values) {
+      print(' - "${e.label}"');
+    }
+    print('Aktuelles Zahlungsintervall: "$_zahlungsintervall"');
+
+    // Zahlungsintervall prüfen
+    if (!CostRepeatInterval.values.any(
+      (e) =>
+          e.label.toLowerCase().trim() ==
+          _zahlungsintervall.toLowerCase().trim(),
+    )) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Bitte ein gültiges Zahlungsintervall wählen.')),
+      );
+      return;
+    }
+
+    // ContractRuntime zusammenbauen
+    final contractRuntime = ContractRuntime(
+      dt: _startDate!,
+      howManyinInterval: int.parse(laufzeitParts[0]),
+      interval: Interval.values.firstWhere(
+        (e) => e.label == laufzeitParts[1],
+        orElse: () => Interval.month,
+      ),
+      isAutomaticExtend: _autoVerlaengerung,
+    );
+
+    // ContractQuitInterval zusammenbauen
+    final contractQuitInterval = ContractQuitInterval(
+      howManyInQuitUnits: int.parse(kuendigungsfristParts[0]),
+      quitInterval: QuitInterval.values.firstWhere(
+        (e) => e.label == kuendigungsfristParts[1],
+        orElse: () => QuitInterval.month,
+      ),
+      isQuitReminderAlertSet: _kuendigungserinnerung,
+    );
+
+    // ContractCostRoutine zusammenbauen
+    final contractCostRoutine = ContractCostRoutine(
+      costsInCents: (cost * 100).toInt(),
+      firstCostDate: _firstPaymentDate!,
+      costRepeatInterval: CostRepeatInterval.values.firstWhere(
+        (e) => e.label == _zahlungsintervall,
+        orElse: () => CostRepeatInterval.month,
+      ),
+    );
+
+    // ExtraContractInformation zusammenbauen
+    final extraContractInformation = ExtraContractInformation(
+      _extraInformationController.text.trim(),
+      "",
+    );
+
+    // Neues Contract-Objekt erstellen
     final newContract = Contract(
       category: _selectedContractCategory!,
+      keyword: _keywordcontroller.text.trim(),
       userProfile: _selectedUserProfile!,
       contractPartnerProfile: _selectedContractPartnerProfile!,
-      keyword: _keywordcontroller.text.trim(),
       contractNumber: _contractNumberController.text.trim(),
-      contractRuntime: ContractRuntime(
-        dt: _startDate ?? DateTime.now(),
-        howManyinInterval: int.parse(_laufzeit.split(' ')[0]),
-        interval: Interval.values.firstWhere(
-          (e) => e.label == _laufzeit.split(' ')[1],
-          orElse: () => Interval.month,
-        ),
-        isAutomaticExtend: _autoVerlaengerung,
-      ),
-      contractQuitInterval: ContractQuitInterval(
-        howManyInQuitUnits: int.parse(_kuendigungsfrist.split(' ')[0]),
-        quitInterval: QuitInterval.values.firstWhere(
-          (e) => e.label == _kuendigungsfrist.split(' ')[1],
-          orElse: () => QuitInterval.month,
-        ),
-        isQuitReminderAlertSet: _kuendigungserinnerung,
-      ),
-      contractCostRoutine: ContractCostRoutine(
-        costsInCents: (double.parse(_costController.text.trim()) * 100).toInt(),
-        firstCostDate: _firstPaymentDate ?? DateTime.now(),
-        costRepeatInterval: CostRepeatInterval.values.firstWhere(
-          (e) => e.label == _zahlungsintervall,
-          orElse: () => CostRepeatInterval.month,
-        ),
-      ),
-      extraContractInformations: ExtraContractInformation(
-        _extraInformationController.text.trim(),
-        "",
-      ),
+      contractRuntime: contractRuntime,
+      contractQuitInterval: contractQuitInterval,
+      contractCostRoutine: contractCostRoutine,
+      extraContractInformations: extraContractInformation,
     );
 
     try {
