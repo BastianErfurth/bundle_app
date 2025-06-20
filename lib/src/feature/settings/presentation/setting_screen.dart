@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';

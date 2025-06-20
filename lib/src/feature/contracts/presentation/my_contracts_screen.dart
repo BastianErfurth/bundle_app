@@ -44,7 +44,6 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //List<Contract> contracts = widget.db.getMyContracts();
     return Scaffold(
       body: SafeArea(
         child: Padding(
