@@ -207,4 +207,14 @@ class MockDatabaseRepository implements DatabaseRepository {
           p.houseNumber == profile.houseNumber,
     );
   }
+
+  @override
+  Future<Contract?> getContractByNumber(String contractNumber) async {
+    await Future.delayed(Duration(seconds: 1));
+    try {
+      return myContracts.firstWhere((c) => c.contractNumber == contractNumber);
+    } catch (e) {
+      return null; // Nicht gefunden
+    }
+  }
 }

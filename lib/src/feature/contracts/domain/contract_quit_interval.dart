@@ -7,13 +7,23 @@ enum QuitInterval {
   String get label {
     switch (this) {
       case QuitInterval.day:
-        return 'Day';
+        return 'Tag(e()Day';
       case QuitInterval.week:
-        return 'Week';
+        return 'Woche(n)';
       case QuitInterval.month:
-        return 'Month';
+        return 'Monat(e)';
       case QuitInterval.year:
-        return 'Year';
+        return 'Jahr(e)';
+    }
+  }
+
+  static QuitInterval? fromLabel(String label) {
+    try {
+      return QuitInterval.values.firstWhere(
+        (e) => e.label.toLowerCase().trim() == label.toLowerCase().trim(),
+      );
+    } catch (_) {
+      return null;
     }
   }
 }

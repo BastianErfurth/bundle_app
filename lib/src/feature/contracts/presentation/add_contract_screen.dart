@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
@@ -26,6 +28,16 @@ class AddContractScreen extends StatefulWidget {
 
   @override
   State<AddContractScreen> createState() => _AddContractScreenState();
+}
+
+// Extension for CostRepeatInterval to provide fromLabel factory
+extension CostRepeatIntervalExtension on CostRepeatInterval {
+  static CostRepeatInterval fromLabel(String label) {
+    return CostRepeatInterval.values.firstWhere(
+      (e) => e.label.toLowerCase() == label.toLowerCase(),
+      orElse: () => CostRepeatInterval.month,
+    );
+  }
 }
 
 class _AddContractScreenState extends State<AddContractScreen> {
@@ -500,7 +512,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
       adapter: PickerDataAdapter<String>(
         pickerData: [
           List.generate(31, (index) => '${index + 1}'),
-          ['Tag(e)', 'Woche(n)', 'Monat(e)', 'Jahr(e)', 'Unbegrenzt'],
+          ['Tag(e)', 'Woche(n)', 'Monat(e)', 'Jahr(e)', 'unbegrenzt'],
         ],
         isArray: true,
       ),
@@ -509,32 +521,35 @@ class _AddContractScreenState extends State<AddContractScreen> {
         'Laufzeit wählen',
         style: TextStyle(color: Palette.textWhite),
       ),
-      selecteds: [0, 2],
+      selecteds: [0, 3], // z. B. 1 Jahr vorausgewählt
       textStyle: TextStyle(color: Palette.textWhite, fontSize: 18),
       onConfirm: (picker, selecteds) {
-        final zahl = picker.getSelectedValues()[0];
         final einheit = picker.getSelectedValues()[1];
 
         setState(() {
-          if (einheit == 'Unbegrenzt') {
-            _laufzeit = 'Unbegrenzt';
+          if (selecteds[1] == 4) {
+            // "unbegrenzt" wurde gewählt
+            _laufzeit = 'unbegrenzt';
+            _autoVerlaengerung = false; // Optional deaktivieren
           } else {
+            final zahl = picker.getSelectedValues()[0];
             _laufzeit = '$zahl $einheit';
+
+            // Optional: Auto-Verlängerung aktivieren, z. B. bei "1 Jahr(e)"
+            if (einheit == 'Jahr(e)' && zahl == '1') {
+              _autoVerlaengerung = true;
+            }
           }
         });
       },
     );
 
-    // Zeige den Picker im Dialog manuell
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Palette.backgroundGreenBlue,
-          child: SizedBox(
-            height: 250, // oder gewünschte Höhe
-            child: picker.makePicker(),
-          ),
+          child: SizedBox(height: 250, child: picker.makePicker()),
         );
       },
     );
@@ -546,7 +561,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
       adapter: PickerDataAdapter<String>(
         pickerData: [
           List.generate(31, (index) => '${index + 1}'),
-          ['Tag(e)', 'Woche(n)', 'Monat(e)', 'Jahr(e)', 'Unbegrenzt'],
+          ['Tag(e)', 'Woche(n)', 'Monat(e)', 'Jahr(e)', 'unbegrenzt'],
         ],
         isArray: true,
       ),
@@ -649,9 +664,10 @@ class _AddContractScreenState extends State<AddContractScreen> {
     }
 
     // Laufzeit prüfen (z.B. "1 Jahr")
-    if (_laufzeit != "unbegrenzt") {
-      final laufzeitParts = _laufzeit.split(' ');
-      if (laufzeitParts.length != 2 || int.tryParse(laufzeitParts[0]) == null) {
+    final laufzeitNormalized = _laufzeit.toLowerCase().trim();
+    if (laufzeitNormalized != 'unbegrenzt') {
+      final parts = laufzeitNormalized.split(' ');
+      if (parts.length != 2 || int.tryParse(parts[0]) == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Bitte eine gültige Laufzeit auswählen.')),
         );
@@ -682,18 +698,13 @@ class _AddContractScreenState extends State<AddContractScreen> {
       return;
     }
 
-    print('Alle CostRepeatInterval labels:');
-    for (var e in CostRepeatInterval.values) {
-      print(' - "${e.label}"');
-    }
-    print('Aktuelles Zahlungsintervall: "$_zahlungsintervall"');
-
     // Zahlungsintervall prüfen
-    if (!CostRepeatInterval.values.any(
-      (e) =>
-          e.label.toLowerCase().trim() ==
-          _zahlungsintervall.toLowerCase().trim(),
-    )) {
+    late CostRepeatInterval selectedInterval;
+    try {
+      selectedInterval = CostRepeatIntervalExtension.fromLabel(
+        _zahlungsintervall,
+      );
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Bitte ein gültiges Zahlungsintervall wählen.')),
       );

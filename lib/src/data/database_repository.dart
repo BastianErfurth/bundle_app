@@ -22,4 +22,5 @@ abstract class DatabaseRepository {
   Future<void> deleteContractPartnerProfile(
     ContractPartnerProfile profile,
   ); // hinzufügen
+  Future<Contract?> getContractByNumber(String contractNumber);
 }
