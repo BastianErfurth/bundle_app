@@ -6,6 +6,7 @@ import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/add_contract_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_list_container.dart';
+import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_piechart.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/dropdown_select_field.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -181,13 +182,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                       children: [
                         SizedBox(
                           height: 150,
-                          child: PieChart(
-                            PieChartData(
-                              sections: pieSections,
-                              sectionsSpace: 2,
-                              centerSpaceRadius: 24,
-                            ),
-                          ),
+                          child: ContractPieChart(contracts: contracts),
                         ),
                         SizedBox(height: 16),
                       ],

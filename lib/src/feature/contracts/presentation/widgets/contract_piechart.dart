@@ -1,5 +1,6 @@
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_category.dart';
+import 'package:bundle_app/src/theme/palette.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -17,14 +18,14 @@ class ContractPieChart extends StatelessWidget {
 
     final total = categoryCounts.values.fold(0, (a, b) => a + b);
     final colors = [
-      Colors.blue,
-      Colors.red,
-      Colors.green,
-      Colors.orange,
-      Colors.purple,
-      Colors.teal,
-      Colors.amber,
-      Colors.brown,
+      Palette.buttonBackgroundUnused1,
+      Palette.buttonBackgroundUnused2,
+      Palette.buttonTextGreenBlue,
+      Palette.darkGreenblue,
+      Palette.lightGreenBlue,
+      Palette.mediumGreenBlue,
+      Palette.textWhite,
+      Palette.mixedGreenBlue,
     ];
 
     int colorIndex = 0;

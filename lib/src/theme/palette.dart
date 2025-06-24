@@ -9,4 +9,11 @@ abstract class Palette {
   static final Color buttonTextGreenBlue = const Color(0xFF1D8390);
   static final Color buttonBackgroundUnused1 = const Color(0xFF3ABFD0);
   static final Color buttonBackgroundUnused2 = const Color(0xFF085964);
+  static final Color mixedGreenBlue = const Color.fromARGB(255, 98, 131, 135);
+  static final Color mixedLightGreenBlue = const Color.fromARGB(
+    255,
+    81,
+    117,
+    122,
+  );
 }
