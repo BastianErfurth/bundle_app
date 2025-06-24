@@ -31,7 +31,6 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
   void initState() {
     super.initState();
     _myContracts = widget.db.getMyContracts();
-    // Fetch user profiles from the database or set dummy data
     widget.db.getUserProfiles().then((profiles) {
       setState(() {
         _userProfiles = profiles;
@@ -40,6 +39,46 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
         }
       });
     });
+  }
+
+  List<PieChartSectionData> _buildPieChartSections(List<Contract> contracts) {
+    final Map<ContractCategory, int> categoryCounts = {};
+    for (var contract in contracts) {
+      categoryCounts[contract.category] =
+          (categoryCounts[contract.category] ?? 0) + 1;
+    }
+
+    final total = categoryCounts.values.fold(0, (a, b) => a + b);
+    final colors = [
+      Colors.blue,
+      Colors.red,
+      Colors.green,
+      Colors.orange,
+      Colors.purple,
+      Colors.teal,
+      Colors.amber,
+      Colors.brown,
+    ];
+
+    int colorIndex = 0;
+    return categoryCounts.entries.map((entry) {
+      final category = entry.key;
+      final count = entry.value;
+      final percentage = (count / total) * 100;
+      final color = colors[colorIndex % colors.length];
+      colorIndex++;
+      return PieChartSectionData(
+        value: count.toDouble(),
+        title: '${category.label}\n${percentage.toStringAsFixed(1)}%',
+        color: color,
+        radius: 40,
+        titleStyle: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      );
+    }).toList();
   }
 
   @override
@@ -73,9 +112,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                         ),
                       );
                     },
-                    label: Row(
-                      children: [Icon(Icons.close), Text("Hinzufügen")],
-                    ),
+                    label: Row(children: [Icon(Icons.add), Text("Hinzufügen")]),
                   ),
                 ],
               ),
@@ -90,7 +127,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Center(child: Text("Fehler: ${snapshot.error}"));
+                    return Center(child: Text("Fehler: \${snapshot.error}"));
                   } else if (snapshot.hasData) {
                     final profiles = snapshot.data ?? [];
                     return DropDownSelectField<UserProfile>(
@@ -132,27 +169,34 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                   });
                 },
               ),
-
               SizedBox(height: 16),
-              SizedBox(
-                height: 100,
-                child: PieChart(
-                  PieChartData(
-                    sections: [
-                      PieChartSectionData(value: 1),
-                      //PieChartSectionData(value: 20),
-                      //PieChartSectionData(value: 20),
-                      //PieChartSectionData(value: 20),
-                      //PieChartSectionData(value: 20),
-                      //PieChartSectionData(value: 20),
-                      //PieChartSectionData(value: 20),
-                    ],
-                  ),
-                  duration: Duration(milliseconds: 150),
-                  curve: Curves.linear,
-                ),
+              FutureBuilder<List<Contract>>(
+                future: _myContracts,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData) {
+                    final contracts = snapshot.data!;
+                    final pieSections = _buildPieChartSections(contracts);
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: 150,
+                          child: PieChart(
+                            PieChartData(
+                              sections: pieSections,
+                              sectionsSpace: 2,
+                              centerSpaceRadius: 24,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                      ],
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
               ),
-              SizedBox(height: 16),
               Expanded(
                 child: FutureBuilder(
                   future: _myContracts,
@@ -160,7 +204,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasError) {
                         return Center(
-                          child: Text("Fehler:${snapshot.error.toString()}"),
+                          child: Text("Fehler:\${snapshot.error.toString()}"),
                         );
                       } else if (snapshot.hasData) {
                         List<Contract> contracts = snapshot.data ?? [];
@@ -202,9 +246,9 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 4,
                     children: [
                       Icon(Icons.send_rounded),
+                      SizedBox(width: 4),
                       Text("Vertragsübersicht versenden"),
                     ],
                   ),

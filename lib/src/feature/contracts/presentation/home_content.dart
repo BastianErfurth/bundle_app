@@ -1,7 +1,9 @@
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/calender/presentation/calender_screen.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/add_contract_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/my_contracts_screen.dart';
+import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_piechart.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/feature/costs/presentation/cost_screen.dart';
 import 'package:bundle_app/src/theme/palette.dart';
@@ -18,6 +20,14 @@ class HomeContent extends StatefulWidget {
 }
 
 class _HomeContentState extends State<HomeContent> {
+  late Future<List<Contract>> _contractsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _contractsFuture = widget.db.getMyContracts();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -41,25 +51,25 @@ class _HomeContentState extends State<HomeContent> {
             Row(
               children: [
                 TopicHeadline(
-                    topicIcon: Icon(Icons.description_outlined),
-                    topicText: "Verträge"),
+                  topicIcon: Icon(Icons.description_outlined),
+                  topicText: "Verträge",
+                ),
                 SizedBox(width: 6),
                 FilledButton(
-                    onPressed: () {
-                      setState(() {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => AddContractScreen(widget.db),
-                          ),
-                        );
-                      });
-                    },
-                    child: Row(
-                      children: [
-                        Icon(Icons.add_box_outlined),
-                        Text("Hinzufügen"),
-                      ],
-                    )),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AddContractScreen(widget.db),
+                      ),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.add_box_outlined),
+                      Text("Hinzufügen"),
+                    ],
+                  ),
+                ),
                 SizedBox(width: 8),
                 FilledButton(
                   onPressed: () {
@@ -74,39 +84,50 @@ class _HomeContentState extends State<HomeContent> {
               ],
             ),
             SizedBox(height: 8),
-            SizedBox(
-              height: 100,
-              child: PieChart(
-                PieChartData(sections: [
-                  PieChartSectionData(value: 1),
-                  //PieChartSectionData(value: 20),
-                  //PieChartSectionData(value: 20),
-                  //PieChartSectionData(value: 20),
-                  //PieChartSectionData(value: 20),
-                  //PieChartSectionData(value: 20),
-                  //PieChartSectionData(value: 20),
-                ]),
-                duration: Duration(milliseconds: 150),
-                curve: Curves.linear,
-              ),
+            FutureBuilder<List<Contract>>(
+              future: _contractsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SizedBox(
+                    height: 150,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                } else if (snapshot.hasError) {
+                  return SizedBox(
+                    height: 150,
+                    child: Center(child: Text('Fehler: ${snapshot.error}')),
+                  );
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return SizedBox(
+                    height: 150,
+                    child: Center(child: Text('Keine Verträge vorhanden')),
+                  );
+                } else {
+                  return SizedBox(
+                    height: 150,
+                    child: ContractPieChart(contracts: snapshot.data!),
+                  );
+                }
+              },
             ),
             SizedBox(height: 16),
             Row(
               children: [
                 TopicHeadline(
-                    topicIcon: Icon(Icons.euro_symbol_outlined),
-                    topicText: "Kosten"),
+                  topicIcon: Icon(Icons.euro_symbol_outlined),
+                  topicText: "Kosten",
+                ),
                 SizedBox(width: 8),
                 FilledButton(
-                    style: ButtonStyle(),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => CostScreen(widget.db),
-                        ),
-                      );
-                    },
-                    child: Icon(Icons.euro_outlined)),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CostScreen(widget.db),
+                      ),
+                    );
+                  },
+                  child: Icon(Icons.euro_outlined),
+                ),
               ],
             ),
             SizedBox(height: 8),
@@ -120,10 +141,15 @@ class _HomeContentState extends State<HomeContent> {
                     BarChartData(
                       maxY: 10,
                       barGroups: List.generate(12, (index) {
-                        return BarChartGroupData(x: index, barRods: [
-                          BarChartRodData(
-                              toY: 5, color: Palette.lightGreenBlue),
-                        ]);
+                        return BarChartGroupData(
+                          x: index,
+                          barRods: [
+                            BarChartRodData(
+                              toY: 5,
+                              color: Palette.lightGreenBlue,
+                            ),
+                          ],
+                        );
                       }),
                       titlesData: FlTitlesData(
                         bottomTitles: AxisTitles(
@@ -155,11 +181,14 @@ class _HomeContentState extends State<HomeContent> {
                           ),
                         ),
                         leftTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: true)),
+                          sideTitles: SideTitles(showTitles: true),
+                        ),
                         rightTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: false)),
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
                         topTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: false)),
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
                       ),
                       borderData: FlBorderData(show: false),
                       backgroundColor: Palette.darkGreenblue,
@@ -173,8 +202,9 @@ class _HomeContentState extends State<HomeContent> {
             Row(
               children: [
                 TopicHeadline(
-                    topicIcon: Icon(Icons.calendar_month),
-                    topicText: "Kalender"),
+                  topicIcon: Icon(Icons.calendar_month),
+                  topicText: "Kalender",
+                ),
                 SizedBox(width: 8),
                 FilledButton(
                   onPressed: () {
