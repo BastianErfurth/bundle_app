@@ -28,64 +28,57 @@ class _ContractListContainerState extends State<ContractListContainer> {
   Widget build(BuildContext context) {
     return ContractAttributes(
       textTopic: widget.contract.keyword,
-      iconButton: IconButton(
-        onPressed: () {},
-        icon: Row(
-          spacing: 16,
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ViewContractScreen(
-                      contractNumber: widget.contract.contractNumber,
-                      db: widget.db,
-                    ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ViewContractScreen(
+                    contractNumber: widget.contract.contractNumber,
+                    db: widget.db,
                   ),
-                );
-              },
-              icon: Icon(Icons.visibility),
-            ),
-            IconButton(
-              onPressed: () async {
-                final confirm = await showDialog<bool>(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text("Vertrag löschen"),
-                    content: Text(
-                      "Möchtest du diesen Vertrag wirklich löschen?",
+                ),
+              );
+            },
+            icon: Icon(Icons.visibility),
+          ),
+          IconButton(
+            onPressed: () async {
+              final confirm = await showDialog<bool>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("Vertrag löschen"),
+                  content: Text("Möchtest du diesen Vertrag wirklich löschen?"),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: Text("Abbrechen"),
                     ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: Text("Abbrechen"),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      child: Text(
+                        "Löschen",
+                        style: TextStyle(color: Palette.lightGreenBlue),
                       ),
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        child: Text(
-                          "Löschen",
-                          style: TextStyle(color: Palette.lightGreenBlue),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                    ),
+                  ],
+                ),
+              );
 
-                if (confirm == true) {
-                  await widget.db.deleteContract(
-                    widget.contract.contractNumber,
-                  );
+              if (confirm == true) {
+                await widget.db.deleteContract(widget.contract.contractNumber);
 
-                  // Optional: Zeige Bestätigung
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text("Vertrag gelöscht")));
-                }
-              },
-              icon: Icon(Icons.delete, color: Palette.lightGreenBlue),
-            ),
-          ],
-        ),
+                // Optional: Zeige Bestätigung
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text("Vertrag gelöscht")));
+              }
+            },
+            icon: Icon(Icons.delete, color: Palette.lightGreenBlue),
+          ),
+        ],
       ),
     );
   }

@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 
 class ContractAttributes extends StatelessWidget {
   final String? textTopic;
-  final IconButton iconButton;
+  final Widget? trailing; // <-- war IconButton, jetzt allgemein Widget
   final String? valueText;
+
   const ContractAttributes({
     super.key,
     required this.textTopic,
-    required this.iconButton,
+    this.trailing,
     this.valueText,
   });
 
@@ -35,7 +36,7 @@ class ContractAttributes extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
-            iconButton,
+            if (trailing != null) trailing!,
           ],
         ),
       ),

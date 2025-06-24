@@ -146,7 +146,7 @@ class _SettingScreenState extends State<NewSettingScreen>
           child: ElevatedButton.icon(
             icon: const Icon(Icons.add),
             label: const Text("Neuer Vertragspartner"),
-            onPressed: _showContractPartnerProfileDialog,
+            onPressed: () => _showContractPartnerProfileDialog(context),
           ),
         ),
       ],
@@ -188,7 +188,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Nachname",
                     hintText: "Nachname eingeben",
@@ -200,7 +200,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Straße",
                     hintText: "Straße eingeben",
@@ -212,7 +212,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Hausnummer",
                     hintText: "Hausnummer eingeben",
@@ -224,7 +224,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "PLZ",
                     hintText: "PLZ eingeben",
@@ -236,7 +236,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Stadt",
                     hintText: "Stadt eingeben",
@@ -290,7 +290,7 @@ class _SettingScreenState extends State<NewSettingScreen>
     );
   }
 
-  void _showContractPartnerProfileDialog() {
+  void _showContractPartnerProfileDialog(BuildContext parentContext) {
     final formKey = GlobalKey<FormState>();
 
     bool isInContractList = false;
@@ -327,7 +327,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Ansprechpartner",
                     hintText: "Ansprechpartner eingeben",
@@ -339,7 +339,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Straße",
                     hintText: "Straße eingeben",
@@ -351,7 +351,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Hausnummer",
                     hintText: "Hausnummer eingeben",
@@ -363,7 +363,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "PLZ",
                     hintText: "PLZ eingeben",
@@ -375,7 +375,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       return null;
                     },
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
                     labelText: "Stadt",
                     hintText: "Stadt eingeben",
@@ -407,9 +407,9 @@ class _SettingScreenState extends State<NewSettingScreen>
             ),
             ElevatedButton(
               child: const Text("Speichern"),
-              onPressed: () {
+              onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  final newPartner = ContractPartnerProfile(
+                  final newPartnerProfile = ContractPartnerProfile(
                     companyName: _companyNameController.text,
                     contactPersonName: _contactPersonController.text,
                     street: _streetController.text,
@@ -418,7 +418,15 @@ class _SettingScreenState extends State<NewSettingScreen>
                     city: _cityController.text,
                     isInContractList: isInContractList,
                   );
-                  _addContractPartnerProfile(newPartner);
+                  await _addContractPartnerProfile(newPartnerProfile);
+
+                  // Snackbar anzeigen (wichtig: parentContext benutzen!)
+                  ScaffoldMessenger.of(parentContext).showSnackBar(
+                    const SnackBar(
+                      content: Text("Vertragspartner gespeichert"),
+                    ),
+                  );
+
                   Navigator.of(context).pop();
                 }
               },

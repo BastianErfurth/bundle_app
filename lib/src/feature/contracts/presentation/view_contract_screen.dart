@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
+import 'package:intl/intl.dart'; // für Datum
 
 class ViewContractScreen extends StatefulWidget {
   final String contractNumber;
   final DatabaseRepository db;
 
   const ViewContractScreen({
-    Key? key,
+    super.key,
     required this.contractNumber,
     required this.db,
-  }) : super(key: key);
+  });
 
   @override
   State<ViewContractScreen> createState() => _ViewContractScreenState();
@@ -20,6 +21,7 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
   Contract? _contract;
   bool _isLoading = true;
   String? _error;
+  final dateFormat = DateFormat('dd.MM.yyyy');
 
   @override
   void initState() {
@@ -73,6 +75,7 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
     }
 
     final contract = _contract!;
+    final extraInfo = contract.extraContractInformations.toString().trim();
 
     return Scaffold(
       appBar: AppBar(title: Text('Vertrag: ${contract.keyword}')),
@@ -106,7 +109,7 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
               'Vertragspartner:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            Text('${contract.contractPartnerProfile.companyName}'),
+            Text(contract.contractPartnerProfile.companyName),
             Text(
               'Kontakt: ${contract.contractPartnerProfile.contactPersonName}',
             ),
@@ -118,7 +121,9 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
             ),
             SizedBox(height: 8),
             Text('Laufzeit:', style: TextStyle(fontWeight: FontWeight.bold)),
-            Text('Startdatum: ${contract.contractRuntime.dt.toLocal()}'),
+            Text(
+              'Startdatum: ${dateFormat.format(contract.contractRuntime.dt)}',
+            ),
             Text('Intervall: ${contract.contractRuntime.interval.name}'),
             Text(
               'Intervallanzahl: ${contract.contractRuntime.howManyinInterval}',
@@ -144,17 +149,22 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
               'Betrag: ${(contract.contractCostRoutine.costsInCents / 100).toStringAsFixed(2)} €',
             ),
             Text(
-              'Erste Zahlung: ${contract.contractCostRoutine.firstCostDate != null ? contract.contractCostRoutine.firstCostDate!.toLocal().toString() : "Nicht verfügbar"}',
+              'Erste Zahlung: ${contract.contractCostRoutine.firstCostDate != null ? dateFormat.format(contract.contractCostRoutine.firstCostDate!) : "Nicht verfügbar"}',
             ),
             Text(
               'Zahlungsintervall: ${contract.contractCostRoutine.costRepeatInterval.name}',
             ),
             SizedBox(height: 8),
-            Text(
-              'Zusatzinformationen:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text('Info 1: ${contract.extraContractInformations}'),
+
+            // Nur anzeigen, wenn Zusatzinformationen vorhanden sind
+            if (extraInfo.isNotEmpty) ...[
+              SizedBox(height: 8),
+              Text(
+                'Zusatzinformationen:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(extraInfo),
+            ],
           ],
         ),
       ),

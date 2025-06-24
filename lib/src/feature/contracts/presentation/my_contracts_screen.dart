@@ -5,7 +5,6 @@ import 'package:bundle_app/src/feature/contracts/domain/contract_category.dart';
 import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/add_contract_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
-import 'package:bundle_app/src/feature/contracts/presentation/view_contract_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_list_container.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/dropdown_select_field.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';

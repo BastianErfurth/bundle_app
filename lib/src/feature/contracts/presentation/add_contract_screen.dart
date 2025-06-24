@@ -49,8 +49,6 @@ class _AddContractScreenState extends State<AddContractScreen> {
       TextEditingController();
 
   UserProfile? _selectedUserProfile;
-  ContractRuntime? _contractRuntime;
-  ContractQuitInterval? _contractQuitInterval;
 
   DateTime? _startDate;
   DateTime? _firstPaymentDate;
@@ -60,10 +58,8 @@ class _AddContractScreenState extends State<AddContractScreen> {
   String _kuendigungsfrist = "Kündigungsfrist";
   String _zahlungsintervall = "Zahlungsintervall";
 
-  List<UserProfile> _userProfiles = [];
   Future<List<UserProfile>>? _userProfilesFuture;
   Future<List<ContractPartnerProfile>>? _contractPartnerProfilesFuture;
-  List<ContractPartnerProfile> _contractPartnerProfiles = [];
   ContractPartnerProfile? _selectedContractPartnerProfile;
   ContractCategory? _selectedContractCategory;
 
@@ -299,7 +295,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       valueText: _startDate != null
                           ? DateFormat('dd.MM.yyyy').format(_startDate!)
                           : "Startdatum wählen",
-                      iconButton: IconButton(
+                      trailing: IconButton(
                         onPressed: datePickingStart,
                         icon: Icon(Icons.expand_more),
                       ),
@@ -308,7 +304,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     ContractAttributes(
                       textTopic: "Laufzeit wählen",
                       valueText: _laufzeit,
-                      iconButton: IconButton(
+                      trailing: IconButton(
                         onPressed: () {
                           showLaufzeitPicker();
                         },
@@ -318,7 +314,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     SizedBox(height: 6),
                     ContractAttributes(
                       textTopic: "Automatische Verlängerung",
-                      iconButton: IconButton(
+                      trailing: IconButton(
                         icon: Icon(
                           _autoVerlaengerung
                               ? Icons.toggle_on
@@ -342,7 +338,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     ContractAttributes(
                       textTopic: "Kündigungsfrist",
                       valueText: _kuendigungsfrist,
-                      iconButton: IconButton(
+                      trailing: IconButton(
                         onPressed: () {
                           showCancelPeriodPicker();
                         },
@@ -352,7 +348,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     SizedBox(height: 6),
                     ContractAttributes(
                       textTopic: "Kündigungserinnerung",
-                      iconButton: IconButton(
+                      trailing: IconButton(
                         onPressed: () {
                           setState(() {
                             _kuendigungserinnerung = !_kuendigungserinnerung;
@@ -403,7 +399,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       valueText: _firstPaymentDate != null
                           ? DateFormat('dd.MM.yyyy').format(_firstPaymentDate!)
                           : "wählen",
-                      iconButton: IconButton(
+                      trailing: IconButton(
                         onPressed: () {
                           datePickingIntervall();
                         },
@@ -414,7 +410,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                     ContractAttributes(
                       textTopic: "Zahlungsintervall",
                       valueText: _zahlungsintervall,
-                      iconButton: IconButton(
+                      trailing: IconButton(
                         onPressed: () {
                           showpayIntervalPicker();
                         },
@@ -699,12 +695,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
     }
 
     // Zahlungsintervall prüfen
-    late CostRepeatInterval selectedInterval;
-    try {
-      selectedInterval = CostRepeatIntervalExtension.fromLabel(
-        _zahlungsintervall,
-      );
-    } catch (e) {
+    try {} catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Bitte ein gültiges Zahlungsintervall wählen.')),
       );

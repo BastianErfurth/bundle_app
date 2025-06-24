@@ -92,7 +92,7 @@ class _CostScreenState extends State<CostScreen> {
               ContractAttributes(
                 textTopic: "Zahlungsintervall",
                 valueText: _zahlungsintervall,
-                iconButton: IconButton(
+                trailing: IconButton(
                   onPressed: showpayIntervalPicker,
                   icon: Icon(Icons.expand_more),
                 ),
