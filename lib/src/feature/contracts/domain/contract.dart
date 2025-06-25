@@ -31,4 +31,6 @@ class Contract {
     required this.contractCostRoutine,
     required this.extraContractInformations,
   });
+
+  get name => null;
 }
