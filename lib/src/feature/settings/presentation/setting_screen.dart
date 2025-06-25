@@ -68,22 +68,58 @@ class _SettingScreenState extends State<SettingScreen> {
   Future<void> _saveUserProfile() async {
     if (_userFormKey.currentState!.validate()) {
       _userFormKey.currentState!.save();
+
+      // Lade-Dialog anzeigen
+      showDialog(
+        context: context,
+        barrierDismissible: false, // damit Nutzer nicht wegklicken kann
+        builder: (context) => const Center(child: CircularProgressIndicator()),
+      );
+
+      // Profil speichern
       await widget.databaseRepository.addUserProfile(_newUser);
       await _loadProfiles();
+
+      // Lade-Dialog schließen
+      if (!mounted) return;
+      Navigator.of(context).pop(); // schließt den Dialog
+
+      // Snackbar anzeigen (optional)
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Benutzerprofil gespeichert")),
       );
+
+      // Zurück zum vorherigen Screen
+      Navigator.of(context).pop();
     }
   }
 
   Future<void> _savePartnerProfile() async {
     if (_partnerFormKey.currentState!.validate()) {
       _partnerFormKey.currentState!.save();
+
+      // Lade-Dialog anzeigen
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(child: CircularProgressIndicator()),
+      );
+
+      // Partnerprofil speichern
       await widget.databaseRepository.addContractPartnerProfile(_newPartner);
       await _loadProfiles();
+
+      // Lade-Dialog schließen
+      if (!mounted) return;
+      Navigator.of(context).pop(); // schließt den Lade-Dialog
+
+      // Snackbar anzeigen (optional)
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Partnerprofil gespeichert")),
       );
+
+      // Zurück zum vorherigen Screen
+      Navigator.of(context).pop();
     }
   }
 
