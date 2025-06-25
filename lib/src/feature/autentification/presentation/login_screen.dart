@@ -48,83 +48,91 @@ class _LogInScreenState extends State<LogInScreen> {
               SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFormFieldWithoutIcon(
-                      controller: _emailController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Bitte gib eine Emailadresse ein";
-                        } else if (!RegExp(
-                          r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
-                        ).hasMatch(value)) {
-                          return "Bitte gib eine gültige Emailadresse ein";
-                        } else if (value.length < 5) {
-                          return "Emailadresse muss mindestens 5 Zeichen lang sein";
-                        } else if (value.length > 50) {
-                          return "Emailadresse darf maximal 50 Zeichen lang sein";
-                        }
-                        return null;
-                      },
-                      labelText: "Email",
-                      hintText: "Emailadresse eingeben",
-                    ),
-                    SizedBox(height: 24),
-                    TextFieldWithIcon(
-                      controller: _passwordController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Bitte gib ein Passwort ein";
-                        } else if (value.length < 8) {
-                          return "Passwort muss mindestens 6 Zeichen lang sein";
-                        } else if (value.length > 50) {
-                          return "Passwort darf maximal 50 Zeichen lang sein";
-                        } else if (!RegExp(
-                          r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$",
-                        ).hasMatch(value)) {
-                          return "Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Großbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten";
-                        } else if (value.contains(" ")) {
-                          return "Passwort darf keine Leerzeichen enthalten";
-                        }
-                        return null;
-                      },
-
-                      labelText: "Passwort",
-                      hintText: "Passwort eingeben",
-                      iconButton: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _isObscured = !_isObscured;
-                          });
+                child: AutofillGroup(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormFieldWithoutIcon(
+                        autofillHints: const [AutofillHints.email],
+                        keyboardType: TextInputType.emailAddress,
+                        controller: _emailController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Bitte gib eine Emailadresse ein";
+                          } else if (!RegExp(
+                            r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+                          ).hasMatch(value)) {
+                            return "Bitte gib eine gültige Emailadresse ein";
+                          } else if (value.length < 5) {
+                            return "Emailadresse muss mindestens 5 Zeichen lang sein";
+                          } else if (value.length > 50) {
+                            return "Emailadresse darf maximal 50 Zeichen lang sein";
+                          }
+                          return null;
                         },
-                        icon: Icon(
-                          _isObscured ? Icons.visibility_off : Icons.visibility,
+                        labelText: "Email",
+                        hintText: "Emailadresse eingeben",
+                      ),
+                      SizedBox(height: 24),
+                      TextFieldWithIcon(
+                        keyboardType: TextInputType.visiblePassword,
+                        autofillHints: const [AutofillHints.password],
+                        controller: _passwordController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Bitte gib ein Passwort ein";
+                          } else if (value.length < 8) {
+                            return "Passwort muss mindestens 6 Zeichen lang sein";
+                          } else if (value.length > 50) {
+                            return "Passwort darf maximal 50 Zeichen lang sein";
+                          } else if (!RegExp(
+                            r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$",
+                          ).hasMatch(value)) {
+                            return "Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Großbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten";
+                          } else if (value.contains(" ")) {
+                            return "Passwort darf keine Leerzeichen enthalten";
+                          }
+                          return null;
+                        },
+
+                        labelText: "Passwort",
+                        hintText: "Passwort eingeben",
+                        iconButton: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isObscured = !_isObscured;
+                            });
+                          },
+                          icon: Icon(
+                            _isObscured
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                        ),
+                        obscureText: _isObscured,
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text("Passwort vergessen?"),
                         ),
                       ),
-                      obscureText: _isObscured,
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Text("Passwort vergessen?"),
+                      SizedBox(
+                        width: double.infinity,
+                        child: FilledButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => HomeScreen(widget.db),
+                              ),
+                            );
+                          },
+                          child: Text("Login"),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: FilledButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(widget.db),
-                            ),
-                          );
-                        },
-                        child: Text("Login"),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 20),

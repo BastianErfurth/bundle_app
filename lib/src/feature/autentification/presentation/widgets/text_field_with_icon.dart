@@ -7,6 +7,7 @@ class TextFieldWithIcon extends StatefulWidget {
   final Widget iconButton;
   final bool obscureText;
   final TextEditingController controller;
+  final List<String> autofillHints;
   final String? Function(String?)? validator;
 
   const TextFieldWithIcon({
@@ -17,6 +18,8 @@ class TextFieldWithIcon extends StatefulWidget {
     required this.obscureText,
     this.validator,
     required this.controller,
+    required this.autofillHints,
+    required TextInputType keyboardType,
   });
 
   @override

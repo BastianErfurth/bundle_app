@@ -187,6 +187,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       }
                       return null;
                     },
+                    autofillHints: [],
                   ),
                   const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
@@ -199,6 +200,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       }
                       return null;
                     },
+                    autofillHints: [],
                   ),
                   const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
@@ -211,6 +213,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       }
                       return null;
                     },
+                    autofillHints: [],
                   ),
                   const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
@@ -223,6 +226,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       }
                       return null;
                     },
+                    autofillHints: [],
                   ),
                   const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
@@ -235,6 +239,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       }
                       return null;
                     },
+                    autofillHints: [],
                   ),
                   const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
@@ -247,6 +252,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       }
                       return null;
                     },
+                    autofillHints: [],
                   ),
                   SwitchListTile(
                     title: const Text("Profil privat"),
@@ -326,6 +332,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       }
                       return null;
                     },
+                    autofillHints: [],
                   ),
                   const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
@@ -338,6 +345,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       }
                       return null;
                     },
+                    autofillHints: [],
                   ),
                   const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
@@ -350,6 +358,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       }
                       return null;
                     },
+                    autofillHints: [],
                   ),
                   const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
@@ -362,6 +371,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       }
                       return null;
                     },
+                    autofillHints: [],
                   ),
                   const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
@@ -374,6 +384,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       }
                       return null;
                     },
+                    autofillHints: [],
                   ),
                   const SizedBox(height: 8),
                   TextFormFieldWithoutIcon(
@@ -386,6 +397,7 @@ class _SettingScreenState extends State<NewSettingScreen>
                       }
                       return null;
                     },
+                    autofillHints: [],
                   ),
                   SwitchListTile(
                     title: const Text("In Vertragsliste"),

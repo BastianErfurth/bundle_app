@@ -157,6 +157,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                         }
                         return null;
                       },
+                      autofillHints: [],
                     ),
                     SizedBox(height: 6),
                     SizedBox(height: 16),
@@ -283,6 +284,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                         }
                         return null;
                       },
+                      autofillHints: [],
                     ),
                     SizedBox(height: 16),
                     TopicHeadline(
@@ -392,6 +394,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                         }
                         return null;
                       },
+                      autofillHints: [],
                     ),
                     SizedBox(height: 6),
                     ContractAttributes(
@@ -429,6 +432,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       validator: (value) {
                         return null;
                       },
+                      autofillHints: [],
                     ),
                     SizedBox(height: 24),
                     Row(

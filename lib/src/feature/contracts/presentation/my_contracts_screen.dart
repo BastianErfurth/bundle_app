@@ -156,6 +156,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                 validator: (value) {
                   return null;
                 },
+                autofillHints: [],
               ),
               SizedBox(height: 4),
               DropDownSelectField<ContractCategory?>(
