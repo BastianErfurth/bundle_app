@@ -51,6 +51,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
 
   Future<List<Contract>> _getFilteredContracts() async {
     final allContracts = await widget.db.getMyContracts();
+    final searchText = _searchController.text.toLowerCase();
 
     return allContracts.where((contract) {
       final matchesUser =
@@ -59,11 +60,11 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
       final matchesCategory =
           _selectedContractCategory == null ||
           contract.category == _selectedContractCategory;
+
+      final keyword = contract.keyword;
+
       final matchesSearch =
-          _searchController.text.isEmpty ||
-          contract.name.toLowerCase().contains(
-            _searchController.text.toLowerCase(),
-          );
+          searchText.isEmpty || keyword.toLowerCase().contains(searchText);
 
       return matchesUser && matchesCategory && matchesSearch;
     }).toList();

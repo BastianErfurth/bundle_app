@@ -47,4 +47,27 @@ class UserProfile extends Profile {
       isPrivate: isPrivate ?? this.isPrivate,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserProfile &&
+        other.firstName == firstName &&
+        other.lastName == lastName &&
+        other.street == street &&
+        other.houseNumber == houseNumber &&
+        other.zipCode == zipCode &&
+        other.city == city &&
+        other.isPrivate == isPrivate;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    firstName,
+    lastName,
+    street,
+    houseNumber,
+    zipCode,
+    city,
+    isPrivate,
+  );
 }
