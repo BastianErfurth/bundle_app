@@ -84,7 +84,6 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
           padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
-              // Top Buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -122,7 +121,6 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
               ),
               SizedBox(height: 8),
 
-              // UserProfile Dropdown
               DropDownSelectField<UserProfile?>(
                 labelText: "Profil wählen",
                 values: [null, ..._userProfiles],
@@ -139,7 +137,6 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
               ),
               SizedBox(height: 4),
 
-              // Search
               TextFormFieldWithoutIcon(
                 labelText: "Suchbegriff eingeben",
                 hintText: "Stichwort",
@@ -149,7 +146,6 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
               ),
               SizedBox(height: 4),
 
-              // Category Dropdown
               DropDownSelectField<ContractCategory?>(
                 labelText: "Kategorie wählen",
                 values: [null, ...ContractCategory.values],
@@ -165,7 +161,6 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
               ),
               SizedBox(height: 16),
 
-              // PieChart
               FutureBuilder<List<Contract>>(
                 future: _filteredContracts,
                 builder: (context, snapshot) {
@@ -190,7 +185,6 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                 },
               ),
 
-              // Contract List
               Expanded(
                 child: FutureBuilder<List<Contract>>(
                   future: _filteredContracts,
@@ -224,11 +218,8 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                 ),
               ),
 
-              // Export Button
               FilledButton.icon(
-                onPressed: () {
-                  // Exportfunktion hier einbauen, falls gewünscht
-                },
+                onPressed: () {},
                 label: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
