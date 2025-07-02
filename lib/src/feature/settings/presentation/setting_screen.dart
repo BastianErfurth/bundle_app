@@ -196,6 +196,17 @@ class _SettingScreenState extends State<SettingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            FilledButton(
+              onPressed: () {},
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 4,
+                  children: [Icon(Icons.logout), Text("Log out")],
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
             const Text(
               "Deine Profile",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
