@@ -206,7 +206,8 @@ class _AddContractScreenState extends State<AddContractScreen> {
                                   .push(
                                     MaterialPageRoute(
                                       builder: (context) => SettingScreen(
-                                        databaseRepository: widget.db,
+                                        db: widget.db,
+                                        auth: widget.auth,
                                       ),
                                     ),
                                   )
@@ -262,7 +263,8 @@ class _AddContractScreenState extends State<AddContractScreen> {
                                   .push(
                                     MaterialPageRoute(
                                       builder: (context) => SettingScreen(
-                                        databaseRepository: widget.db,
+                                        db: widget.db,
+                                        auth: widget.auth,
                                       ),
                                     ),
                                   )

@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
       CostScreen(widget.db),
       MyContractsScreen(widget.db, widget.auth),
       CalenderScreen(widget.db),
-      SettingScreen(databaseRepository: widget.db),
+      SettingScreen(db: widget.db, auth: widget.auth),
     ];
   }
 

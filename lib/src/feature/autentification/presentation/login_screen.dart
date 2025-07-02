@@ -3,7 +3,6 @@ import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/registration_screen.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
-import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
@@ -123,12 +122,10 @@ class _LogInScreenState extends State<LogInScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: FilledButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    HomeScreen(widget.db, widget.auth),
-                              ),
+                          onPressed: () async {
+                            await widget.auth.signInWithEmailAndPassword(
+                              _emailController.text,
+                              _passwordController.text,
                             );
                           },
                           child: Text("Login"),

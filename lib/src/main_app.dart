@@ -1,7 +1,7 @@
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
-import 'package:bundle_app/src/feature/autentification/presentation/login_screen.dart';
-import 'package:bundle_app/src/feature/contracts/presentation/home_content.dart';
+import 'package:bundle_app/src/feature/autentification/presentation/registration_screen.dart';
+import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -21,8 +21,8 @@ class MainApp extends StatelessWidget {
           darkTheme: AppTheme.darkTheme,
           themeMode: ThemeMode.dark,
           home: snapshot.hasData
-              ? HomeContent(db, auth)
-              : LogInScreen(db, auth),
+              ? HomeScreen(db, auth)
+              : RegistrationScreen(db, auth),
         );
       },
     );

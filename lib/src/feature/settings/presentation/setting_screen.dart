@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
@@ -7,9 +8,10 @@ import 'package:bundle_app/src/feature/contracts/domain/contract_partner_profile
 import 'package:bundle_app/src/data/database_repository.dart';
 
 class SettingScreen extends StatefulWidget {
-  final DatabaseRepository databaseRepository;
+  final DatabaseRepository db;
+  final AuthRepository auth;
 
-  const SettingScreen({super.key, required this.databaseRepository});
+  const SettingScreen({super.key, required this.db, required this.auth});
 
   @override
   State<SettingScreen> createState() => _SettingScreenState();
@@ -34,8 +36,8 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Future<void> _loadProfiles() async {
-    final users = await widget.databaseRepository.getUserProfiles();
-    final partners = await widget.databaseRepository.getContractors();
+    final users = await widget.db.getUserProfiles();
+    final partners = await widget.db.getContractors();
     setState(() {
       _userProfiles = users;
       _contractPartners = partners;
@@ -77,7 +79,7 @@ class _SettingScreenState extends State<SettingScreen> {
       );
 
       // Profil speichern
-      await widget.databaseRepository.addUserProfile(_newUser);
+      await widget.db.addUserProfile(_newUser);
       await _loadProfiles();
 
       // Lade-Dialog schließen
@@ -106,7 +108,7 @@ class _SettingScreenState extends State<SettingScreen> {
       );
 
       // Partnerprofil speichern
-      await widget.databaseRepository.addContractPartnerProfile(_newPartner);
+      await widget.db.addContractPartnerProfile(_newPartner);
       await _loadProfiles();
 
       // Lade-Dialog schließen
@@ -145,7 +147,7 @@ class _SettingScreenState extends State<SettingScreen> {
     );
 
     if (confirmed == true) {
-      await widget.databaseRepository.deleteUserProfile(user);
+      await widget.db.deleteUserProfile(user);
       await _loadProfiles();
       ScaffoldMessenger.of(
         context,
@@ -175,7 +177,7 @@ class _SettingScreenState extends State<SettingScreen> {
     );
 
     if (confirmed == true) {
-      await widget.databaseRepository.deleteContractPartnerProfile(partner);
+      await widget.db.deleteContractPartnerProfile(partner);
       await _loadProfiles();
       ScaffoldMessenger.of(
         context,
@@ -197,7 +199,9 @@ class _SettingScreenState extends State<SettingScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FilledButton(
-              onPressed: () {},
+              onPressed: () async {
+                await widget.auth.signOut();
+              },
               child: Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -2,7 +2,6 @@ import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
-import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 
@@ -106,14 +105,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Bitte gib ein Passwort ein";
-                      } else if (value.length < 8) {
+                      } else if (value.length < 6) {
                         return "Passwort muss mindestens 6 Zeichen lang sein";
-                      } else if (value.length > 50) {
-                        return "Passwort darf maximal 50 Zeichen lang sein";
-                      } else if (!RegExp(
-                        r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$",
-                      ).hasMatch(value)) {
-                        return "Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Großbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten";
+                      } else if (value.length > 10) {
+                        return "Passwort darf maximal 10 Zeichen lang sein";
                       } else if (value.contains(" ")) {
                         return "Passwort darf keine Leerzeichen enthalten";
                       }
@@ -165,12 +160,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                HomeScreen(widget.db, widget.auth),
-                          ),
+                      onPressed: () async {
+                        await widget.auth.createUserWithEmailAndPassword(
+                          _emailController.text,
+                          _passwordController.text,
                         );
                       },
                       child: Text("Registrieren"),
