@@ -1,3 +1,4 @@
+import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/calender/presentation/calender_screen.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
@@ -13,7 +14,8 @@ import 'package:table_calendar/table_calendar.dart';
 
 class HomeContent extends StatefulWidget {
   final DatabaseRepository db;
-  const HomeContent(this.db, {super.key});
+  final AuthRepository auth;
+  const HomeContent(this.db, this.auth, {super.key});
 
   @override
   State<HomeContent> createState() => _HomeContentState();
@@ -59,7 +61,8 @@ class _HomeContentState extends State<HomeContent> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => AddContractScreen(widget.db),
+                        builder: (context) =>
+                            AddContractScreen(widget.db, widget.auth),
                       ),
                     );
                   },
@@ -75,7 +78,8 @@ class _HomeContentState extends State<HomeContent> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => MyContractsScreen(widget.db),
+                        builder: (context) =>
+                            MyContractsScreen(widget.db, widget.auth),
                       ),
                     );
                   },

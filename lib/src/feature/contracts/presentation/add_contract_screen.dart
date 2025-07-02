@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
@@ -24,7 +25,8 @@ import 'package:flutter_picker_plus/flutter_picker_plus.dart';
 
 class AddContractScreen extends StatefulWidget {
   final DatabaseRepository db;
-  const AddContractScreen(this.db, {super.key});
+  final AuthRepository auth;
+  const AddContractScreen(this.db, this.auth, {super.key});
 
   @override
   State<AddContractScreen> createState() => _AddContractScreenState();
@@ -117,7 +119,8 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => HomeScreen(widget.db),
+                                builder: (context) =>
+                                    HomeScreen(widget.db, widget.auth),
                               ),
                             );
                           },

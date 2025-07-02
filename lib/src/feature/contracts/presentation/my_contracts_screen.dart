@@ -1,3 +1,4 @@
+import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
@@ -13,7 +14,8 @@ import 'package:flutter/material.dart';
 
 class MyContractsScreen extends StatefulWidget {
   final DatabaseRepository db;
-  const MyContractsScreen(this.db, {super.key});
+  final AuthRepository auth;
+  const MyContractsScreen(this.db, this.auth, {super.key});
 
   @override
   State<MyContractsScreen> createState() => _MyContractsScreenState();
@@ -91,7 +93,8 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => HomeScreen(widget.db),
+                          builder: (context) =>
+                              HomeScreen(widget.db, widget.auth),
                         ),
                       );
                     },
@@ -105,7 +108,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                           .push(
                             MaterialPageRoute(
                               builder: (context) =>
-                                  AddContractScreen(widget.db),
+                                  AddContractScreen(widget.db, widget.auth),
                             ),
                           )
                           .then((_) => _applyFilters());

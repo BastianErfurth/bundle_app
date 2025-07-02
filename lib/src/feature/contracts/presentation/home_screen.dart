@@ -1,4 +1,5 @@
 import 'package:bundle_app/src/common/bottom_navbar.dart';
+import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/calender/presentation/calender_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/home_content.dart';
@@ -9,7 +10,8 @@ import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   final DatabaseRepository db;
-  const HomeScreen(this.db, {super.key});
+  final AuthRepository auth;
+  const HomeScreen(this.db, this.auth, {super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -23,9 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     myScreens = [
-      HomeContent(widget.db),
+      HomeContent(widget.db, widget.auth),
       CostScreen(widget.db),
-      MyContractsScreen(widget.db),
+      MyContractsScreen(widget.db, widget.auth),
       CalenderScreen(widget.db),
       SettingScreen(databaseRepository: widget.db),
     ];
