@@ -82,14 +82,10 @@ class _LogInScreenState extends State<LogInScreen> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Bitte gib ein Passwort ein";
-                          } else if (value.length < 8) {
+                          } else if (value.length < 6) {
                             return "Passwort muss mindestens 6 Zeichen lang sein";
-                          } else if (value.length > 50) {
-                            return "Passwort darf maximal 50 Zeichen lang sein";
-                          } else if (!RegExp(
-                            r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$",
-                          ).hasMatch(value)) {
-                            return "Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Großbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten";
+                          } else if (value.length > 10) {
+                            return "Passwort darf maximal 10 Zeichen lang sein";
                           } else if (value.contains(" ")) {
                             return "Passwort darf keine Leerzeichen enthalten";
                           }
