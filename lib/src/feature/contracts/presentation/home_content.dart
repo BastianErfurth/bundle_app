@@ -1,7 +1,8 @@
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/calender/presentation/calender_screen.dart';
-import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract.dart'
+    as contracts_domain;
 import 'package:bundle_app/src/feature/contracts/presentation/add_contract_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/my_contracts_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_piechart.dart';
@@ -22,7 +23,7 @@ class HomeContent extends StatefulWidget {
 }
 
 class _HomeContentState extends State<HomeContent> {
-  late Future<List<Contract>> _contractsFuture;
+  late Future<List<contracts_domain.Contract>> _contractsFuture;
 
   @override
   void initState() {
@@ -88,7 +89,7 @@ class _HomeContentState extends State<HomeContent> {
               ],
             ),
             SizedBox(height: 8),
-            FutureBuilder<List<Contract>>(
+            FutureBuilder<List<contracts_domain.Contract>>(
               future: _contractsFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {

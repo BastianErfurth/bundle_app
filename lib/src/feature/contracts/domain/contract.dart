@@ -33,4 +33,8 @@ class Contract {
   });
 
   get name => null;
+
+  get cost => null;
+
+  get firstCostDate => null;
 }
