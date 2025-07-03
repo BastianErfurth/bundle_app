@@ -48,14 +48,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     "Bundle",
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   Text(
                     "Nur kurz registrieren, dann gehts los...",
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 8),
 
                   TextFormFieldWithoutIcon(
                     autofillHints: [AutofillHints.username],
@@ -170,7 +170,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 20),
                   Row(
                     spacing: 16,
                     children: [
@@ -179,17 +178,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       Expanded(child: Divider(color: Palette.textWhite)),
                     ],
                   ),
-                  SizedBox(height: 20),
-                  Row(
+
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       FilledButton.icon(
                         onPressed: () {},
                         label: Center(
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.apple),
-                              //Text("Login with Apple")
+                              Text("Login with Apple"),
                             ],
                           ),
                         ),
@@ -198,10 +198,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         onPressed: () {},
                         child: Center(
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             spacing: 4,
                             children: [
-                              Icon(Icons.facebook),
-                              //Text("Login with Facebook")
+                              Image.asset(
+                                "assets/images/google.png",
+                                height: 24,
+                              ),
+                              Text("Login with Google"),
                             ],
                           ),
                         ),
