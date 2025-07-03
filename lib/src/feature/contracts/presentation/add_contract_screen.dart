@@ -109,7 +109,12 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       children: [
                         FilledButton.icon(
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    HomeScreen(widget.db, widget.auth),
+                              ),
+                            );
                           },
                           label: Row(
                             children: [Icon(Icons.close), Text("Abbrechen")],
