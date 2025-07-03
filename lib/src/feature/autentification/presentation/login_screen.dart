@@ -141,17 +141,15 @@ class _LogInScreenState extends State<LogInScreen> {
                 ],
               ),
               SizedBox(height: 20),
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   FilledButton.icon(
                     onPressed: () {},
                     label: Center(
                       child: Row(
-                        children: [
-                          Icon(Icons.apple),
-                          //Text("Login with Apple")
-                        ],
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [Icon(Icons.apple), Text("Login with Apple")],
                       ),
                     ),
                   ),
@@ -159,10 +157,11 @@ class _LogInScreenState extends State<LogInScreen> {
                     onPressed: () {},
                     child: Center(
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         spacing: 4,
                         children: [
-                          Icon(Icons.facebook),
-                          //Text("Login with Facebook")
+                          Image.asset("assets/images/google.png", height: 24),
+                          Text("Login with Facebook"),
                         ],
                       ),
                     ),
