@@ -192,7 +192,10 @@ class _SettingScreenState extends State<SettingScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Einstellungen")),
+      appBar: AppBar(
+        title: const Text("Einstellungen"),
+        backgroundColor: Palette.backgroundGreenBlue,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
