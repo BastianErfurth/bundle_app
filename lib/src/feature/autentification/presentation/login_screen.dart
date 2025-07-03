@@ -161,7 +161,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         spacing: 4,
                         children: [
                           Image.asset("assets/images/google.png", height: 24),
-                          Text("Login with Facebook"),
+                          Text("Login with Google"),
                         ],
                       ),
                     ),
