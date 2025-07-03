@@ -22,4 +22,6 @@ class ContractCostRoutine {
     required this.firstCostDate,
     required this.costRepeatInterval,
   });
+
+  String? get interval => null;
 }
