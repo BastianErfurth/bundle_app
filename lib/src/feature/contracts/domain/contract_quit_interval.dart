@@ -40,4 +40,21 @@ class ContractQuitInterval {
     required this.quitInterval,
     required this.isQuitReminderAlertSet,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'howManyInQuitUnits': howManyInQuitUnits,
+      'quitInterval': quitInterval.label,
+      'isQuitReminderAlertSet': isQuitReminderAlertSet,
+    };
+  }
+
+  factory ContractQuitInterval.fromMap(Map<String, dynamic> map) {
+    return ContractQuitInterval(
+      howManyInQuitUnits: map['howManyInQuitUnits'] ?? 0,
+      quitInterval:
+          QuitInterval.fromLabel(map['quitInterval']) ?? QuitInterval.month,
+      isQuitReminderAlertSet: map['isQuitReminderAlertSet'] ?? false,
+    );
+  }
 }

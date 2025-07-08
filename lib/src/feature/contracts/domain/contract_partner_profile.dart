@@ -17,6 +17,30 @@ class ContractPartnerProfile extends Profile {
     required this.isInContractList,
   });
 
+  Map<String, dynamic> toMap() {
+    return {
+      'companyName': companyName,
+      'contactPersonName': contactPersonName,
+      'street': street,
+      'houseNumber': houseNumber,
+      'zipCode': zipCode,
+      'city': city,
+      'isInContractList': isInContractList,
+    };
+  }
+
+  factory ContractPartnerProfile.fromMap(Map<String, dynamic> map) {
+    return ContractPartnerProfile(
+      companyName: map['companyName'] ?? '',
+      contactPersonName: map['contactPersonName'] ?? '',
+      street: map['street'] ?? '',
+      houseNumber: map['houseNumber'] ?? '',
+      zipCode: map['zipCode'] ?? '',
+      city: map['city'] ?? '',
+      isInContractList: map['isInContractList'] ?? false,
+    );
+  }
+
   @override
   String toString() => companyName;
 

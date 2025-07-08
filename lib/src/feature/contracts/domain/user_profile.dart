@@ -16,6 +16,31 @@ class UserProfile extends Profile {
     required super.city,
     required this.isPrivate,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'street': street,
+      'houseNumber': houseNumber,
+      'zipCode': zipCode,
+      'city': city,
+      'isPrivate': isPrivate,
+    };
+  }
+
+  factory UserProfile.fromMap(Map<String, dynamic> map) {
+    return UserProfile(
+      firstName: map['firstName'] ?? '',
+      lastName: map['lastName'] ?? '',
+      street: map['street'] ?? '',
+      houseNumber: map['houseNumber'] ?? '',
+      zipCode: map['zipCode'] ?? '',
+      city: map['city'] ?? '',
+      isPrivate: map['isPrivate'] ?? false,
+    );
+  }
+
   @override
   String toString() {
     return "$firstName $lastName";

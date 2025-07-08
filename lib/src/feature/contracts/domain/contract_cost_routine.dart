@@ -23,5 +23,26 @@ class ContractCostRoutine {
     required this.costRepeatInterval,
   });
 
+  Map<String, dynamic> toMap() {
+    return {
+      'costsInCents': costsInCents,
+      'firstCostDate': firstCostDate?.toIso8601String(),
+      'costRepeatInterval': costRepeatInterval.label,
+    };
+  }
+
+  factory ContractCostRoutine.fromMap(Map<String, dynamic> map) {
+    return ContractCostRoutine(
+      costsInCents: map['costsInCents'] ?? 0,
+      firstCostDate: map['firstCostDate'] != null
+          ? DateTime.parse(map['firstCostDate'])
+          : null,
+      costRepeatInterval: CostRepeatInterval.values.firstWhere(
+        (e) => e.name == map['costRepeatInterval'],
+        orElse: () => CostRepeatInterval.month,
+      ),
+    );
+  }
+
   String? get interval => null;
 }
