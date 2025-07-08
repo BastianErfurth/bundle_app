@@ -21,11 +21,8 @@ class CostScreen extends StatefulWidget {
 class _CostScreenState extends State<CostScreen> {
   String _zahlungsintervall = "Zahlungsintervall wählen";
   ContractCategory? _selectedContractCategory;
-
-  String itemLabel(List<Contract> contracts) {
-    // Customize this as needed for your UI
-    return "Verträge (${contracts.length})";
-  }
+  Contract?
+  _selectedContract; // NEU: ausgewählter Vertrag oder null = alle Verträge
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +47,14 @@ class _CostScreenState extends State<CostScreen> {
                 onChanged: (ContractCategory? newValue) {
                   setState(() {
                     _selectedContractCategory = newValue;
+                    _selectedContract =
+                        null; // Vertrag reset bei Kategorie-Wechsel
                   });
                 },
               ),
               SizedBox(height: 8),
               FutureBuilder<List<Contract>>(
-                future: (widget.db as MockDatabaseRepository)
-                    .getMyContracts(), // Use the mock repository for testing
+                future: (widget.db as MockDatabaseRepository).getMyContracts(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
@@ -65,23 +63,32 @@ class _CostScreenState extends State<CostScreen> {
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return Text('Keine Verträge gefunden');
                   } else {
-                    // Use a dropdown for a single Contract selection
-                    return DropDownSelectField<Contract>(
-                      values: _selectedContractCategory == null
-                          ? snapshot.data! // Alle Verträge anzeigen
-                          : snapshot.data!
+                    final allContracts = snapshot.data!;
+                    // Liste mit 'null' als erste Option für "Alle Verträge"
+                    final filteredContracts = _selectedContractCategory == null
+                        ? [null, ...allContracts]
+                        : [
+                            null,
+                            ...allContracts
                                 .where(
-                                  (contract) =>
-                                      contract.category ==
-                                      _selectedContractCategory,
+                                  (c) =>
+                                      c.category == _selectedContractCategory,
                                 )
-                                .toList(), // Nur gefilterte Verträge
+                                // ignore: unnecessary_to_list_in_spreads
+                                .toList(),
+                          ];
+
+                    return DropDownSelectField<Contract?>(
+                      values: filteredContracts,
                       labelText: "Vertrag auswählen",
-                      itemLabel: (Contract contract) =>
-                          '${contract.keyword} - ${contract.contractPartnerProfile.companyName}',
+                      selectedValue: _selectedContract,
+                      itemLabel: (Contract? contract) {
+                        if (contract == null) return "Alle Verträge";
+                        return '${contract.keyword} - ${contract.contractPartnerProfile.companyName}';
+                      },
                       onChanged: (Contract? newValue) {
                         setState(() {
-                          // Falls du den ausgewählten Vertrag speichern willst, hier speichern
+                          _selectedContract = newValue;
                         });
                       },
                     );
@@ -112,10 +119,10 @@ class _CostScreenState extends State<CostScreen> {
                   child: Column(
                     children: [
                       Row(
-                        spacing: 16,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.euro, size: 32),
+                          SizedBox(width: 16),
                           Text(
                             "1440,00",
                             style: Theme.of(context).textTheme.displaySmall,
@@ -206,9 +213,9 @@ class _CostScreenState extends State<CostScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 4,
                     children: [
                       Icon(Icons.send_rounded),
+                      SizedBox(width: 4),
                       Text("Kostenübersicht versenden"),
                     ],
                   ),
