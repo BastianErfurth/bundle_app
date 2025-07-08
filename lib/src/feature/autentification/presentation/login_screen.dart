@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/registration_screen.dart';
@@ -88,8 +90,8 @@ class _LogInScreenState extends State<LogInScreen> {
                             return "Passwort darf maximal 10 Zeichen lang sein";
                           } else if (value.contains(" ")) {
                             return "Passwort darf keine Leerzeichen enthalten";
-                          }
-                          return null;
+                          } else
+                            return null;
                         },
 
                         labelText: "Passwort",

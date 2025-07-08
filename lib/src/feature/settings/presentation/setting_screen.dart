@@ -214,6 +214,7 @@ class _SettingScreenState extends State<SettingScreen> {
               ),
             ),
             SizedBox(height: 16),
+
             const Text(
               "Deine Profile",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),

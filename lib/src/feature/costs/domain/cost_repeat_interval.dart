@@ -1,4 +1,3 @@
-// (Assuming this is the file where CostRepeatInterval is defined)
 enum CostRepeatInterval { day, week, month, quarter, halfYear, year, once }
 
 extension CostRepeatIntervalExtension on CostRepeatInterval {
