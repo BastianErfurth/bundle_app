@@ -140,7 +140,7 @@ class _CostScreenState extends State<CostScreen> {
               ),
               SizedBox(height: 40),
               SizedBox(
-                height: 220,
+                height: 200,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: SizedBox(

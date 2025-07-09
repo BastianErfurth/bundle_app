@@ -51,7 +51,7 @@ class MockDatabaseRepository implements DatabaseRepository {
           6,
           1,
         ), // erstes Abbuchungsdatum muss hier hin
-        costRepeatInterval: CostRepeatInterval.month,
+        costRepeatInterval: CostRepeatInterval.quarter,
       ),
       extraContractInformations: ExtraContractInformation(
         "Audi 80 rot",
