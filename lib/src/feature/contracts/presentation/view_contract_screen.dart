@@ -1,3 +1,4 @@
+import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
@@ -78,7 +79,10 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
     final extraInfo = contract.extraContractInformations.toString().trim();
 
     return Scaffold(
-      appBar: AppBar(title: Text('Vertrag: ${contract.keyword}')),
+      appBar: AppBar(
+        title: Text('Vertrag: ${contract.keyword}'),
+        backgroundColor: Palette.backgroundGreenBlue,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -88,6 +92,8 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
               'Kategorie: ${contract.category.name}',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
+            SizedBox(height: 8),
+            Text('Name: ${contract.keyword}'),
             SizedBox(height: 8),
             Text('Vertragsnummer: ${contract.contractNumber}'),
             SizedBox(height: 8),

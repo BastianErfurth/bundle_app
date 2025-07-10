@@ -59,13 +59,18 @@ class _HomeContentState extends State<HomeContent> {
                 ),
                 SizedBox(width: 6),
                 FilledButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
+                  onPressed: () async {
+                    final result = await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) =>
                             AddContractScreen(widget.db, widget.auth),
                       ),
                     );
+                    if (result == true) {
+                      setState(() {
+                        _contractsFuture = widget.db.getMyContracts();
+                      });
+                    }
                   },
                   child: Row(
                     children: [

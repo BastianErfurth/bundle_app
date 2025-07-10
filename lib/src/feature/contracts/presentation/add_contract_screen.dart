@@ -784,7 +784,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
         SnackBar(content: Text('Vertrag erfolgreich hinzugefügt.')),
       );
 
-      Navigator.of(context).pop(); // Zurück zur vorherigen Ansicht
+      Navigator.of(context).pop(true); // Zurück zur vorherigen Ansicht
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Fehler beim Speichern des Vertrags: $e')),

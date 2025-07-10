@@ -111,7 +111,20 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                                   AddContractScreen(widget.db, widget.auth),
                             ),
                           )
-                          .then((_) => _applyFilters());
+                          .then((result) {
+                            if (result == true) {
+                              _applyFilters();
+
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Vertrag erfolgreich gespeichert',
+                                  ),
+                                ),
+                              );
+                            }
+                          });
                     },
                     label: Row(children: [Icon(Icons.add), Text("Hinzufügen")]),
                   ),

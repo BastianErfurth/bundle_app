@@ -104,6 +104,15 @@ class MockDatabaseRepository implements DatabaseRepository {
   ];
   List<ContractPartnerProfile> myContractors = [
     ContractPartnerProfile(
+      companyName: "O2Germany",
+      contactPersonName: "Herr Funk",
+      street: "Handyallee",
+      houseNumber: "22",
+      zipCode: "50556",
+      city: "Köln",
+      isInContractList: true,
+    ),
+    ContractPartnerProfile(
       companyName: "Allianz AG",
       contactPersonName: "Faru Schneider",
       street: "Kochstr",

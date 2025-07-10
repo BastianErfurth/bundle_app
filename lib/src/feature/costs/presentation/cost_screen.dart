@@ -176,6 +176,7 @@ class _CostScreenState extends State<CostScreen> {
                                   "Jul",
                                   "Aug",
                                   "Sep",
+                                  "Okt",
                                   "Nov",
                                   "Dez",
                                 ];
@@ -190,10 +191,10 @@ class _CostScreenState extends State<CostScreen> {
                             ),
                           ),
                           leftTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: true),
+                            sideTitles: SideTitles(showTitles: false),
                           ),
                           rightTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: true),
+                            sideTitles: SideTitles(showTitles: false),
                           ),
                           topTitles: AxisTitles(
                             sideTitles: SideTitles(showTitles: true),
