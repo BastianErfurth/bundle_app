@@ -163,7 +163,7 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
                 'Zusatzinformationen:',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text(extraInfo),
+              Text(contract.extraContractInformations.toString()),
             ],
           ],
         ),

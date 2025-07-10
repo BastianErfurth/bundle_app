@@ -76,4 +76,8 @@ class Contract {
   get cost => null;
 
   get firstCostDate => null;
+
+  get costRepeatInterval => null;
+
+  get costRoutine => null;
 }

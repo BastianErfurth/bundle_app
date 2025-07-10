@@ -153,6 +153,7 @@ class _CostScreenState extends State<CostScreen> {
                             x: index,
                             barRods: [
                               BarChartRodData(
+                                fromY: 1,
                                 toY: 5,
                                 color: Palette.lightGreenBlue,
                               ),
@@ -270,3 +271,4 @@ class _CostScreenState extends State<CostScreen> {
     );
   }
 }
+// aktuelle Version ohne funktionierendem BarChart

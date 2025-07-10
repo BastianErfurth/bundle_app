@@ -150,10 +150,7 @@ class MockDatabaseRepository implements DatabaseRepository {
   Future<void> modifyContract(Contract updatedContract) async {
     await Future.delayed(Duration(seconds: 5));
     for (Contract contract in myContracts) {
-      // check if the contract number matches
       if (contract.contractNumber == updatedContract.contractNumber) {
-        // we have found the contract to update
-        // remove the old contract and add the updated one
         myContracts.remove(contract);
         myContracts.add(updatedContract);
       }
@@ -214,7 +211,7 @@ class MockDatabaseRepository implements DatabaseRepository {
     try {
       return myContracts.firstWhere((c) => c.contractNumber == contractNumber);
     } catch (e) {
-      return null; // Nicht gefunden
+      return null;
     }
   }
 }
