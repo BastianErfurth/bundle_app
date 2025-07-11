@@ -41,7 +41,7 @@ class ContractRuntime {
     return {
       'dt': dt.toIso8601String(),
       'howManyinInterval': howManyinInterval,
-      'interval': interval.label,
+      'interval': interval.name,
       'isAutomaticExtend': isAutomaticExtend,
     };
   }

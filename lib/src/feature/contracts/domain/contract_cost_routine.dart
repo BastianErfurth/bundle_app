@@ -27,7 +27,7 @@ class ContractCostRoutine {
     return {
       'costsInCents': costsInCents,
       'firstCostDate': firstCostDate?.toIso8601String(),
-      'costRepeatInterval': costRepeatInterval.label,
+      'costRepeatInterval': costRepeatInterval.name,
     };
   }
 

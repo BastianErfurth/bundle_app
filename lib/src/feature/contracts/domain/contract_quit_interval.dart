@@ -44,7 +44,7 @@ class ContractQuitInterval {
   Map<String, dynamic> toMap() {
     return {
       'howManyInQuitUnits': howManyInQuitUnits,
-      'quitInterval': quitInterval.label,
+      'quitInterval': quitInterval.name,
       'isQuitReminderAlertSet': isQuitReminderAlertSet,
     };
   }

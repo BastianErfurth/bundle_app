@@ -71,13 +71,8 @@ class Contract {
     );
   }
 
-  get name => null;
+  DateTime? get firstCostDate => contractCostRoutine.firstCostDate;
 
-  get cost => null;
-
-  get firstCostDate => null;
-
-  get costRepeatInterval => null;
-
-  get costRoutine => null;
+  CostRepeatInterval? get costRepeatInterval =>
+      contractCostRoutine.costRepeatInterval;
 }

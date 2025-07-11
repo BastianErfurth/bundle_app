@@ -7,9 +7,11 @@ import 'package:bundle_app/src/feature/contracts/domain/contract_quit_interval.d
 import 'package:bundle_app/src/feature/contracts/domain/contract_runtime.dart';
 import 'package:bundle_app/src/feature/contracts/domain/extra_contract_information.dart';
 import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MockDatabaseRepository implements DatabaseRepository {
-  //simulierte Datenbank
+class FirebaseRepository implements DatabaseRepository {
+  final fs = FirebaseFirestore.instance;
+
   List<Contract> myContracts = [
     Contract(
       category: ContractCategory.insurance,
@@ -145,17 +147,15 @@ class MockDatabaseRepository implements DatabaseRepository {
 
   @override
   Future<void> addContract(Contract newContract) async {
-    await Future.delayed(Duration(seconds: 5));
-    myContracts.add(newContract);
+    await fs.collection("mycontracts").add(newContract.toMap());
   }
 
   @override
   Future<void> deleteContract(Contract docDeleteName) async {
-    await Future.delayed(Duration(seconds: 5));
-    myContracts.remove(docDeleteName);
+    await fs.collection("mycontracts").doc().delete();
   }
 
-  @override
+  @override //TODO muss noch bearbeitet werden
   Future<void> modifyContract(Contract updatedContract) async {
     await Future.delayed(Duration(seconds: 1));
     final index = myContracts.indexWhere(
@@ -172,48 +172,52 @@ class MockDatabaseRepository implements DatabaseRepository {
 
   @override
   Future<List<Contract>> getMyContracts() async {
-    await Future.delayed(Duration(seconds: 5));
-    return myContracts;
+    final snap = await fs.collection("mycontracts").get();
+    return snap.docs.map((e) {
+      return Contract.fromMap(e.data());
+    }).toList();
   }
 
   @override
   Future<void> addContractPartnerProfile(ContractPartnerProfile profile) async {
-    await Future.delayed(Duration(seconds: 5));
-    myContractors.add(profile);
+    await fs.collection("mycontractors").add(profile.toMap());
   }
 
   @override
   Future<void> addUserProfile(UserProfile profile) async {
-    await Future.delayed(Duration(seconds: 5));
-    myUserProfiles.add(profile);
+    await fs.collection("myuserprofiles").add(profile.toMap());
   }
 
   @override
   Future<List<ContractPartnerProfile>> getContractors() async {
-    await Future.delayed(Duration(seconds: 5));
-    return myContractors;
+    final snap = await fs.collection("mycontractpartners").get();
+    return snap.docs.map((e) {
+      return ContractPartnerProfile.fromMap(e.data());
+    }).toList();
   }
 
   @override
   Future<List<UserProfile>> getUserProfiles() async {
-    await Future.delayed(Duration(seconds: 5));
-    return myUserProfiles;
+    final snap = await fs.collection("myuserprofiles").get();
+    return snap.docs.map((e) {
+      return UserProfile.fromMap(e.data());
+    }).toList();
   }
 
-  @override
+  @override //TODO muss noch bearbeitet werden
   Future<void> deleteUserProfile(UserProfile profile) async {
     await Future.delayed(Duration(seconds: 5));
     myUserProfiles.remove(profile);
   }
 
-  @override
+  @override //TODO muss noch bearbeitet werden
   Future<void> deleteContractPartnerProfile(
     ContractPartnerProfile profile,
   ) async {
     myContractors.remove(profile);
   }
 
-  @override
+  @override //TODO muss noch bearbeitet werden
   Future<Contract?> getContractByNumber(String contractNumber) async {
     await Future.delayed(Duration(seconds: 1));
     try {
