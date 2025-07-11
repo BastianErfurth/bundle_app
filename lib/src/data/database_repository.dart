@@ -11,16 +11,12 @@ abstract class DatabaseRepository {
 
   // UserProfiles
   Future<List<UserProfile>> getUserProfiles();
-  Future<void> addUserProfile(UserProfile profile); // async machen
-  Future<void> deleteUserProfile(UserProfile profile); // hinzufügen
+  Future<void> addUserProfile(UserProfile profile);
+  Future<void> deleteUserProfile(UserProfile profile);
 
   // Vertragspartner
   Future<List<ContractPartnerProfile>> getContractors();
-  Future<void> addContractPartnerProfile(
-    ContractPartnerProfile profile,
-  ); // async machen
-  Future<void> deleteContractPartnerProfile(
-    ContractPartnerProfile profile,
-  ); // hinzufügen
+  Future<void> addContractPartnerProfile(ContractPartnerProfile profile);
+  Future<void> deleteContractPartnerProfile(ContractPartnerProfile profile);
   Future<Contract?> getContractByNumber(String contractNumber);
 }
