@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     myScreens = [
       HomeContent(widget.db, widget.auth),
-      CostScreen(widget.db),
+      CostScreen(widget.db, widget.auth),
       MyContractsScreen(widget.db, widget.auth),
       CalenderScreen(widget.db),
       SettingScreen(db: widget.db, auth: widget.auth),

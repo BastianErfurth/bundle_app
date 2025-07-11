@@ -3,6 +3,7 @@ import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_category.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract_cost_routine.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/dropdown_select_field.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
@@ -23,11 +24,45 @@ class CostScreen extends StatefulWidget {
 class _CostScreenState extends State<CostScreen> {
   String _zahlungsintervall = "Zahlungsintervall wählen";
   ContractCategory? _selectedContractCategory;
-  Contract?
-  _selectedContract; // NEU: ausgewählter Vertrag oder null = alle Verträge
+  Contract? _selectedContract;
+
+  List<Contract> _allContracts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadContracts();
+  }
+
+  Future<void> _loadContracts() async {
+    final contracts = await (widget.db as MockDatabaseRepository)
+        .getMyContracts();
+    setState(() {
+      _allContracts = contracts;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    // Filter Verträge nach Kategorie
+    List<Contract> filteredContracts = _allContracts.where((contract) {
+      if (_selectedContractCategory == null) return true;
+      return contract.category == _selectedContractCategory;
+    }).toList();
+
+    // Wenn ein Vertrag ausgewählt ist, nur diesen anzeigen
+    if (_selectedContract != null) {
+      filteredContracts = filteredContracts
+          .where((c) => c.id == _selectedContract!.id)
+          .toList();
+    }
+
+    // Berechne monatliche Kosten aus den gefilterten Verträgen
+    final monthlyCosts = _calculateMonthlyCosts(filteredContracts);
+
+    // Gesamtkosten im Jahr berechnen
+    final gesamt = monthlyCosts.fold(0.0, (prev, e) => prev + e);
+
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
       body: Padding(
@@ -65,7 +100,6 @@ class _CostScreenState extends State<CostScreen> {
                     return Text('Keine Verträge gefunden');
                   } else {
                     final allContracts = snapshot.data!;
-                    // Liste mit 'null' als erste Option für "Alle Verträge"
                     final filteredContracts = _selectedContractCategory == null
                         ? [null, ...allContracts]
                         : [
@@ -92,6 +126,7 @@ class _CostScreenState extends State<CostScreen> {
                   }
                 },
               ),
+
               SizedBox(height: 4),
               ContractAttributes(
                 textTopic: "Zahlungsintervall",
@@ -121,7 +156,7 @@ class _CostScreenState extends State<CostScreen> {
                           Icon(Icons.euro, size: 32),
                           SizedBox(width: 16),
                           Text(
-                            "1440,00",
+                            (gesamt / 100).toStringAsFixed(2),
                             style: Theme.of(context).textTheme.displaySmall,
                           ),
                         ],
@@ -144,14 +179,18 @@ class _CostScreenState extends State<CostScreen> {
                     width: 800,
                     child: BarChart(
                       BarChartData(
-                        maxY: 10,
+                        maxY: monthlyCosts.isNotEmpty
+                            ? (monthlyCosts.reduce((a, b) => a > b ? a : b) *
+                                      1.2)
+                                  .clamp(10, double.infinity)
+                            : 10,
                         barGroups: List.generate(12, (index) {
                           return BarChartGroupData(
                             x: index,
                             barRods: [
                               BarChartRodData(
-                                fromY: 1,
-                                toY: 5,
+                                fromY: 0,
+                                toY: monthlyCosts[index] / 100, // Cent in Euro
                                 color: Palette.lightGreenBlue,
                               ),
                             ],
@@ -194,7 +233,7 @@ class _CostScreenState extends State<CostScreen> {
                             sideTitles: SideTitles(showTitles: false),
                           ),
                           topTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: true),
+                            sideTitles: SideTitles(showTitles: false),
                           ),
                         ),
                         borderData: FlBorderData(show: false),
@@ -268,5 +307,73 @@ class _CostScreenState extends State<CostScreen> {
       },
     );
   }
+
+  List<double> _calculateMonthlyCosts(List<Contract> contracts) {
+    final List<double> monthlyCosts = List.filled(12, 0.0);
+    final int currentYear = DateTime.now().year;
+
+    for (var contract in contracts) {
+      final start = contract.firstCostDate;
+      if (start == null) continue;
+
+      // Zahlungsintervall vom Vertrag (Enum)
+      final interval = contract.contractCostRoutine.costRepeatInterval;
+
+      // Filter nach globalem Zahlungsintervall-String
+      if (!_matchesFilter(interval, _zahlungsintervall)) continue;
+
+      final cost = contract.contractCostRoutine.costsInCents.toDouble();
+
+      int stepMonths = _stepMonthsFromInterval(interval);
+
+      for (int m = 0; m < 12; m++) {
+        final current = DateTime(currentYear, m + 1);
+        if (current.isBefore(start)) continue;
+
+        int diff =
+            (current.year - start.year) * 12 + (current.month - start.month);
+        if (diff % stepMonths == 0) {
+          monthlyCosts[m] += cost;
+        }
+      }
+    }
+    print('MonthlyCosts: $monthlyCosts');
+    return monthlyCosts;
+  }
+
+  int _stepMonthsFromInterval(CostRepeatInterval interval) {
+    switch (interval) {
+      case CostRepeatInterval.day:
+        return 1; // Vereinfachung: täglich als monatlich zählen
+      case CostRepeatInterval.week:
+        return 1; // wöchentlich als monatlich zählen
+      case CostRepeatInterval.month:
+        return 1;
+      case CostRepeatInterval.quarter:
+        return 3;
+      case CostRepeatInterval.halfyear:
+        return 6;
+      case CostRepeatInterval.year:
+        return 12;
+    }
+  }
+
+  bool _matchesFilter(CostRepeatInterval interval, String filter) {
+    switch (filter) {
+      case "monatlich":
+        return interval == CostRepeatInterval.month;
+      case "vierteljährlich":
+        return interval == CostRepeatInterval.quarter;
+      case "halbjährlich":
+        return interval == CostRepeatInterval.halfyear;
+      case "jährlich":
+        return interval == CostRepeatInterval.year;
+      case "täglich":
+        return interval == CostRepeatInterval.day;
+      case "wöchentlich":
+        return interval == CostRepeatInterval.week;
+      default:
+        return true; // Kein Filter => alles anzeigen
+    }
+  }
 }
-// aktuelle Version ohne funktionierendem BarChart

@@ -51,6 +51,7 @@ class Contract {
 
   factory Contract.fromMap(Map<String, dynamic> map, {String? id}) {
     return Contract(
+      id: id,
       category: ContractCategory.values.firstWhere(
         (e) => e.name == map['category'],
         orElse: () => ContractCategory.other,

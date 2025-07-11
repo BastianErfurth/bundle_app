@@ -132,7 +132,8 @@ class _HomeContentState extends State<HomeContent> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => CostScreen(widget.db),
+                        builder: (context) =>
+                            CostScreen(widget.db, widget.auth),
                       ),
                     );
                   },

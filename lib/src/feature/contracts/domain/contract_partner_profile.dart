@@ -2,12 +2,14 @@ import 'profile.dart';
 
 class ContractPartnerProfile extends Profile {
   //Attribute
+  String? id;
   final String companyName;
   final String contactPersonName;
   final bool isInContractList;
 
   //Konstruktor
   ContractPartnerProfile({
+    this.id,
     required this.companyName,
     required this.contactPersonName,
     required super.street,
@@ -29,8 +31,12 @@ class ContractPartnerProfile extends Profile {
     };
   }
 
-  factory ContractPartnerProfile.fromMap(Map<String, dynamic> map) {
+  factory ContractPartnerProfile.fromMap(
+    Map<String, dynamic> map, {
+    String? id,
+  }) {
     return ContractPartnerProfile(
+      id: id,
       companyName: map['companyName'] ?? '',
       contactPersonName: map['contactPersonName'] ?? '',
       street: map['street'] ?? '',

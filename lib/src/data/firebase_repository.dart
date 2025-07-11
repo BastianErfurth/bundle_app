@@ -157,19 +157,15 @@ class FirebaseRepository implements DatabaseRepository {
     await fs.collection("mycontracts").doc().delete();
   }
 
-  @override //TODO muss noch bearbeitet werden
+  @override
   Future<void> modifyContract(Contract updatedContract) async {
-    await Future.delayed(Duration(seconds: 1));
-    final index = myContracts.indexWhere(
-      (c) => c.contractNumber == updatedContract.contractNumber,
-    );
-    if (index != -1) {
-      myContracts[index] = updatedContract;
-    } else {
-      throw Exception(
-        "Vertrag mit Nummer ${updatedContract.contractNumber} nicht gefunden",
-      );
+    if (updatedContract.id == null) {
+      throw Exception("Contract ID darf nicht null sein");
     }
+
+    final docRef = fs.collection("mycontracts").doc(updatedContract.id);
+
+    await docRef.update(updatedContract.toMap());
   }
 
   @override
@@ -232,26 +228,37 @@ class FirebaseRepository implements DatabaseRepository {
     return snap.docs.map((e) => UserProfile.fromMap(e.data())).toList();
   }
 
-  @override //TODO muss noch bearbeitet werden
+  @override
   Future<void> deleteUserProfile(UserProfile profile) async {
-    await Future.delayed(Duration(seconds: 5));
-    myUserProfiles.remove(profile);
+    if (profile.id == null) {
+      throw Exception("Kein Dokument-ID zum Löschen vorhanden.");
+    }
+    await fs.collection('myuserprofiles').doc(profile.id).delete();
   }
 
-  @override //TODO muss noch bearbeitet werden
+  @override
   Future<void> deleteContractPartnerProfile(
     ContractPartnerProfile profile,
   ) async {
-    myContractors.remove(profile);
+    if (profile.id == null) {
+      throw Exception("Keine Dokument-ID vorhanden, kann Profil nicht löschen");
+    }
+    await fs.collection('mycontractors').doc(profile.id).delete();
   }
 
-  @override //TODO muss noch bearbeitet werden
+  @override
   Future<Contract?> getContractByNumber(String contractNumber) async {
-    await Future.delayed(Duration(seconds: 1));
-    try {
-      return myContracts.firstWhere((c) => c.contractNumber == contractNumber);
-    } catch (e) {
+    final querySnapshot = await fs
+        .collection('mycontracts')
+        .where('contractNumber', isEqualTo: contractNumber)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isEmpty) {
       return null;
+    } else {
+      final doc = querySnapshot.docs.first;
+      return Contract.fromMap(doc.data(), id: doc.id);
     }
   }
 }

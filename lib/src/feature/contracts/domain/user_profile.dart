@@ -2,12 +2,14 @@ import 'profile.dart';
 
 class UserProfile extends Profile {
   //Attribute
+  String? id;
   final String lastName;
   final String firstName;
   bool isPrivate;
 
   //Konstruktor
   UserProfile({
+    this.id,
     required this.lastName,
     required this.firstName,
     required super.street,
@@ -29,8 +31,9 @@ class UserProfile extends Profile {
     };
   }
 
-  factory UserProfile.fromMap(Map<String, dynamic> map) {
+  factory UserProfile.fromMap(Map<String, dynamic> map, {String? id}) {
     return UserProfile(
+      id: id,
       firstName: map['firstName'] ?? '',
       lastName: map['lastName'] ?? '',
       street: map['street'] ?? '',
