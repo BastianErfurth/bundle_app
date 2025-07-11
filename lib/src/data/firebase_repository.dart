@@ -8,9 +8,11 @@ import 'package:bundle_app/src/feature/contracts/domain/contract_runtime.dart';
 import 'package:bundle_app/src/feature/contracts/domain/extra_contract_information.dart';
 import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseRepository implements DatabaseRepository {
   final fs = FirebaseFirestore.instance;
+  final fbAuth = FirebaseAuth.instance;
 
   List<Contract> myContracts = [
     Contract(
@@ -172,10 +174,18 @@ class FirebaseRepository implements DatabaseRepository {
 
   @override
   Future<List<Contract>> getMyContracts() async {
-    final snap = await fs.collection("mycontracts").get();
-    return snap.docs.map((e) {
-      return Contract.fromMap(e.data());
-    }).toList();
+    final user = fbAuth.currentUser;
+    if (user == null) {
+      return [];
+    }
+    final userId = user.uid;
+
+    final snap = await fs
+        .collection("mycontracts")
+        .where("userId", isEqualTo: userId)
+        .get();
+
+    return snap.docs.map((e) => Contract.fromMap(e.data(), id: e.id)).toList();
   }
 
   @override
@@ -190,18 +200,36 @@ class FirebaseRepository implements DatabaseRepository {
 
   @override
   Future<List<ContractPartnerProfile>> getContractors() async {
-    final snap = await fs.collection("mycontractpartners").get();
-    return snap.docs.map((e) {
-      return ContractPartnerProfile.fromMap(e.data());
-    }).toList();
+    final user = fbAuth.currentUser;
+    if (user == null) {
+      return [];
+    }
+    final userId = user.uid;
+
+    final snap = await fs
+        .collection("mycontractors")
+        .where("userId", isEqualTo: userId)
+        .get();
+
+    return snap.docs
+        .map((e) => ContractPartnerProfile.fromMap(e.data()))
+        .toList();
   }
 
   @override
   Future<List<UserProfile>> getUserProfiles() async {
-    final snap = await fs.collection("myuserprofiles").get();
-    return snap.docs.map((e) {
-      return UserProfile.fromMap(e.data());
-    }).toList();
+    final user = fbAuth.currentUser;
+    if (user == null) {
+      return [];
+    }
+    final userId = user.uid;
+
+    final snap = await fs
+        .collection("myuserprofiles")
+        .where("userId", isEqualTo: userId)
+        .get();
+
+    return snap.docs.map((e) => UserProfile.fromMap(e.data())).toList();
   }
 
   @override //TODO muss noch bearbeitet werden
