@@ -140,6 +140,9 @@ class _CostTestScreenState extends State<CostTestScreen> {
                 future: getCostList(),
                 builder: (context, snapshot) {
                   List<CostPerMonth> costs = snapshot.data ?? [];
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
 
                   return SizedBox(
                     height: 200,
