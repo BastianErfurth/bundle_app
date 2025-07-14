@@ -5,6 +5,8 @@ import 'package:bundle_app/src/feature/calender/presentation/calender_screen.dar
 import 'package:bundle_app/src/feature/contracts/presentation/home_content.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/my_contracts_screen.dart';
 import 'package:bundle_app/src/feature/costs/presentation/cost_screen.dart';
+import 'package:bundle_app/src/feature/costs/presentation/cost_screen_test.dart';
+import 'package:bundle_app/src/feature/costs/presentation/cost_test_screen.dart';
 import 'package:bundle_app/src/feature/settings/presentation/setting_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +28,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     myScreens = [
       HomeContent(widget.db, widget.auth),
-      CostScreen(widget.db, widget.auth),
+      //CostScreenTest(widget.db, widget.auth),
+      //CostScreen(widget.db, widget.auth),
+      CostTestScreen(widget.db, widget.auth),
       MyContractsScreen(widget.db, widget.auth),
       CalenderScreen(widget.db),
       SettingScreen(db: widget.db, auth: widget.auth),

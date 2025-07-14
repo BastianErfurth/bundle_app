@@ -1,6 +1,5 @@
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
-import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_category.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_cost_routine.dart';
@@ -12,16 +11,16 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker_plus/picker.dart';
 
-class CostScreen extends StatefulWidget {
+class CostScreenTest extends StatefulWidget {
   final DatabaseRepository db;
   final AuthRepository auth;
-  const CostScreen(this.db, this.auth, {super.key});
+  const CostScreenTest(this.db, this.auth, {super.key});
 
   @override
-  State<CostScreen> createState() => _CostScreenState();
+  State<CostScreenTest> createState() => _CostScreenTestState();
 }
 
-class _CostScreenState extends State<CostScreen> {
+class _CostScreenTestState extends State<CostScreenTest> {
   String _zahlungsintervall = "Zahlungsintervall wählen";
   ContractCategory? _selectedContractCategory;
   Contract? _selectedContract;
@@ -35,8 +34,7 @@ class _CostScreenState extends State<CostScreen> {
   }
 
   Future<void> _loadContracts() async {
-    final contracts = await (widget.db as MockDatabaseRepository)
-        .getMyContracts();
+    final contracts = await widget.db.getMyContracts();
     setState(() {
       _allContracts = contracts;
     });
@@ -60,7 +58,7 @@ class _CostScreenState extends State<CostScreen> {
     // Berechne monatliche Kosten aus den gefilterten Verträgen
     final monthlyCosts = _calculateMonthlyCosts(filteredContracts);
 
-    // Gesamtkosten im Jahr berechnen
+    // Gesamtkosten im Jahr berechnen (Summe der Monatswerte)
     final gesamt = monthlyCosts.fold(0.0, (prev, e) => prev + e);
 
     return Scaffold(
@@ -100,7 +98,8 @@ class _CostScreenState extends State<CostScreen> {
                     return Text('Keine Verträge gefunden');
                   } else {
                     final allContracts = snapshot.data!;
-                    final filteredContracts = _selectedContractCategory == null
+                    final filteredContractsDropdown =
+                        _selectedContractCategory == null
                         ? [null, ...allContracts]
                         : [
                             null,
@@ -110,7 +109,7 @@ class _CostScreenState extends State<CostScreen> {
                           ];
 
                     return DropDownSelectField<Contract?>(
-                      values: filteredContracts,
+                      values: filteredContractsDropdown,
                       labelText: "Vertrag auswählen",
                       selectedValue: _selectedContract,
                       itemLabel: (Contract? contract) {
@@ -126,7 +125,6 @@ class _CostScreenState extends State<CostScreen> {
                   }
                 },
               ),
-
               SizedBox(height: 4),
               ContractAttributes(
                 textTopic: "Zahlungsintervall",
@@ -172,26 +170,39 @@ class _CostScreenState extends State<CostScreen> {
               ),
               SizedBox(height: 40),
               SizedBox(
-                height: 200,
+                height: 280, // Größere Höhe für größere Balken
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: SizedBox(
-                    width: 800,
+                    width: 900,
                     child: BarChart(
                       BarChartData(
                         maxY: monthlyCosts.isNotEmpty
                             ? (monthlyCosts.reduce((a, b) => a > b ? a : b) *
-                                      1.2)
+                                      1.3)
                                   .clamp(10, double.infinity)
                             : 10,
                         barGroups: List.generate(12, (index) {
                           return BarChartGroupData(
                             x: index,
+                            barsSpace: 6, // Abstand zwischen Balken in Gruppe
                             barRods: [
                               BarChartRodData(
                                 fromY: 0,
                                 toY: monthlyCosts[index] / 100, // Cent in Euro
                                 color: Palette.lightGreenBlue,
+                                width: 24, // Breitere Balken
+                                borderRadius: BorderRadius.circular(6),
+                                backDrawRodData: BackgroundBarChartRodData(
+                                  show: true,
+                                  toY:
+                                      (monthlyCosts.reduce(
+                                            (a, b) => a > b ? a : b,
+                                          ) *
+                                          1.3) /
+                                      100,
+                                  color: Palette.darkGreenblue.withOpacity(0.3),
+                                ),
                               ),
                             ],
                           );
@@ -201,7 +212,10 @@ class _CostScreenState extends State<CostScreen> {
                             sideTitles: SideTitles(
                               showTitles: true,
                               getTitlesWidget: (value, meta) {
-                                var style = TextStyle(color: Palette.textWhite);
+                                var style = TextStyle(
+                                  color: Palette.textWhite,
+                                  fontWeight: FontWeight.bold,
+                                );
                                 const months = [
                                   "Jan",
                                   "Feb",
@@ -217,9 +231,12 @@ class _CostScreenState extends State<CostScreen> {
                                   "Dez",
                                 ];
                                 if (value.toInt() < months.length) {
-                                  return Text(
-                                    months[value.toInt()],
-                                    style: style,
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: Text(
+                                      months[value.toInt()],
+                                      style: style,
+                                    ),
                                   );
                                 }
                                 return const SizedBox.shrink();
@@ -313,10 +330,9 @@ class _CostScreenState extends State<CostScreen> {
     final int currentYear = DateTime.now().year;
 
     for (var contract in contracts) {
-      final start = contract.firstCostDate;
+      final start = contract.contractCostRoutine.firstCostDate;
       if (start == null) continue;
 
-      // Zahlungsintervall vom Vertrag (Enum)
       final interval = contract.contractCostRoutine.costRepeatInterval;
 
       // Filter nach globalem Zahlungsintervall-String
@@ -324,29 +340,34 @@ class _CostScreenState extends State<CostScreen> {
 
       final cost = contract.contractCostRoutine.costsInCents.toDouble();
 
-      int stepMonths = _stepMonthsFromInterval(interval);
+      final stepMonths = _stepMonthsFromInterval(interval);
 
       for (int m = 0; m < 12; m++) {
         final current = DateTime(currentYear, m + 1);
-        if (current.isBefore(start)) continue;
 
-        int diff =
+        // Zahlung erst ab dem Startdatum (Monat) berücksichtigen
+        if (current.isBefore(DateTime(start.year, start.month))) continue;
+
+        // Berechne die Differenz in Monaten zwischen aktuellem Monat und Startmonat
+        int diffMonths =
             (current.year - start.year) * 12 + (current.month - start.month);
-        if (diff % stepMonths == 0) {
+
+        // Wenn die Differenz modulo Intervall = 0, dann Zahlung in diesem Monat
+        if (diffMonths % stepMonths == 0) {
           monthlyCosts[m] += cost;
         }
       }
     }
-    print('MonthlyCosts: $monthlyCosts');
+
     return monthlyCosts;
   }
 
   int _stepMonthsFromInterval(CostRepeatInterval interval) {
     switch (interval) {
       case CostRepeatInterval.day:
-        return 1; // Vereinfachung: täglich als monatlich zählen
+        return 1; // täglich als monatlich zählen (vereinfachend)
       case CostRepeatInterval.week:
-        return 1; // wöchentlich als monatlich zählen
+        return 1; // wöchentlich als monatlich zählen (vereinfachend)
       case CostRepeatInterval.month:
         return 1;
       case CostRepeatInterval.quarter:
@@ -359,21 +380,23 @@ class _CostScreenState extends State<CostScreen> {
   }
 
   bool _matchesFilter(CostRepeatInterval interval, String filter) {
-    switch (filter) {
-      case "monatlich":
+    if (filter == 'Zahlungsintervall wählen') return true;
+
+    switch (filter.toLowerCase()) {
+      case 'monatlich':
         return interval == CostRepeatInterval.month;
-      case "vierteljährlich":
+      case 'vierteljährlich':
         return interval == CostRepeatInterval.quarter;
-      case "halbjährlich":
+      case 'halbjährlich':
         return interval == CostRepeatInterval.halfyear;
-      case "jährlich":
+      case 'jährlich':
         return interval == CostRepeatInterval.year;
-      case "täglich":
+      case 'täglich':
         return interval == CostRepeatInterval.day;
-      case "wöchentlich":
+      case 'wöchentlich':
         return interval == CostRepeatInterval.week;
       default:
-        return true; // Kein Filter => alles anzeigen
+        return true;
     }
   }
 }
