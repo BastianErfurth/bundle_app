@@ -136,13 +136,32 @@ class _CostTestScreenState extends State<CostTestScreen> {
                 ),
               ),
               SizedBox(height: 40),
-              FutureBuilder(
+              FutureBuilder<List<CostPerMonth>>(
                 future: getCostList(),
                 builder: (context, snapshot) {
-                  List<CostPerMonth> costs = snapshot.data ?? [];
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const Center(child: CircularProgressIndicator());
                   }
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text("Keine Daten"));
+                  }
+
+                  List<CostPerMonth> costs = snapshot.data!;
+
+                  // Hilfsfunktion: Dreht die Liste, sodass der erste Eintrag der aktuelle Monat ist
+                  List<CostPerMonth> rotateCostsToCurrentMonth(
+                    List<CostPerMonth> costs,
+                  ) {
+                    int currentMonth = DateTime.now().month; // 1..12
+                    int rotateIndex = currentMonth - 1; // index 0..11
+
+                    return List.generate(12, (i) {
+                      return costs[(rotateIndex + i) % 12];
+                    });
+                  }
+
+                  // Anwenden der Rotation
+                  costs = rotateCostsToCurrentMonth(costs);
 
                   return SizedBox(
                     height: 200,
@@ -170,9 +189,17 @@ class _CostTestScreenState extends State<CostTestScreen> {
                                 sideTitles: SideTitles(
                                   showTitles: true,
                                   getTitlesWidget: (value, meta) {
-                                    var style = TextStyle(
-                                      color: Palette.textWhite,
+                                    var style = const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
                                     );
+
+                                    DateTime now = DateTime.now();
+                                    int currentMonth = now.month;
+
+                                    int monthIndex =
+                                        ((currentMonth - 1) + value.toInt()) %
+                                        12;
                                     const months = [
                                       "Jan",
                                       "Feb",
@@ -187,13 +214,11 @@ class _CostTestScreenState extends State<CostTestScreen> {
                                       "Nov",
                                       "Dez",
                                     ];
-                                    if (value.toInt() < months.length) {
-                                      return Text(
-                                        months[value.toInt()],
-                                        style: style,
-                                      );
-                                    }
-                                    return const SizedBox.shrink();
+
+                                    return Text(
+                                      months[monthIndex],
+                                      style: style,
+                                    );
                                   },
                                 ),
                               ),
@@ -204,7 +229,31 @@ class _CostTestScreenState extends State<CostTestScreen> {
                                 sideTitles: SideTitles(showTitles: false),
                               ),
                               topTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: true),
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  getTitlesWidget: (value, meta) {
+                                    int index = value.toInt();
+                                    if (index < 0 || index >= costs.length)
+                                      return const SizedBox.shrink();
+
+                                    double costValue =
+                                        costs[index].sum.toDouble() / 100;
+
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 4,
+                                      ), // etwas Abstand zum Balken
+                                      child: Text(
+                                        costValue.toStringAsFixed(2) + " €",
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                             borderData: FlBorderData(show: false),
