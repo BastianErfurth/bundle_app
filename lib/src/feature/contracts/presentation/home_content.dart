@@ -8,6 +8,7 @@ import 'package:bundle_app/src/feature/contracts/presentation/my_contracts_scree
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_piechart.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/feature/costs/presentation/cost_screen.dart';
+import 'package:bundle_app/src/feature/costs/presentation/cost_test_screen.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';

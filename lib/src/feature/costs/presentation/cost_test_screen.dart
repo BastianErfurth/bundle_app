@@ -114,25 +114,38 @@ class _CostTestScreenState extends State<CostTestScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(24),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                  child: FutureBuilder<List<CostPerMonth>>(
+                    future: getCostList(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Center(child: Text("Keine Kosten vorhanden"));
+                      }
+
+                      final costs = snapshot.data!;
+                      final currentYear = DateTime.now().year;
+                      final totalCostForYear = calculateTotalCostForYear(
+                        costs,
+                        currentYear,
+                      );
+                      final totalCostText = totalCostForYear.toStringAsFixed(2);
+
+                      return Column(
                         children: [
-                          Icon(Icons.euro, size: 32),
-                          SizedBox(width: 16),
                           Text(
-                            "1440,00",
+                            'Gesamtsumme $currentYear:',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Text(
+                            '$totalCostText €',
                             style: Theme.of(context).textTheme.displaySmall,
                           ),
+                          // ... hier dein BarChart Widget usw.
                         ],
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        "Gesamtsumme",
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
               ),
@@ -163,6 +176,17 @@ class _CostTestScreenState extends State<CostTestScreen> {
 
                   // Anwenden der Rotation
                   costs = rotateCostsToCurrentMonth(costs);
+                  double maxCost =
+                      costs.map((c) => c.sum).fold(0, (a, b) => a > b ? a : b) /
+                      100;
+                  double totalSum2025 = 0;
+                  for (var cost in costs) {
+                    // Monat in Jahr/Monat-Format umwandeln
+                    int year = cost.monthNumber ~/ 100;
+                    if (year == 2025) {
+                      totalSum2025 += cost.sum;
+                    }
+                  }
 
                   return SizedBox(
                     height: 200,
@@ -172,7 +196,7 @@ class _CostTestScreenState extends State<CostTestScreen> {
                         width: 800,
                         child: BarChart(
                           BarChartData(
-                            maxY: 200,
+                            maxY: maxCost > 0 ? maxCost * 1.3 : 200,
                             barGroups: List.generate(12, (index) {
                               DateTime now = DateTime.now();
                               int monthOffset =
@@ -191,6 +215,7 @@ class _CostTestScreenState extends State<CostTestScreen> {
                                         costs[rotatedIndex].sum.toDouble() /
                                         100,
                                     color: Palette.lightGreenBlue,
+                                    width: 16,
                                   ),
                                 ],
                               );
@@ -267,7 +292,7 @@ class _CostTestScreenState extends State<CostTestScreen> {
                                         "${costValue.toStringAsFixed(2)} €",
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 10,
+                                          fontSize: 12,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -362,6 +387,18 @@ class _CostTestScreenState extends State<CostTestScreen> {
         );
       },
     );
+  }
+
+  double calculateTotalCostForYear(List<CostPerMonth> costs, int year) {
+    double total = 0;
+    for (final cost in costs) {
+      // cost.monthNumber ist z.B. 202501 für Jan 2025, 202512 für Dez 2025
+      int costYear = cost.monthNumber ~/ 100; // Integer-Division
+      if (costYear == year) {
+        total += cost.sum;
+      }
+    }
+    return total / 100; // in Euro, wenn sum in Cent ist
   }
 
   // Future<List<CostPerMonth>> getCostList() async {
@@ -481,21 +518,21 @@ class _CostTestScreenState extends State<CostTestScreen> {
     return costs;
   }
 
-  List<double> rotateCostsToCurrentMonth(List<double> costs) {
-    // Aktuellen Monat holen (1=Januar, 12=Dezember)
-    int currentMonth = DateTime.now().month;
+  // List<double> rotateCostsToCurrentMonth(List<double> costs) {
+  //   // Aktuellen Monat holen (1=Januar, 12=Dezember)
+  //   int currentMonth = DateTime.now().month;
 
-    // Index der Rotation berechnen (0-basiert)
-    int rotateIndex = currentMonth - 1;
+  //   // Index der Rotation berechnen (0-basiert)
+  //   int rotateIndex = currentMonth - 1;
 
-    // Liste aufteilen und neu zusammensetzen
-    List<double> rotated = [
-      ...costs.sublist(rotateIndex), // Ab aktuellem Monat bis Ende
-      ...costs.sublist(0, rotateIndex), // Von Anfang bis Monat davor
-    ];
+  //   // Liste aufteilen und neu zusammensetzen
+  //   List<double> rotated = [
+  //     ...costs.sublist(rotateIndex), // Ab aktuellem Monat bis Ende
+  //     ...costs.sublist(0, rotateIndex), // Von Anfang bis Monat davor
+  //   ];
 
-    return rotated;
-  }
+  //   return rotated;
+  // }
 
   List<BarChartGroupData> rotateBarsToCurrentMonth(
     List<BarChartGroupData> originalBars,

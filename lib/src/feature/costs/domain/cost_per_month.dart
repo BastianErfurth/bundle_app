@@ -1,13 +1,11 @@
 class CostPerMonth {
-  final int monthNumber;
-  int sum;
+  final int monthNumber; // z.B. 202501 für Jan 2025
+  int sum; // Summe in Cent
 
   CostPerMonth(this.monthNumber, this.sum);
 
   @override
   String toString() {
-    return sum.toString() + "     " + monthNumber.toString();
+    return '$sum     $monthNumber';
   }
 }
-
-//num Months { JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OKT, NOV, DEZ }
