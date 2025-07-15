@@ -174,12 +174,22 @@ class _CostTestScreenState extends State<CostTestScreen> {
                           BarChartData(
                             maxY: 200,
                             barGroups: List.generate(12, (index) {
+                              DateTime now = DateTime.now();
+                              int monthOffset =
+                                  (now.month - 1) %
+                                  12; // z. B. Juli -> 6 (indexbasiert)
+
+                              // Daten ebenfalls rotieren
+                              int rotatedIndex = (index + monthOffset) % 12;
+
                               return BarChartGroupData(
-                                x: index,
+                                x: index, // Beschriftung & Daten sind jetzt synchron
                                 barRods: [
                                   BarChartRodData(
                                     fromY: 0,
-                                    toY: costs[index].sum.toDouble() / 100,
+                                    toY:
+                                        costs[rotatedIndex].sum.toDouble() /
+                                        100,
                                     color: Palette.lightGreenBlue,
                                   ),
                                 ],
@@ -190,9 +200,14 @@ class _CostTestScreenState extends State<CostTestScreen> {
                                 sideTitles: SideTitles(
                                   showTitles: true,
                                   getTitlesWidget: (value, meta) {
-                                    var style = const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
+                                    int index = value.toInt();
+                                    if (index < 0 || index >= 12)
+                                      return SizedBox.shrink();
+
+                                    DateTime now = DateTime.now();
+                                    DateTime monthDate = DateTime(
+                                      now.year,
+                                      now.month + index,
                                     );
 
                                     const months = [
@@ -210,33 +225,19 @@ class _CostTestScreenState extends State<CostTestScreen> {
                                       "Dez",
                                     ];
 
-                                    DateTime now = DateTime.now();
-                                    int currentMonth = now.month; // 1-12
-                                    int currentYear = now.year;
-
-                                    // Gesamt-Monatsindex bezogen auf das aktuelle Datum (value ist 0..11 oder mehr)
-                                    int totalMonthIndex =
-                                        (currentMonth - 1) + value.toInt();
-
-                                    // Berechne Jahr und Monat
-                                    int displayYear =
-                                        currentYear + (totalMonthIndex ~/ 12);
-                                    int monthIndex = totalMonthIndex % 12;
-
-                                    // Monatsname + Jahr zusammenfügen
-                                    String yearShort = (displayYear % 100)
-                                        .toString()
-                                        .padLeft(2, '0');
-                                    // z.B. 2025 % 100 = 25; padLeft für führende Null bei z.B. 2001 -> "01"
-
                                     String label =
-                                        "${months[monthIndex]} $yearShort";
+                                        "${months[monthDate.month - 1]} ${monthDate.year % 100}";
 
-                                    return Text(label, style: style);
+                                    return Text(
+                                      label,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                      ),
+                                    );
                                   },
                                 ),
                               ),
-
                               leftTitles: AxisTitles(
                                 sideTitles: SideTitles(showTitles: false),
                               ),
@@ -248,20 +249,23 @@ class _CostTestScreenState extends State<CostTestScreen> {
                                   showTitles: true,
                                   getTitlesWidget: (value, meta) {
                                     int index = value.toInt();
-                                    if (index < 0 || index >= costs.length) {
-                                      return const SizedBox.shrink();
-                                    }
+                                    if (index < 0 || index >= 12)
+                                      return SizedBox.shrink();
+
+                                    DateTime now = DateTime.now();
+                                    int monthOffset = (now.month - 1) % 12;
+                                    int rotatedIndex =
+                                        (index + monthOffset) % 12;
 
                                     double costValue =
-                                        costs[index].sum.toDouble() / 100;
+                                        costs[rotatedIndex].sum.toDouble() /
+                                        100;
 
                                     return Padding(
-                                      padding: const EdgeInsets.only(
-                                        bottom: 4,
-                                      ), // etwas Abstand zum Balken
+                                      padding: const EdgeInsets.only(bottom: 4),
                                       child: Text(
-                                        costValue.toStringAsFixed(2) + " €",
-                                        style: const TextStyle(
+                                        "${costValue.toStringAsFixed(2)} €",
+                                        style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 10,
                                           fontWeight: FontWeight.bold,
@@ -415,73 +419,102 @@ class _CostTestScreenState extends State<CostTestScreen> {
   Future<List<CostPerMonth>> getCostList() async {
     final List<Contract> contracts = await widget.db.getMyContracts();
 
-    final List<CostPerMonth> costs = List.generate(
-      12,
-      (index) => CostPerMonth(index + 1, 0),
-    );
+    DateTime now = DateTime.now();
+    DateTime chartStart = DateTime(now.year, now.month);
+
+    final List<CostPerMonth> costs = List.generate(12, (index) {
+      DateTime month = DateTime(chartStart.year, chartStart.month + index);
+      int monthNumber = month.year * 100 + month.month;
+      return CostPerMonth(monthNumber, 0);
+    });
 
     for (final contract in contracts) {
-      final firstDate = contract.contractCostRoutine.firstCostDate;
+      final firstDate = contract.contractCostRoutine.firstCostDate!;
       final costInCents = contract.contractCostRoutine.costsInCents;
       final repeatInterval = contract.contractCostRoutine.costRepeatInterval;
 
-      if (firstDate == null) continue;
+      for (int i = 0; i < costs.length; i++) {
+        DateTime monthDate = DateTime(
+          costs[i].monthNumber ~/ 100,
+          costs[i].monthNumber % 100,
+        );
 
-      switch (repeatInterval) {
-        case CostRepeatInterval.day:
-          final dailyCost = costInCents;
-          final monthlyCost = (dailyCost * 365 / 12).round();
-          for (final costPerMonth in costs) {
-            costPerMonth.sum += monthlyCost;
-          }
-          break;
+        if (monthDate.isBefore(DateTime(firstDate.year, firstDate.month))) {
+          continue;
+        }
 
-        case CostRepeatInterval.week:
-          final weeklyCost = costInCents;
-          final monthlyCost = (weeklyCost * 52 / 12).round();
-          for (final costPerMonth in costs) {
-            costPerMonth.sum += monthlyCost;
-          }
-          break;
+        bool addCost = false;
 
-        case CostRepeatInterval.month:
-          for (final costPerMonth in costs) {
-            costPerMonth.sum += costInCents;
-          }
-          break;
+        switch (repeatInterval) {
+          case CostRepeatInterval.month:
+            addCost = true;
+            break;
 
-        case CostRepeatInterval.quarter:
-          for (int i = 0; i < 12; i++) {
-            final currentMonth = i + 1;
-            final diff = (currentMonth - firstDate.month + 12) % 12;
-            if (diff % 3 == 0) {
-              costs[i].sum += costInCents;
-            }
-          }
-          break;
+          case CostRepeatInterval.quarter:
+            int diffInMonths =
+                (monthDate.year - firstDate.year) * 12 +
+                (monthDate.month - firstDate.month);
+            if (diffInMonths % 3 == 0) addCost = true;
+            break;
 
-        case CostRepeatInterval.halfyear:
-          for (int i = 0; i < 12; i++) {
-            final currentMonth = i + 1;
-            final diff = (currentMonth - firstDate.month + 12) % 12;
-            if (diff % 6 == 0) {
-              costs[i].sum += costInCents;
-            }
-          }
-          break;
+          case CostRepeatInterval.halfyear:
+            int diffInMonths =
+                (monthDate.year - firstDate.year) * 12 +
+                (monthDate.month - firstDate.month);
+            if (diffInMonths % 6 == 0) addCost = true;
+            break;
 
-        case CostRepeatInterval.year:
-          for (int i = 0; i < 12; i++) {
-            final currentMonth = i + 1;
-            if (currentMonth == firstDate.month) {
-              costs[i].sum += costInCents;
-            }
-          }
-          break;
+          case CostRepeatInterval.year:
+            if (monthDate.month == firstDate.month &&
+                monthDate.year >= firstDate.year)
+              addCost = true;
+            break;
+
+          default:
+            break;
+        }
+
+        if (addCost) costs[i].sum += costInCents;
       }
     }
 
     return costs;
   }
+
+  List<double> rotateCostsToCurrentMonth(List<double> costs) {
+    // Aktuellen Monat holen (1=Januar, 12=Dezember)
+    int currentMonth = DateTime.now().month;
+
+    // Index der Rotation berechnen (0-basiert)
+    int rotateIndex = currentMonth - 1;
+
+    // Liste aufteilen und neu zusammensetzen
+    List<double> rotated = [
+      ...costs.sublist(rotateIndex), // Ab aktuellem Monat bis Ende
+      ...costs.sublist(0, rotateIndex), // Von Anfang bis Monat davor
+    ];
+
+    return rotated;
+  }
+
+  List<BarChartGroupData> rotateBarsToCurrentMonth(
+    List<BarChartGroupData> originalBars,
+  ) {
+    int currentMonth = DateTime.now().month; // 7 für Juli
+
+    // In Flutter: Januar = 1, daher:
+    // Index von Juli: 6 (0-basiert)
+    int startIndex = currentMonth - 1;
+
+    // Balken neu anordnen
+    List<BarChartGroupData> rotatedBars = [
+      ...originalBars.sublist(startIndex),
+      ...originalBars.sublist(0, startIndex),
+    ];
+
+    return rotatedBars;
+  }
 }
+
+
 // aktuelle Version mit funktionierendem BarChart nach 1to1 mit Ban und KI
