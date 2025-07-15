@@ -201,7 +201,7 @@ class _CostScreenTestState extends State<CostScreenTest> {
                                           ) *
                                           1.3) /
                                       100,
-                                  color: Palette.darkGreenblue.withOpacity(0.3),
+                                  color: Palette.darkGreenblue.withValues(),
                                 ),
                               ),
                             ],

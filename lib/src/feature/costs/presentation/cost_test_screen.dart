@@ -12,6 +12,7 @@ import 'package:bundle_app/src/theme/palette.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker_plus/picker.dart';
+import 'package:intl/intl.dart';
 
 class CostTestScreen extends StatefulWidget {
   final DatabaseRepository db;
@@ -23,7 +24,7 @@ class CostTestScreen extends StatefulWidget {
 }
 
 class _CostTestScreenState extends State<CostTestScreen> {
-  String _zahlungsintervall = "Zahlungsintervall wählen";
+  String _zahlungsintervall = "monatlich";
   ContractCategory? _selectedContractCategory;
   Contract? _selectedContract;
 
@@ -194,12 +195,6 @@ class _CostTestScreenState extends State<CostTestScreen> {
                                       fontSize: 12,
                                     );
 
-                                    DateTime now = DateTime.now();
-                                    int currentMonth = now.month;
-
-                                    int monthIndex =
-                                        ((currentMonth - 1) + value.toInt()) %
-                                        12;
                                     const months = [
                                       "Jan",
                                       "Feb",
@@ -215,13 +210,33 @@ class _CostTestScreenState extends State<CostTestScreen> {
                                       "Dez",
                                     ];
 
-                                    return Text(
-                                      months[monthIndex],
-                                      style: style,
-                                    );
+                                    DateTime now = DateTime.now();
+                                    int currentMonth = now.month; // 1-12
+                                    int currentYear = now.year;
+
+                                    // Gesamt-Monatsindex bezogen auf das aktuelle Datum (value ist 0..11 oder mehr)
+                                    int totalMonthIndex =
+                                        (currentMonth - 1) + value.toInt();
+
+                                    // Berechne Jahr und Monat
+                                    int displayYear =
+                                        currentYear + (totalMonthIndex ~/ 12);
+                                    int monthIndex = totalMonthIndex % 12;
+
+                                    // Monatsname + Jahr zusammenfügen
+                                    String yearShort = (displayYear % 100)
+                                        .toString()
+                                        .padLeft(2, '0');
+                                    // z.B. 2025 % 100 = 25; padLeft für führende Null bei z.B. 2001 -> "01"
+
+                                    String label =
+                                        "${months[monthIndex]} $yearShort";
+
+                                    return Text(label, style: style);
                                   },
                                 ),
                               ),
+
                               leftTitles: AxisTitles(
                                 sideTitles: SideTitles(showTitles: false),
                               ),
@@ -233,8 +248,9 @@ class _CostTestScreenState extends State<CostTestScreen> {
                                   showTitles: true,
                                   getTitlesWidget: (value, meta) {
                                     int index = value.toInt();
-                                    if (index < 0 || index >= costs.length)
+                                    if (index < 0 || index >= costs.length) {
                                       return const SizedBox.shrink();
+                                    }
 
                                     double costValue =
                                         costs[index].sum.toDouble() / 100;
@@ -289,6 +305,19 @@ class _CostTestScreenState extends State<CostTestScreen> {
     );
   }
 
+  List<String> generateMonthLabels() {
+    List<String> labels = [];
+    DateTime chartStart = DateTime(DateTime.now().year, DateTime.now().month);
+
+    for (int i = 0; i < 12; i++) {
+      DateTime month = DateTime(chartStart.year, chartStart.month + i);
+      String label = DateFormat('MMM yyyy').format(month); // z. B. "Jul 2025"
+      labels.add(label);
+    }
+
+    return labels;
+  }
+
   void showpayIntervalPicker() {
     final List<String> laufzeitOptionen = [
       'täglich',
@@ -304,7 +333,7 @@ class _CostTestScreenState extends State<CostTestScreen> {
       adapter: PickerDataAdapter<String>(pickerData: laufzeitOptionen),
       hideHeader: false,
       title: Text(
-        'Zahlungsintervall wählen',
+        'wählen', // nur Anzeigetext. monatlich ist by default ausgewählt
         style: TextStyle(color: Palette.textWhite),
       ),
       selecteds: [
@@ -400,7 +429,6 @@ class _CostTestScreenState extends State<CostTestScreen> {
 
       switch (repeatInterval) {
         case CostRepeatInterval.day:
-          // Kosten aufs Jahr hochrechnen und gleichmäßig auf Monate verteilen
           final dailyCost = costInCents;
           final monthlyCost = (dailyCost * 365 / 12).round();
           for (final costPerMonth in costs) {
@@ -409,7 +437,6 @@ class _CostTestScreenState extends State<CostTestScreen> {
           break;
 
         case CostRepeatInterval.week:
-          // Wöchentliche Kosten aufs Jahr hochrechnen und auf Monate verteilen
           final weeklyCost = costInCents;
           final monthlyCost = (weeklyCost * 52 / 12).round();
           for (final costPerMonth in costs) {
@@ -418,14 +445,12 @@ class _CostTestScreenState extends State<CostTestScreen> {
           break;
 
         case CostRepeatInterval.month:
-          // Jeden Monat wird der Betrag fällig
           for (final costPerMonth in costs) {
             costPerMonth.sum += costInCents;
           }
           break;
 
         case CostRepeatInterval.quarter:
-          // Nur alle 3 Monate fällig (ab dem Startmonat)
           for (int i = 0; i < 12; i++) {
             final currentMonth = i + 1;
             final diff = (currentMonth - firstDate.month + 12) % 12;
@@ -436,7 +461,6 @@ class _CostTestScreenState extends State<CostTestScreen> {
           break;
 
         case CostRepeatInterval.halfyear:
-          // Nur alle 6 Monate fällig (ab dem Startmonat)
           for (int i = 0; i < 12; i++) {
             final currentMonth = i + 1;
             final diff = (currentMonth - firstDate.month + 12) % 12;
@@ -447,8 +471,12 @@ class _CostTestScreenState extends State<CostTestScreen> {
           break;
 
         case CostRepeatInterval.year:
-          // Nur im Startmonat fällig
-          costs[firstDate.month - 1].sum += costInCents;
+          for (int i = 0; i < 12; i++) {
+            final currentMonth = i + 1;
+            if (currentMonth == firstDate.month) {
+              costs[i].sum += costInCents;
+            }
+          }
           break;
       }
     }
@@ -456,4 +484,4 @@ class _CostTestScreenState extends State<CostTestScreen> {
     return costs;
   }
 }
-// aktuelle Version ohne funktionierendem BarChart
+// aktuelle Version mit funktionierendem BarChart nach 1to1 mit Ban und KI
