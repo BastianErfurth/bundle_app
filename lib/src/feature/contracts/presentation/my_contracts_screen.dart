@@ -182,7 +182,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return SizedBox(
-                      height: 150,
+                      height: 120,
                       child: Center(child: CircularProgressIndicator()),
                     );
                   } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {

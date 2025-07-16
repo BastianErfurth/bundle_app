@@ -180,10 +180,103 @@ class _CostScreenState extends State<CostScreen> {
                       scrollDirection: Axis.horizontal,
                       child: SizedBox(
                         width: 800,
-                        child: BarChartYearOverview(
-                          maxCost: maxCost,
-                          costs: costs,
-                          auswahljahr: _auswahljahr,
+                        child: BarChart(
+                          BarChartData(
+                            maxY: maxCost > 0 ? maxCost * 1.3 : 200,
+                            barGroups: List.generate(12, (index) {
+                              return BarChartGroupData(
+                                x: index,
+                                barRods: [
+                                  BarChartRodData(
+                                    fromY: 0,
+                                    toY: costs[index].sum.toDouble() / 100,
+                                    color: Palette.lightGreenBlue,
+                                    width: 16,
+                                  ),
+                                ],
+                              );
+                            }),
+                            titlesData: FlTitlesData(
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  getTitlesWidget: (value, meta) {
+                                    int index = value.toInt();
+                                    if (index < 0 || index >= 12) {
+                                      return SizedBox.shrink();
+                                    }
+
+                                    const months = [
+                                      "Jan",
+                                      "Feb",
+                                      "Mar",
+                                      "Apr",
+                                      "Mai",
+                                      "Jun",
+                                      "Jul",
+                                      "Aug",
+                                      "Sep",
+                                      "Okt",
+                                      "Nov",
+                                      "Dez",
+                                    ];
+
+                                    // Hole die letzten zwei Ziffern vom Jahr, z.B. "2025" -> "25"
+                                    String yearSuffix = _auswahljahr.substring(
+                                      2,
+                                    );
+
+                                    String label =
+                                        "${months[index]}$yearSuffix";
+
+                                    return Text(
+                                      label,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              rightTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              topTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  getTitlesWidget: (value, meta) {
+                                    int index = value.toInt();
+                                    if (index < 0 || index >= 12) {
+                                      return SizedBox.shrink();
+                                    }
+
+                                    double costValue =
+                                        costs[index].sum.toDouble() / 100;
+
+                                    return Padding(
+                                      padding: const EdgeInsets.only(bottom: 4),
+                                      child: Text(
+                                        "${costValue.toStringAsFixed(2)} €",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                            borderData: FlBorderData(show: false),
+                            backgroundColor: Palette.darkGreenblue,
+                            gridData: FlGridData(show: false),
+                          ),
                         ),
                       ),
                     ),
@@ -410,129 +503,7 @@ class _CostScreenState extends State<CostScreen> {
 
     return costs;
   }
-
-  List<BarChartGroupData> rotateBarsToCurrentMonth(
-    List<BarChartGroupData> originalBars,
-  ) {
-    int currentMonth = DateTime.now().month; // 7 für Juli
-
-    // In Flutter: Januar = 1, daher:
-    // Index von Juli: 6 (0-basiert)
-    int startIndex = currentMonth - 1;
-
-    // Balken neu anordnen
-    List<BarChartGroupData> rotatedBars = [
-      ...originalBars.sublist(startIndex),
-      ...originalBars.sublist(0, startIndex),
-    ];
-
-    return rotatedBars;
-  }
-}
-
-class BarChartYearOverview extends StatelessWidget {
-  const BarChartYearOverview({
-    super.key,
-    required this.maxCost,
-    required this.costs,
-    required String auswahljahr,
-  }) : _auswahljahr = auswahljahr;
-
-  final double maxCost;
-  final List<CostPerMonth> costs;
-  final String _auswahljahr;
-
-  @override
-  Widget build(BuildContext context) {
-    return BarChart(
-      BarChartData(
-        maxY: maxCost > 0 ? maxCost * 1.3 : 200,
-        barGroups: List.generate(12, (index) {
-          return BarChartGroupData(
-            x: index,
-            barRods: [
-              BarChartRodData(
-                fromY: 0,
-                toY: costs[index].sum.toDouble() / 100,
-                color: Palette.lightGreenBlue,
-                width: 16,
-              ),
-            ],
-          );
-        }),
-        titlesData: FlTitlesData(
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              getTitlesWidget: (value, meta) {
-                int index = value.toInt();
-                if (index < 0 || index >= 12) {
-                  return SizedBox.shrink();
-                }
-
-                const months = [
-                  "Jan",
-                  "Feb",
-                  "Mar",
-                  "Apr",
-                  "Mai",
-                  "Jun",
-                  "Jul",
-                  "Aug",
-                  "Sep",
-                  "Okt",
-                  "Nov",
-                  "Dez",
-                ];
-
-                // Hole die letzten zwei Ziffern vom Jahr, z.B. "2025" -> "25"
-                String yearSuffix = _auswahljahr.substring(2);
-
-                String label = "${months[index]}$yearSuffix";
-
-                return Text(
-                  label,
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                );
-              },
-            ),
-          ),
-
-          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              getTitlesWidget: (value, meta) {
-                int index = value.toInt();
-                if (index < 0 || index >= 12) {
-                  return SizedBox.shrink();
-                }
-
-                double costValue = costs[index].sum.toDouble() / 100;
-
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Text(
-                    "${costValue.toStringAsFixed(2)} €",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-        borderData: FlBorderData(show: false),
-        backgroundColor: Palette.darkGreenblue,
-        gridData: FlGridData(show: false),
-      ),
-    );
-  }
 }
 
 
-// aktuelle Version mit funktionierendem BarChart STand 15.7.
+// aktuelle Version mit funktionierendem BarChart Stand 16.7.
