@@ -27,11 +27,12 @@ class _CostScreenState extends State<CostScreen> {
   String _zahlungsintervall = "monatlich";
   ContractCategory? _selectedContractCategory;
   Contract? _selectedContract;
+  String _auswahljahr = "2025";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
+      //appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -102,9 +103,9 @@ class _CostScreenState extends State<CostScreen> {
                   icon: Icon(Icons.expand_more),
                 ),
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 8),
               Container(
-                width: 300,
+                width: 250,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Palette.lightGreenBlue, Palette.darkGreenblue],
@@ -147,6 +148,15 @@ class _CostScreenState extends State<CostScreen> {
                       );
                     },
                   ),
+                ),
+              ),
+              SizedBox(height: 8),
+              ContractAttributes(
+                textTopic: "Jahr wählen",
+                valueText: _auswahljahr.toString(),
+                trailing: IconButton(
+                  icon: Icon(Icons.expand_more),
+                  onPressed: showYearPicker,
                 ),
               ),
               SizedBox(height: 40),
@@ -285,6 +295,39 @@ class _CostScreenState extends State<CostScreen> {
     );
   }
 
+  Future<int?> showCustomYearPicker({
+    required BuildContext context,
+    required int selectedYear,
+    required int firstYear,
+    required int lastYear,
+  }) async {
+    return showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Jahr auswählen"),
+          content: SizedBox(
+            width: double.maxFinite,
+            height: 300,
+            child: ListView.builder(
+              itemCount: lastYear - firstYear + 1,
+              itemBuilder: (BuildContext context, int index) {
+                final year = firstYear + index;
+                return ListTile(
+                  title: Text(year.toString()),
+                  selected: year == selectedYear,
+                  onTap: () {
+                    Navigator.of(context).pop(year);
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   List<String> generateMonthLabels() {
     List<String> labels = [];
     DateTime chartStart = DateTime(DateTime.now().year, DateTime.now().month);
@@ -325,6 +368,41 @@ class _CostScreenState extends State<CostScreen> {
       onConfirm: (picker, selecteds) {
         setState(() {
           _zahlungsintervall = laufzeitOptionen[selecteds.first];
+        });
+      },
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Palette.backgroundGreenBlue,
+          child: SizedBox(height: 250, child: picker.makePicker()),
+        );
+      },
+    );
+  }
+
+  Future<void> showYearPicker() async {
+    final List<Map<String, dynamic>> years = List.generate(9, (index) {
+      int year = 2022 + index;
+      return {'text': year.toString(), 'value': year};
+    });
+
+    int selectedIndex = years.indexWhere(
+      (element) => element['value'].toString() == _auswahljahr,
+    );
+
+    Picker picker = Picker(
+      backgroundColor: Palette.backgroundGreenBlue,
+      adapter: PickerDataAdapter<Map<String, dynamic>>(pickerData: years),
+      hideHeader: false,
+      title: Text('Jahr wählen', style: TextStyle(color: Palette.textWhite)),
+      selecteds: [selectedIndex],
+      textStyle: TextStyle(color: Palette.textWhite, fontSize: 18),
+      onConfirm: (picker, selecteds) {
+        setState(() {
+          _auswahljahr = years[selecteds.first]['value'].toString();
         });
       },
     );
