@@ -1,6 +1,5 @@
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
-import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_category.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_cost_routine.dart';
@@ -179,13 +178,10 @@ class _CostTestScreenState extends State<CostTestScreen> {
                   double maxCost =
                       costs.map((c) => c.sum).fold(0, (a, b) => a > b ? a : b) /
                       100;
-                  double totalSum2025 = 0;
                   for (var cost in costs) {
                     // Monat in Jahr/Monat-Format umwandeln
                     int year = cost.monthNumber ~/ 100;
-                    if (year == 2025) {
-                      totalSum2025 += cost.sum;
-                    }
+                    if (year == 2025) {}
                   }
 
                   return SizedBox(
@@ -275,8 +271,9 @@ class _CostTestScreenState extends State<CostTestScreen> {
                                   showTitles: true,
                                   getTitlesWidget: (value, meta) {
                                     int index = value.toInt();
-                                    if (index < 0 || index >= 12)
+                                    if (index < 0 || index >= 12) {
                                       return SizedBox.shrink();
+                                    }
 
                                     DateTime now = DateTime.now();
                                     int monthOffset = (now.month - 1) % 12;
@@ -427,10 +424,10 @@ class _CostTestScreenState extends State<CostTestScreen> {
 
   //     switch (contract.contractCostRoutine.costRepeatInterval) {
   //       case CostRepeatInterval.day:
-  //         // TODO: Handle this case.
+  //
   //         throw UnimplementedError();
   //       case CostRepeatInterval.week:
-  //         // TODO: Handle this case.
+  //
   //         throw UnimplementedError();
   //       case CostRepeatInterval.month:
   //         for (int i = 0; i < costs.length; i++)
@@ -439,13 +436,13 @@ class _CostTestScreenState extends State<CostTestScreen> {
   //         }
 
   //       case CostRepeatInterval.quarter:
-  //         // TODO: Handle this case.
+  //
   //         throw UnimplementedError();
   //       case CostRepeatInterval.halfyear:
-  //         // TODO: Handle this case.
+  //
   //         throw UnimplementedError();
   //       case CostRepeatInterval.year:
-  //         // TODO: Handle this case.
+  //
   //         throw UnimplementedError();
   //     }
 
