@@ -502,25 +502,7 @@ class _CostScreenState extends State<CostScreen> {
 
     return costs;
   }
-
-  List<BarChartGroupData> rotateBarsToCurrentMonth(
-    List<BarChartGroupData> originalBars,
-  ) {
-    int currentMonth = DateTime.now().month; // 7 für Juli
-
-    // In Flutter: Januar = 1, daher:
-    // Index von Juli: 6 (0-basiert)
-    int startIndex = currentMonth - 1;
-
-    // Balken neu anordnen
-    List<BarChartGroupData> rotatedBars = [
-      ...originalBars.sublist(startIndex),
-      ...originalBars.sublist(0, startIndex),
-    ];
-
-    return rotatedBars;
-  }
 }
 
 
-// aktuelle Version mit funktionierendem BarChart STand 15.7.
+// aktuelle Version mit funktionierendem BarChart Stand 16.7.
