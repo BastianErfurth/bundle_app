@@ -126,30 +126,31 @@ class _CostScreenState extends State<CostScreen> {
                       }
 
                       final costs = snapshot.data!;
-                      final currentYear = DateTime.now().year;
+                      final selectedYear = int.parse(_auswahljahr);
                       final totalCostForYear = calculateTotalCostForYear(
                         costs,
-                        currentYear,
+                        selectedYear,
                       );
                       final totalCostText = totalCostForYear.toStringAsFixed(2);
 
                       return Column(
                         children: [
                           Text(
-                            'Gesamtsumme $currentYear:',
+                            'Gesamtsumme $selectedYear:',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
                             '$totalCostText €',
                             style: Theme.of(context).textTheme.displaySmall,
                           ),
-                          // ... hier dein BarChart Widget usw.
+                          // Hier kannst du dein BarChart Widget hinzufügen
                         ],
                       );
                     },
                   ),
                 ),
               ),
+
               SizedBox(height: 8),
               ContractAttributes(
                 textTopic: "Jahr wählen",
@@ -384,25 +385,23 @@ class _CostScreenState extends State<CostScreen> {
   }
 
   Future<void> showYearPicker() async {
-    final List<Map<String, dynamic>> years = List.generate(9, (index) {
-      int year = 2022 + index;
-      return {'text': year.toString(), 'value': year};
-    });
-
-    int selectedIndex = years.indexWhere(
-      (element) => element['value'].toString() == _auswahljahr,
+    final List<String> years = List.generate(
+      9,
+      (index) => (2022 + index).toString(),
     );
+
+    int selectedIndex = years.indexOf(_auswahljahr);
 
     Picker picker = Picker(
       backgroundColor: Palette.backgroundGreenBlue,
-      adapter: PickerDataAdapter<Map<String, dynamic>>(pickerData: years),
+      adapter: PickerDataAdapter<String>(pickerData: years),
       hideHeader: false,
       title: Text('Jahr wählen', style: TextStyle(color: Palette.textWhite)),
       selecteds: [selectedIndex],
       textStyle: TextStyle(color: Palette.textWhite, fontSize: 18),
       onConfirm: (picker, selecteds) {
         setState(() {
-          _auswahljahr = years[selecteds.first]['value'].toString();
+          _auswahljahr = years[selecteds.first];
         });
       },
     );
@@ -433,62 +432,62 @@ class _CostScreenState extends State<CostScreen> {
   Future<List<CostPerMonth>> getCostList() async {
     final List<Contract> contracts = await widget.db.getMyContracts();
 
-    DateTime now = DateTime.now();
-    DateTime chartStart = DateTime(now.year, 1); // Start bei Januar
-
+    final int selectedYear = int.parse(_auswahljahr);
     final List<CostPerMonth> costs = List.generate(12, (index) {
-      DateTime month = DateTime(chartStart.year, chartStart.month + index);
-      int monthNumber = month.year * 100 + month.month;
-      return CostPerMonth(monthNumber, 0);
+      return CostPerMonth(selectedYear * 100 + (index + 1), 0);
     });
 
     for (final contract in contracts) {
-      final firstDate = contract.contractCostRoutine.firstCostDate!;
-      final costInCents = contract.contractCostRoutine.costsInCents;
-      final repeatInterval = contract.contractCostRoutine.costRepeatInterval;
+      // Filter auf Kategorie & Vertrag
+      if (_selectedContractCategory != null &&
+          contract.category != _selectedContractCategory) {
+        continue;
+      }
+      if (_selectedContract != null && contract != _selectedContract) {
+        continue;
+      }
 
-      for (int i = 0; i < costs.length; i++) {
-        DateTime monthDate = DateTime(
-          costs[i].monthNumber ~/ 100,
-          costs[i].monthNumber % 100,
-        );
+      final routine = contract.contractCostRoutine;
+      final firstDate = routine.firstCostDate!;
+      final costInCents = routine.costsInCents;
+      final interval = routine.costRepeatInterval;
 
-        if (monthDate.isBefore(DateTime(firstDate.year, firstDate.month))) {
-          continue;
+      // Erster Zahlungstermin (monatlich, vierteljährlich, etc.)
+      DateTime current = DateTime(firstDate.year, firstDate.month);
+
+      // Gehe durch die Zahlungszeiträume, bis Jahr + 1, um nicht endlos zu loopen
+      while (current.year <= selectedYear) {
+        if (current.year == selectedYear) {
+          int index = current.month - 1;
+          if (index >= 0 && index < costs.length) {
+            costs[index].sum += costInCents;
+          }
         }
 
-        bool addCost = false;
-
-        switch (repeatInterval) {
+        // Nächster Zahlungstermin je Intervall
+        switch (interval) {
+          case CostRepeatInterval.day:
+            current = current.add(Duration(days: 1));
+            break;
+          case CostRepeatInterval.week:
+            current = current.add(Duration(days: 7));
+            break;
           case CostRepeatInterval.month:
-            addCost = true;
+            current = DateTime(current.year, current.month + 1);
             break;
-
           case CostRepeatInterval.quarter:
-            int diffInMonths =
-                (monthDate.year - firstDate.year) * 12 +
-                (monthDate.month - firstDate.month);
-            if (diffInMonths % 3 == 0) addCost = true;
+            current = DateTime(current.year, current.month + 3);
             break;
-
           case CostRepeatInterval.halfyear:
-            int diffInMonths =
-                (monthDate.year - firstDate.year) * 12 +
-                (monthDate.month - firstDate.month);
-            if (diffInMonths % 6 == 0) addCost = true;
+            current = DateTime(current.year, current.month + 6);
             break;
-
           case CostRepeatInterval.year:
-            if (monthDate.month == firstDate.month &&
-                monthDate.year >= firstDate.year)
-              addCost = true;
-            break;
-
-          default:
+            current = DateTime(current.year + 1, current.month);
             break;
         }
 
-        if (addCost) costs[i].sum += costInCents;
+        // Abbruch bei zu großem Jahr
+        if (current.year > selectedYear + 1) break;
       }
     }
 
