@@ -11,15 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class CalenderScreen extends StatefulWidget {
+class CalenderTestScreen extends StatefulWidget {
   final DatabaseRepository db;
-  const CalenderScreen(this.db, {super.key});
+  const CalenderTestScreen(this.db, {super.key});
 
   @override
-  State<CalenderScreen> createState() => _CalenderScreenState();
+  State<CalenderTestScreen> createState() => _CalenderTestScreenState();
 }
 
-class _CalenderScreenState extends State<CalenderScreen> {
+class _CalenderTestScreenState extends State<CalenderTestScreen> {
   late Future<List<Contract>> _futureContracts;
 
   // Map von Datum zu Liste von Strings (Events)
@@ -216,7 +216,9 @@ class _CalenderScreenState extends State<CalenderScreen> {
                         ),
                 ),
                 FilledButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO: Export-Funktion implementieren
+                  },
                   label: const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Row(

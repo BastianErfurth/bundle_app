@@ -30,7 +30,7 @@ class CalenderInfoCard extends StatelessWidget {
             CrossAxisAlignment.start, // oben ausrichten für mehrzeiligen Text
         children: [
           // Datum mit fixierter Breite
-          Container(
+          SizedBox(
             width: 80,
             child: Text(
               dateText,
