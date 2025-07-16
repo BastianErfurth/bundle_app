@@ -56,7 +56,7 @@ class _CostScreenState extends State<CostScreen> {
                   });
                 },
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 4),
               FutureBuilder<List<Contract>>(
                 future: widget.db.getMyContracts(),
                 builder: (context, snapshot) {
@@ -164,8 +164,9 @@ class _CostScreenState extends State<CostScreen> {
               FutureBuilder<List<CostPerMonth>>(
                 future: getCostList(),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.data!.isEmpty)
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return Text("Keine Daten");
+                  }
 
                   List<CostPerMonth> costs = snapshot.data!;
 
@@ -201,8 +202,9 @@ class _CostScreenState extends State<CostScreen> {
                                   showTitles: true,
                                   getTitlesWidget: (value, meta) {
                                     int index = value.toInt();
-                                    if (index < 0 || index >= 12)
+                                    if (index < 0 || index >= 12) {
                                       return SizedBox.shrink();
+                                    }
 
                                     const months = [
                                       "Jan",
@@ -219,7 +221,13 @@ class _CostScreenState extends State<CostScreen> {
                                       "Dez",
                                     ];
 
-                                    String label = "${months[index]} 25";
+                                    // Hole die letzten zwei Ziffern vom Jahr, z.B. "2025" -> "25"
+                                    String yearSuffix = _auswahljahr.substring(
+                                      2,
+                                    );
+
+                                    String label =
+                                        "${months[index]}$yearSuffix";
 
                                     return Text(
                                       label,
@@ -231,6 +239,7 @@ class _CostScreenState extends State<CostScreen> {
                                   },
                                 ),
                               ),
+
                               leftTitles: AxisTitles(
                                 sideTitles: SideTitles(showTitles: false),
                               ),
@@ -242,8 +251,9 @@ class _CostScreenState extends State<CostScreen> {
                                   showTitles: true,
                                   getTitlesWidget: (value, meta) {
                                     int index = value.toInt();
-                                    if (index < 0 || index >= 12)
+                                    if (index < 0 || index >= 12) {
                                       return SizedBox.shrink();
+                                    }
 
                                     double costValue =
                                         costs[index].sum.toDouble() / 100;
@@ -386,7 +396,7 @@ class _CostScreenState extends State<CostScreen> {
 
   Future<void> showYearPicker() async {
     final List<String> years = List.generate(
-      9,
+      15,
       (index) => (2022 + index).toString(),
     );
 

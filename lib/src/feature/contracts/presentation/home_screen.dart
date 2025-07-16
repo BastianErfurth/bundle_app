@@ -5,8 +5,6 @@ import 'package:bundle_app/src/feature/calender/presentation/calender_screen.dar
 import 'package:bundle_app/src/feature/contracts/presentation/home_content.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/my_contracts_screen.dart';
 import 'package:bundle_app/src/feature/costs/presentation/cost_screen.dart';
-import 'package:bundle_app/src/feature/costs/presentation/cost_screen_test.dart';
-import 'package:bundle_app/src/feature/costs/presentation/cost_test_screen.dart';
 import 'package:bundle_app/src/feature/settings/presentation/setting_screen.dart';
 import 'package:flutter/material.dart';
 

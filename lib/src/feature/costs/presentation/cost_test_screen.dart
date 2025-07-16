@@ -226,8 +226,9 @@ class _CostTestScreenState extends State<CostTestScreen> {
                                   showTitles: true,
                                   getTitlesWidget: (value, meta) {
                                     int index = value.toInt();
-                                    if (index < 0 || index >= 12)
+                                    if (index < 0 || index >= 12) {
                                       return SizedBox.shrink();
+                                    }
 
                                     DateTime now = DateTime.now();
                                     DateTime monthDate = DateTime(
@@ -503,8 +504,9 @@ class _CostTestScreenState extends State<CostTestScreen> {
 
           case CostRepeatInterval.year:
             if (monthDate.month == firstDate.month &&
-                monthDate.year >= firstDate.year)
+                monthDate.year >= firstDate.year) {
               addCost = true;
+            }
             break;
 
           default:
