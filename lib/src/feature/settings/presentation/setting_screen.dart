@@ -286,10 +286,10 @@ class _SettingScreenState extends State<SettingScreen> {
                       _newUser = _newUser.copyWith(isPrivate: val);
                     }),
                   ),
-                  ElevatedButton(
+                  FilledButton(
                     onPressed: _saveUserProfile,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Palette.mediumGreenBlue,
+                      backgroundColor: Palette.textWhite,
                     ),
                     child: const Text("Benutzerprofil hinzufügen"),
                   ),
@@ -354,10 +354,10 @@ class _SettingScreenState extends State<SettingScreen> {
                       _newPartner = _newPartner.copyWith(isInContractList: val);
                     }),
                   ),
-                  ElevatedButton(
+                  FilledButton(
                     onPressed: _savePartnerProfile,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Palette.mediumGreenBlue,
+                      backgroundColor: Palette.textWhite,
                     ),
                     child: const Text("Partnerprofil hinzufügen"),
                   ),
