@@ -9,11 +9,11 @@ import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_head
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalenderScreen extends StatefulWidget {
-  final DatabaseRepository db;
-  const CalenderScreen(this.db, {super.key});
+  const CalenderScreen({super.key});
 
   @override
   State<CalenderScreen> createState() => _CalenderScreenState();
@@ -28,7 +28,10 @@ class _CalenderScreenState extends State<CalenderScreen> {
   @override
   void initState() {
     super.initState();
-    _futureContracts = widget.db.getMyContracts();
+    _futureContracts = Provider.of<DatabaseRepository>(
+      context,
+      listen: false,
+    ).getMyContracts();
   }
 
   List<String> _getEventsForDay(DateTime day) {
@@ -114,7 +117,6 @@ class _CalenderScreenState extends State<CalenderScreen> {
                             MaterialPageRoute(
                               builder: (_) => ViewContractScreen(
                                 contractNumber: contract.contractNumber,
-                                db: widget.db,
                               ),
                             ),
                           );

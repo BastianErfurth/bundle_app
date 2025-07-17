@@ -12,11 +12,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker_plus/picker.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CostScreen extends StatefulWidget {
-  final DatabaseRepository db;
-  final AuthRepository auth;
-  const CostScreen(this.db, this.auth, {super.key});
+  const CostScreen({super.key});
 
   @override
   State<CostScreen> createState() => _CostScreenState();
@@ -30,6 +29,8 @@ class _CostScreenState extends State<CostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final db = context.watch<DatabaseRepository>();
+    final auth = context.watch<AuthRepository>();
     return Scaffold(
       //appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
       body: Padding(
@@ -57,7 +58,7 @@ class _CostScreenState extends State<CostScreen> {
               ),
               SizedBox(height: 4),
               FutureBuilder<List<Contract>>(
-                future: widget.db.getMyContracts(),
+                future: db.getMyContracts(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
@@ -439,7 +440,10 @@ class _CostScreenState extends State<CostScreen> {
   }
 
   Future<List<CostPerMonth>> getCostList() async {
-    final List<Contract> contracts = await widget.db.getMyContracts();
+    final List<Contract> contracts = await Provider.of<DatabaseRepository>(
+      context,
+      listen: false,
+    ).getMyContracts();
 
     final int selectedYear = int.parse(_auswahljahr);
     final List<CostPerMonth> costs = List.generate(12, (index) {

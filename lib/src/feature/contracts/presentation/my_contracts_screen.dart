@@ -11,11 +11,10 @@ import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_p
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/dropdown_select_field.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MyContractsScreen extends StatefulWidget {
-  final DatabaseRepository db;
-  final AuthRepository auth;
-  const MyContractsScreen(this.db, this.auth, {super.key});
+  const MyContractsScreen({super.key});
 
   @override
   State<MyContractsScreen> createState() => _MyContractsScreenState();
@@ -34,25 +33,30 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
   void initState() {
     super.initState();
     _loadUserProfiles();
-    _applyFilters();
-    _searchController.addListener(_applyFilters);
+    _applyFilters(Provider.of<DatabaseRepository>(context, listen: false));
+    _searchController.addListener(() {
+      _applyFilters(Provider.of<DatabaseRepository>(context, listen: false));
+    });
   }
 
   void _loadUserProfiles() async {
-    final profiles = await widget.db.getUserProfiles();
+    final profiles = await Provider.of<DatabaseRepository>(
+      context,
+      listen: false,
+    ).getUserProfiles();
     setState(() {
       _userProfiles = profiles;
     });
   }
 
-  void _applyFilters() {
+  void _applyFilters(DatabaseRepository db) {
     setState(() {
-      _filteredContracts = _getFilteredContracts();
+      _filteredContracts = _getFilteredContracts(db);
     });
   }
 
-  Future<List<Contract>> _getFilteredContracts() async {
-    final allContracts = await widget.db.getMyContracts();
+  Future<List<Contract>> _getFilteredContracts(DatabaseRepository db) async {
+    final allContracts = await db.getMyContracts();
     final searchText = _searchController.text.toLowerCase();
 
     return allContracts.where((contract) {
@@ -80,6 +84,8 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthRepository>();
+    final db = context.watch<DatabaseRepository>();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -92,10 +98,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                   FilledButton.icon(
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              HomeScreen(widget.db, widget.auth),
-                        ),
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
                       );
                     },
                     label: Row(
@@ -107,13 +110,12 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                       Navigator.of(context)
                           .push(
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  AddContractScreen(widget.db, widget.auth),
+                              builder: (context) => AddContractScreen(),
                             ),
                           )
                           .then((result) {
                             if (result == true) {
-                              _applyFilters();
+                              _applyFilters(db);
 
                               // ignore: use_build_context_synchronously
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -147,7 +149,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                 onChanged: (UserProfile? newValue) {
                   setState(() {
                     _selectedUserProfile = newValue;
-                    _applyFilters();
+                    _applyFilters(db);
                   });
                 },
               ),
@@ -171,7 +173,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                 onChanged: (ContractCategory? newValue) {
                   setState(() {
                     _selectedContractCategory = newValue;
-                    _applyFilters();
+                    _applyFilters(db);
                   });
                 },
               ),
@@ -219,8 +221,10 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                             children: [
                               ContractListContainer(
                                 contract: contract,
-                                db: widget.db,
-                                onDelete: _applyFilters,
+                                db: db,
+                                onDelete: () {
+                                  _applyFilters(db);
+                                },
                               ),
                               SizedBox(height: 4),
                             ],

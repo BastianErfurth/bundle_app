@@ -37,7 +37,6 @@ class _ContractListContainerState extends State<ContractListContainer> {
                 MaterialPageRoute(
                   builder: (context) => ViewContractScreen(
                     contractNumber: widget.contract.contractNumber,
-                    db: widget.db,
                   ),
                 ),
               );

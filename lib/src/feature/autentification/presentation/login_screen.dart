@@ -7,11 +7,10 @@ import 'package:bundle_app/src/feature/autentification/presentation/widgets/text
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LogInScreen extends StatefulWidget {
-  final DatabaseRepository db;
-  final AuthRepository auth;
-  const LogInScreen(this.db, this.auth, {super.key});
+  const LogInScreen({super.key});
 
   @override
   State<LogInScreen> createState() => _LogInScreenState();
@@ -23,6 +22,8 @@ class _LogInScreenState extends State<LogInScreen> {
   bool _isObscured = true;
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthRepository>();
+    final db = context.watch<DatabaseRepository>();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -121,7 +122,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         width: double.infinity,
                         child: FilledButton(
                           onPressed: () async {
-                            await widget.auth.signInWithEmailAndPassword(
+                            await auth.signInWithEmailAndPassword(
                               _emailController.text,
                               _passwordController.text,
                             );
@@ -181,8 +182,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       setState(() {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) =>
-                                RegistrationScreen(widget.db, widget.auth),
+                            builder: (context) => RegistrationScreen(),
                           ),
                         );
                       });

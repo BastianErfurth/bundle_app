@@ -7,11 +7,10 @@ import 'package:bundle_app/src/feature/contracts/presentation/my_contracts_scree
 import 'package:bundle_app/src/feature/costs/presentation/cost_screen.dart';
 import 'package:bundle_app/src/feature/settings/presentation/setting_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  final DatabaseRepository db;
-  final AuthRepository auth;
-  const HomeScreen(this.db, this.auth, {super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -23,16 +22,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    final auth = context.watch<AuthRepository>();
+    final db = context.watch<DatabaseRepository>();
     super.initState();
     myScreens = [
-      HomeContent(widget.db, widget.auth),
+      HomeContent(),
       //CostScreenTest(widget.db, widget.auth),
-      CostScreen(widget.db, widget.auth),
+      CostScreen(),
       //CostTestScreen(widget.db, widget.auth),
-      MyContractsScreen(widget.db, widget.auth),
+      MyContractsScreen(),
       //CalenderScreen(widget.db),
-      CalenderTestScreen(widget.db),
-      SettingScreen(db: widget.db, auth: widget.auth),
+      CalenderTestScreen(),
+      SettingScreen(),
     ];
   }
 

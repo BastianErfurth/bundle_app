@@ -1,18 +1,15 @@
+import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
-import 'package:intl/intl.dart'; // für Datum
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart'; // für Datum
 
 class ViewContractScreen extends StatefulWidget {
   final String contractNumber;
-  final DatabaseRepository db;
 
-  const ViewContractScreen({
-    super.key,
-    required this.contractNumber,
-    required this.db,
-  });
+  const ViewContractScreen({super.key, required this.contractNumber});
 
   @override
   State<ViewContractScreen> createState() => _ViewContractScreenState();
@@ -37,9 +34,10 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
     });
 
     try {
-      final contract = await widget.db.getContractByNumber(
-        widget.contractNumber,
-      );
+      final contract = await Provider.of<DatabaseRepository>(
+        context,
+        listen: false,
+      ).getContractByNumber(widget.contractNumber);
       if (contract == null) {
         setState(() {
           _error = 'Kein Vertrag mit dieser Nummer gefunden.';
@@ -61,6 +59,8 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthRepository>();
+    final db = context.watch<DatabaseRepository>();
     if (_isLoading) {
       return Scaffold(
         appBar: AppBar(title: Text('Vertrag ansehen')),

@@ -22,11 +22,10 @@ import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart' hide Interval;
 import 'package:intl/intl.dart';
 import 'package:flutter_picker_plus/flutter_picker_plus.dart';
+import 'package:provider/provider.dart';
 
 class AddContractScreen extends StatefulWidget {
-  final DatabaseRepository db;
-  final AuthRepository auth;
-  const AddContractScreen(this.db, this.auth, {super.key});
+  const AddContractScreen({super.key});
 
   @override
   State<AddContractScreen> createState() => _AddContractScreenState();
@@ -67,10 +66,13 @@ class _AddContractScreenState extends State<AddContractScreen> {
 
   @override
   void initState() {
+    DatabaseRepository db = Provider.of<DatabaseRepository>(
+      context,
+      listen: false,
+    );
     super.initState();
-    _userProfilesFuture = (widget.db as MockDatabaseRepository)
-        .getUserProfiles();
-    _contractPartnerProfilesFuture = (widget.db as MockDatabaseRepository)
+    _userProfilesFuture = (db as MockDatabaseRepository).getUserProfiles();
+    _contractPartnerProfilesFuture = (db as MockDatabaseRepository)
         .getContractors(); // Future für Vertragspartner laden
     // Future für UserProfile laden
   }
@@ -111,8 +113,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    HomeScreen(widget.db, widget.auth),
+                                builder: (context) => HomeScreen(),
                               ),
                             );
                           },
@@ -124,8 +125,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    HomeScreen(widget.db, widget.auth),
+                                builder: (context) => HomeScreen(),
                               ),
                             );
                           },
@@ -210,10 +210,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                               Navigator.of(context)
                                   .push(
                                     MaterialPageRoute(
-                                      builder: (context) => SettingScreen(
-                                        db: widget.db,
-                                        auth: widget.auth,
-                                      ),
+                                      builder: (context) => SettingScreen(),
                                     ),
                                   )
                                   .then((_) {
@@ -267,10 +264,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                               Navigator.of(context)
                                   .push(
                                     MaterialPageRoute(
-                                      builder: (context) => SettingScreen(
-                                        db: widget.db,
-                                        auth: widget.auth,
-                                      ),
+                                      builder: (context) => SettingScreen(),
                                     ),
                                   )
                                   .then((_) {
@@ -452,9 +446,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => NewSettingScreen(
-                                  databaseRepository: widget.db,
-                                ),
+                                builder: (context) => SettingScreen(),
                               ),
                             );
                           },
@@ -778,7 +770,10 @@ class _AddContractScreenState extends State<AddContractScreen> {
     );
 
     try {
-      await widget.db.addContract(newContract);
+      await Provider.of<DatabaseRepository>(
+        context,
+        listen: false,
+      ).addContract(newContract);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Vertrag erfolgreich hinzugefügt.')),

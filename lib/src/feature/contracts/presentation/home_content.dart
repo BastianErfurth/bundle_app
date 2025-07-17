@@ -11,12 +11,11 @@ import 'package:bundle_app/src/feature/costs/presentation/cost_screen.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class HomeContent extends StatefulWidget {
-  final DatabaseRepository db;
-  final AuthRepository auth;
-  const HomeContent(this.db, this.auth, {super.key});
+  const HomeContent({super.key});
 
   @override
   State<HomeContent> createState() => _HomeContentState();
@@ -27,12 +26,16 @@ class _HomeContentState extends State<HomeContent> {
 
   @override
   void initState() {
+    final auth = context.watch<AuthRepository>();
+    final db = context.watch<DatabaseRepository>();
     super.initState();
-    _contractsFuture = widget.db.getMyContracts();
+    _contractsFuture = db.getMyContracts();
   }
 
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthRepository>();
+    final db = context.watch<DatabaseRepository>();
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: SingleChildScrollView(
@@ -62,13 +65,12 @@ class _HomeContentState extends State<HomeContent> {
                   onPressed: () async {
                     final result = await Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) =>
-                            AddContractScreen(widget.db, widget.auth),
+                        builder: (context) => AddContractScreen(),
                       ),
                     );
                     if (result == true) {
                       setState(() {
-                        _contractsFuture = widget.db.getMyContracts();
+                        _contractsFuture = db.getMyContracts();
                       });
                     }
                   },
@@ -84,8 +86,7 @@ class _HomeContentState extends State<HomeContent> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) =>
-                            MyContractsScreen(widget.db, widget.auth),
+                        builder: (context) => MyContractsScreen(),
                       ),
                     );
                   },
@@ -131,10 +132,7 @@ class _HomeContentState extends State<HomeContent> {
                 FilledButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            CostScreen(widget.db, widget.auth),
-                      ),
+                      MaterialPageRoute(builder: (context) => CostScreen()),
                     );
                   },
                   child: Icon(Icons.euro_outlined),
@@ -220,9 +218,7 @@ class _HomeContentState extends State<HomeContent> {
                 FilledButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => CalenderScreen(widget.db),
-                      ),
+                      MaterialPageRoute(builder: (context) => CalenderScreen()),
                     );
                   },
                   child: Icon(Icons.calendar_month),

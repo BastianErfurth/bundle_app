@@ -1,5 +1,6 @@
 // ignore_for_file: constant_pattern_never_matches_value_type
 
+import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/calender/presentation/widgets/calender_info_card.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
@@ -9,11 +10,11 @@ import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_head
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalenderTestScreen extends StatefulWidget {
-  final DatabaseRepository db;
-  const CalenderTestScreen(this.db, {super.key});
+  const CalenderTestScreen({super.key});
 
   @override
   State<CalenderTestScreen> createState() => _CalenderTestScreenState();
@@ -28,7 +29,10 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
   @override
   void initState() {
     super.initState();
-    _futureContracts = widget.db.getMyContracts();
+    _futureContracts = Provider.of<DatabaseRepository>(
+      context,
+      listen: false,
+    ).getMyContracts();
   }
 
   List<String> _getEventsForDay(DateTime day) {
@@ -38,6 +42,8 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthRepository>();
+    final db = context.watch<DatabaseRepository>();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -114,7 +120,6 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
                             MaterialPageRoute(
                               builder: (_) => ViewContractScreen(
                                 contractNumber: contract.contractNumber,
-                                db: widget.db,
                               ),
                             ),
                           );

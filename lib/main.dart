@@ -21,7 +21,7 @@ Future<void> main() async {
         Provider<AuthRepository>(create: (_) => auth),
         Provider<DatabaseRepository>(create: (_) => db),
       ],
-      child: MainApp(db, auth),
+      child: MainApp(),
     ),
   );
 }

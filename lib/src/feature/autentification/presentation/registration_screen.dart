@@ -4,11 +4,10 @@ import 'package:bundle_app/src/feature/autentification/presentation/widgets/text
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  final DatabaseRepository db;
-  final AuthRepository auth;
-  const RegistrationScreen(this.db, this.auth, {super.key});
+  const RegistrationScreen({super.key});
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -24,6 +23,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthRepository>();
+    final db = context.watch<DatabaseRepository>();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -161,7 +162,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     width: double.infinity,
                     child: FilledButton(
                       onPressed: () async {
-                        await widget.auth.createUserWithEmailAndPassword(
+                        await auth.createUserWithEmailAndPassword(
                           _emailController.text,
                           _passwordController.text,
                         );

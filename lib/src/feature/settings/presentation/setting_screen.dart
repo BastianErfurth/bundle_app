@@ -6,12 +6,10 @@ import 'package:bundle_app/src/theme/palette.dart';
 import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_partner_profile.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
+import 'package:provider/provider.dart';
 
 class SettingScreen extends StatefulWidget {
-  final DatabaseRepository db;
-  final AuthRepository auth;
-
-  const SettingScreen({super.key, required this.db, required this.auth});
+  const SettingScreen({super.key});
 
   @override
   State<SettingScreen> createState() => _SettingScreenState();
@@ -36,8 +34,14 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Future<void> _loadProfiles() async {
-    final users = await widget.db.getUserProfiles();
-    final partners = await widget.db.getContractors();
+    final users = await Provider.of<DatabaseRepository>(
+      context,
+      listen: false,
+    ).getUserProfiles();
+    final partners = await Provider.of<DatabaseRepository>(
+      context,
+      listen: false,
+    ).getContractors();
     setState(() {
       _userProfiles = users;
       _contractPartners = partners;
@@ -79,7 +83,10 @@ class _SettingScreenState extends State<SettingScreen> {
       );
 
       // Profil speichern
-      await widget.db.addUserProfile(_newUser);
+      await Provider.of<DatabaseRepository>(
+        context,
+        listen: false,
+      ).addUserProfile(_newUser);
       await _loadProfiles();
 
       // Lade-Dialog schließen
@@ -108,7 +115,10 @@ class _SettingScreenState extends State<SettingScreen> {
       );
 
       // Partnerprofil speichern
-      await widget.db.addContractPartnerProfile(_newPartner);
+      await Provider.of<DatabaseRepository>(
+        context,
+        listen: false,
+      ).addContractPartnerProfile(_newPartner);
       await _loadProfiles();
 
       // Lade-Dialog schließen
@@ -147,7 +157,10 @@ class _SettingScreenState extends State<SettingScreen> {
     );
 
     if (confirmed == true) {
-      await widget.db.deleteUserProfile(user);
+      await Provider.of<DatabaseRepository>(
+        context,
+        listen: false,
+      ).deleteUserProfile(user);
       await _loadProfiles();
       ScaffoldMessenger.of(
         context,
@@ -177,7 +190,10 @@ class _SettingScreenState extends State<SettingScreen> {
     );
 
     if (confirmed == true) {
-      await widget.db.deleteContractPartnerProfile(partner);
+      await Provider.of<DatabaseRepository>(
+        context,
+        listen: false,
+      ).deleteContractPartnerProfile(partner);
       await _loadProfiles();
       ScaffoldMessenger.of(
         context,
@@ -187,6 +203,8 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthRepository>();
+    final db = context.watch<DatabaseRepository>();
     if (_loading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -203,7 +221,7 @@ class _SettingScreenState extends State<SettingScreen> {
           children: [
             FilledButton(
               onPressed: () async {
-                await widget.auth.signOut();
+                await auth.signOut();
               },
               child: Center(
                 child: Row(
