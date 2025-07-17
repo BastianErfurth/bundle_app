@@ -41,6 +41,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(backgroundColor: Palette.backgroundGreenBlue),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: FutureBuilder<List<Contract>>(
