@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthRepository>();
-    final db = context.watch<DatabaseRepository>();
+    context.watch<DatabaseRepository>();
     return StreamBuilder(
       stream: auth.authStateChanges(),
       builder: (context, snapshot) {

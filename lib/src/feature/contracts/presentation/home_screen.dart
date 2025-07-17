@@ -1,7 +1,7 @@
 import 'package:bundle_app/src/common/bottom_navbar.dart';
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
-import 'package:bundle_app/src/feature/calender/presentation/calender_test_neu.dart';
+import 'package:bundle_app/src/feature/calender/presentation/calender_test_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/home_content.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/my_contracts_screen.dart';
 import 'package:bundle_app/src/feature/costs/presentation/cost_screen.dart';
@@ -22,8 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    final auth = context.watch<AuthRepository>();
-    final db = context.watch<DatabaseRepository>();
     super.initState();
     myScreens = [
       HomeContent(),
@@ -39,6 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<AuthRepository>();
+    context.watch<DatabaseRepository>();
     return Scaffold(
       //appBar: AppBar(backgroundColor: Palette.backgroundGreenBlue),
       bottomNavigationBar: ClipRRect(

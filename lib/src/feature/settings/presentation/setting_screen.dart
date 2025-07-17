@@ -204,7 +204,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthRepository>();
-    final db = context.watch<DatabaseRepository>();
+    context.watch<DatabaseRepository>();
     if (_loading) {
       return const Center(child: CircularProgressIndicator());
     }

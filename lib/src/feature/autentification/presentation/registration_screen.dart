@@ -24,7 +24,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthRepository>();
-    final db = context.watch<DatabaseRepository>();
+    context.watch<DatabaseRepository>();
     return Scaffold(
       body: SafeArea(
         child: Padding(

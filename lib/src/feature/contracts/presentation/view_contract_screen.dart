@@ -59,8 +59,8 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = context.watch<AuthRepository>();
-    final db = context.watch<DatabaseRepository>();
+    context.watch<AuthRepository>();
+    context.watch<DatabaseRepository>();
     if (_isLoading) {
       return Scaffold(
         appBar: AppBar(title: Text('Vertrag ansehen')),

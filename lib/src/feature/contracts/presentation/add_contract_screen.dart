@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
@@ -16,7 +15,6 @@ import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/dropdown_select_field.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
-import 'package:bundle_app/src/feature/settings/presentation/new_setting_screen.dart';
 import 'package:bundle_app/src/feature/settings/presentation/setting_screen.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart' hide Interval;
@@ -72,7 +70,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
     );
     super.initState();
     _userProfilesFuture = (db as MockDatabaseRepository).getUserProfiles();
-    _contractPartnerProfilesFuture = (db as MockDatabaseRepository)
+    _contractPartnerProfilesFuture = (db)
         .getContractors(); // Future für Vertragspartner laden
     // Future für UserProfile laden
   }

@@ -23,7 +23,7 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthRepository>();
-    final db = context.watch<DatabaseRepository>();
+    context.watch<DatabaseRepository>();
     return Scaffold(
       body: SafeArea(
         child: Padding(

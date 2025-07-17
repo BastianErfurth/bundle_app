@@ -30,7 +30,7 @@ class _CostScreenState extends State<CostScreen> {
   @override
   Widget build(BuildContext context) {
     final db = context.watch<DatabaseRepository>();
-    final auth = context.watch<AuthRepository>();
+    context.watch<AuthRepository>();
     return Scaffold(
       //appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
       body: Padding(

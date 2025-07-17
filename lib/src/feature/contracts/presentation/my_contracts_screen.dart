@@ -84,7 +84,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = context.watch<AuthRepository>();
+    context.watch<AuthRepository>();
     final db = context.watch<DatabaseRepository>();
     return Scaffold(
       body: SafeArea(

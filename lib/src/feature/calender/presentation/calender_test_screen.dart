@@ -42,8 +42,8 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = context.watch<AuthRepository>();
-    final db = context.watch<DatabaseRepository>();
+    context.watch<AuthRepository>();
+    context.watch<DatabaseRepository>();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -220,15 +220,19 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
                 const SizedBox(height: 16),
                 Expanded(
                   child: reminderCards.isNotEmpty
-                      ? ListView(children: reminderCards)
+                      ? ListView.separated(
+                          itemCount: reminderCards.length,
+                          itemBuilder: (context, index) => reminderCards[index],
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 4),
+                        )
                       : const Center(
                           child: Text("Keine Kündigungserinnerungen"),
                         ),
                 ),
+
                 FilledButton.icon(
-                  onPressed: () {
-                    // TODO: Export-Funktion implementieren
-                  },
+                  onPressed: () {},
                   label: const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Row(

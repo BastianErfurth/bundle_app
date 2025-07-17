@@ -26,15 +26,16 @@ class _HomeContentState extends State<HomeContent> {
 
   @override
   void initState() {
-    final auth = context.watch<AuthRepository>();
-    final db = context.watch<DatabaseRepository>();
     super.initState();
-    _contractsFuture = db.getMyContracts();
+    _contractsFuture = Provider.of<DatabaseRepository>(
+      context,
+      listen: false,
+    ).getMyContracts();
   }
 
   @override
   Widget build(BuildContext context) {
-    final auth = context.watch<AuthRepository>();
+    context.watch<AuthRepository>();
     final db = context.watch<DatabaseRepository>();
     return Padding(
       padding: const EdgeInsets.all(24.0),
