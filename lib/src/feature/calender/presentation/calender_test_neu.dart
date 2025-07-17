@@ -185,7 +185,12 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
                                             e,
                                             style: e.startsWith("Kündigung")
                                                 ? const TextStyle(
-                                                    color: Colors.red,
+                                                    color: Color.fromARGB(
+                                                      255,
+                                                      48,
+                                                      226,
+                                                      32,
+                                                    ),
                                                   )
                                                 : null,
                                           ),

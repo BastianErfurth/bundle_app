@@ -6,6 +6,7 @@ import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/main_app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,5 +14,14 @@ Future<void> main() async {
 
   final AuthRepository auth = FirebaseAuthRepository();
   final DatabaseRepository db = MockDatabaseRepository();
-  runApp(MainApp(db, auth));
+
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<AuthRepository>(create: (_) => auth),
+        Provider<DatabaseRepository>(create: (_) => db),
+      ],
+      child: MainApp(db, auth),
+    ),
+  );
 }
