@@ -22,7 +22,6 @@ class CalenderScreen extends StatefulWidget {
 class _CalenderScreenState extends State<CalenderScreen> {
   late Future<List<Contract>> _futureContracts;
 
-  // Map von Datum zu Liste von Strings (Events)
   late Map<DateTime, List<String>> _events;
 
   @override
@@ -57,13 +56,11 @@ class _CalenderScreenState extends State<CalenderScreen> {
 
             final contracts = snapshot.data!;
 
-            // Events Map füllen
             _events = {};
 
             final reminderCards = <Widget>[];
 
             for (final contract in contracts) {
-              // Debug: Vertragsstart ausgeben
               debugPrint(
                 "Vertrag '${contract.keyword}' startet am ${contract.contractRuntime.dt}",
               );
@@ -168,7 +165,6 @@ class _CalenderScreenState extends State<CalenderScreen> {
                           titleTextStyle: TextStyle(fontSize: 14),
                         ),
 
-                        // Tag anklicken: Events anzeigen
                         onDaySelected: (selectedDay, focusedDay) {
                           final events = _getEventsForDay(selectedDay);
                           if (events.isNotEmpty) {
@@ -186,8 +182,8 @@ class _CalenderScreenState extends State<CalenderScreen> {
                                           title: Text(
                                             e,
                                             style: e.startsWith("Kündigung")
-                                                ? const TextStyle(
-                                                    color: Colors.red,
+                                                ? TextStyle(
+                                                    color: Palette.textWhite,
                                                   )
                                                 : null,
                                           ),
@@ -205,6 +201,34 @@ class _CalenderScreenState extends State<CalenderScreen> {
                             );
                           }
                         },
+
+                        calendarBuilders: CalendarBuilders(
+                          markerBuilder: (context, date, events) {
+                            if (events.isNotEmpty) {
+                              return Positioned(
+                                bottom: 4,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: events.map((_) {
+                                    return Container(
+                                      width: 6,
+                                      height: 6,
+                                      margin: const EdgeInsets.symmetric(
+                                        horizontal: 1,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Palette
+                                            .textWhite, // Hier die rote Farbe für die Markierungen
+                                        shape: BoxShape.circle,
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              );
+                            }
+                            return const SizedBox();
+                          },
+                        ),
                       ),
                     ),
                   ),
