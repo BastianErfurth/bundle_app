@@ -1,11 +1,15 @@
 enum Interval {
-  day,
-  week,
-  month,
-  year,
-  unlimited;
+  day("Day"),
+  week("Week"),
+  month("Month"),
+  year("Year"),
+  unlimited("Unlimited");
 
-  String get label {
+  final String label;
+
+  const Interval(this.label);
+
+  String get labelname {
     switch (this) {
       case Interval.day:
         return 'Day';
@@ -56,5 +60,8 @@ class ContractRuntime {
       ),
       isAutomaticExtend: map['isAutomaticExtend'] ?? false,
     );
+  }
+  String get intervalLabel {
+    return interval.labelname;
   }
 }

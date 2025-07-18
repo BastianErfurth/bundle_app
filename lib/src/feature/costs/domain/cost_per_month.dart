@@ -8,4 +8,12 @@ class CostPerMonth {
   String toString() {
     return '$sum     $monthNumber';
   }
+
+  Map<String, dynamic> toMap() {
+    return {'monthNumber': monthNumber, 'sum': sum};
+  }
+
+  factory CostPerMonth.fromMap(Map<String, dynamic> map) {
+    return CostPerMonth(map['monthNumber'] ?? 0, map['sum'] ?? 0);
+  }
 }

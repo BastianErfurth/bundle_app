@@ -5,6 +5,7 @@ import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/calender/presentation/widgets/calender_info_card.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_cost_routine.dart';
+import 'package:bundle_app/src/feature/contracts/domain/contract_quit_interval.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/view_contract_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/theme/palette.dart';
@@ -254,11 +255,8 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
   }
 
   Map<String, dynamic>? _generateQuitReminder(Contract contract) {
-    final routine = contract.contractCostRoutine;
+    final start = contract.contractRuntime.dt;
 
-    if (routine.firstCostDate == null) return null;
-
-    final start = routine.firstCostDate!;
     final contractEnd = DateTime(
       start.year + contract.contractRuntime.howManyinInterval,
       start.month,
@@ -268,26 +266,28 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
     final quitInterval = contract.contractQuitInterval.quitInterval;
 
     DateTime quitDate;
+
     switch (quitInterval) {
-      case CostRepeatInterval.month:
+      case QuitInterval.month:
         quitDate = DateTime(
           contractEnd.year,
-          contractEnd.month - 1,
+          contractEnd.month - contract.contractQuitInterval.howManyInQuitUnits,
           contractEnd.day,
         );
         break;
-      case CostRepeatInterval.quarter:
+      case QuitInterval.week:
         quitDate = DateTime(
           contractEnd.year,
-          contractEnd.month - 3,
+          contractEnd.month,
           contractEnd.day,
+          -7,
         );
         break;
-      case CostRepeatInterval.halfyear:
+      case QuitInterval.day:
         quitDate = DateTime(
           contractEnd.year,
-          contractEnd.month - 6,
-          contractEnd.day,
+          contractEnd.month,
+          contractEnd.day - 1,
         );
         break;
       case CostRepeatInterval.year:
@@ -301,7 +301,9 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
         quitDate = contractEnd;
     }
 
-    final reminderDate = quitDate.subtract(const Duration(days: 14));
+    final reminderDate = quitDate.subtract(
+      const Duration(days: 10),
+    ); // 10 Tage vor Kündigungsfrist
 
     if (reminderDate.isBefore(DateTime.now())) {
       return null;
@@ -309,7 +311,7 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
 
     return {
       'title':
-          "Kündigung vorbereiten für '${contract.keyword}'. Kündigung zum ${DateFormat('dd.MM.yyyy').format(quitDate)}",
+          "Kündigung vorbereiten für '${contract.keyword}'. Kündigung zum ${DateFormat('dd.MM.yyyy').format(contractEnd)}",
       'reminderDate': reminderDate,
     };
   }

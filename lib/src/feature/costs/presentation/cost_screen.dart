@@ -9,7 +9,6 @@ import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_head
 import 'package:bundle_app/src/feature/costs/domain/cost_per_month.dart';
 import 'package:bundle_app/src/feature/costs/presentation/widgets/barcart_cost.dart';
 import 'package:bundle_app/src/theme/palette.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker_plus/picker.dart';
 import 'package:intl/intl.dart';

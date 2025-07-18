@@ -1,10 +1,13 @@
 enum QuitInterval {
-  day,
-  week,
-  month,
-  year;
+  day("Day"),
+  week("Week"),
+  month("Month"),
+  year("Year");
 
-  String get label {
+  final String label;
+  const QuitInterval(this.label);
+
+  String get labelname {
     switch (this) {
       case QuitInterval.day:
         return 'Tag(e()Day';
@@ -56,5 +59,9 @@ class ContractQuitInterval {
           QuitInterval.fromLabel(map['quitInterval']) ?? QuitInterval.month,
       isQuitReminderAlertSet: map['isQuitReminderAlertSet'] ?? false,
     );
+  }
+
+  String get intervalLabel {
+    return quitInterval.labelname;
   }
 }

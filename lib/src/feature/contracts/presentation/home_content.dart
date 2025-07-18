@@ -11,7 +11,6 @@ import 'package:bundle_app/src/feature/costs/domain/cost_functions.dart';
 import 'package:bundle_app/src/feature/costs/presentation/cost_screen.dart';
 import 'package:bundle_app/src/feature/costs/presentation/widgets/barcart_cost.dart';
 import 'package:bundle_app/src/theme/palette.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
