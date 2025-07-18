@@ -7,6 +7,7 @@ import 'package:bundle_app/src/feature/contracts/presentation/add_contract_scree
 import 'package:bundle_app/src/feature/contracts/presentation/my_contracts_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_piechart.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
+import 'package:bundle_app/src/feature/costs/domain/cost_functions.dart';
 import 'package:bundle_app/src/feature/costs/presentation/cost_screen.dart';
 import 'package:bundle_app/src/feature/costs/presentation/widgets/barcart_cost.dart';
 import 'package:bundle_app/src/theme/palette.dart';
@@ -48,8 +49,8 @@ class _HomeContentState extends State<HomeContent> {
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 child: Image.asset(
                   "assets/images/appicon.png",
-                  height: 100,
-                  width: 100,
+                  height: 75,
+                  width: 75,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -143,14 +144,14 @@ class _HomeContentState extends State<HomeContent> {
             ),
             SizedBox(height: 8),
             SizedBox(
-              height: 120,
+              height: 160,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
                   width: 800,
                   child: BarchartCost(
                     auswahljahr: "2025", // TODO fix Jahr dynamic
-                    future: _contractsFuture,
+                    future: CostService().getCostsForYear(db: db, year: "2025"),
                   ),
                 ),
               ),
