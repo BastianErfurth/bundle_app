@@ -63,4 +63,29 @@ class CostService {
 
     return costs;
   }
+
+  Map<String, dynamic> getCostsForYearAsMap({
+    required DatabaseRepository db,
+    required String year,
+    ContractCategory? category,
+    Contract? contract,
+  }) {
+    final costs = getCostsForYear(
+      db: db,
+      year: year,
+      category: category,
+      contract: contract,
+    );
+
+    return {
+      'year': year,
+      'costs': costs.then((value) => value.map((e) => e.toMap()).toList()),
+    };
+  }
+
+  factory CostService() {
+    return CostService._internal();
+  }
+
+  CostService._internal();
 }
