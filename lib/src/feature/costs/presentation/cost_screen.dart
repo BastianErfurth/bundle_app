@@ -33,7 +33,7 @@ class _CostScreenState extends State<CostScreen> {
     final db = context.watch<DatabaseRepository>();
     context.watch<AuthRepository>();
     return Scaffold(
-      //appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
+      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
