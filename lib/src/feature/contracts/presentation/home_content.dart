@@ -8,6 +8,7 @@ import 'package:bundle_app/src/feature/contracts/presentation/my_contracts_scree
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_piechart.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/feature/costs/presentation/cost_screen.dart';
+import 'package:bundle_app/src/feature/costs/presentation/widgets/barcart_cost.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -147,63 +148,9 @@ class _HomeContentState extends State<HomeContent> {
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
                   width: 800,
-                  child: BarChart(
-                    BarChartData(
-                      maxY: 10,
-                      barGroups: List.generate(12, (index) {
-                        return BarChartGroupData(
-                          x: index,
-                          barRods: [
-                            BarChartRodData(
-                              toY: 5,
-                              color: Palette.lightGreenBlue,
-                            ),
-                          ],
-                        );
-                      }),
-                      titlesData: FlTitlesData(
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            getTitlesWidget: (value, meta) {
-                              var style = TextStyle(color: Palette.textWhite);
-                              const months = [
-                                "Jan",
-                                "Feb",
-                                "Mar",
-                                "Apr",
-                                "Mai",
-                                "Jun",
-                                "Jul",
-                                "Aug",
-                                "Sep",
-                                "Nov",
-                                "Dez",
-                              ];
-                              if (value.toInt() < months.length) {
-                                return Text(
-                                  months[value.toInt()],
-                                  style: style,
-                                );
-                              }
-                              return const SizedBox.shrink();
-                            },
-                          ),
-                        ),
-                        leftTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: true),
-                        ),
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                        topTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                      ),
-                      borderData: FlBorderData(show: false),
-                      backgroundColor: Palette.darkGreenblue,
-                      gridData: FlGridData(show: false),
-                    ),
+                  child: BarchartCost(
+                    auswahljahr: "2025", // TODO fix Jahr dynamic
+                    future: _contractsFuture,
                   ),
                 ),
               ),
