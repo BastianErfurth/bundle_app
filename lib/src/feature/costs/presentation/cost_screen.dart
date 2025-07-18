@@ -388,4 +388,4 @@ class _CostScreenState extends State<CostScreen> {
 }
 
 
-// aktuelle Version mit funktionierendem BarChart Stand 16.7.
+// aktuelle Version mit funktionierendem BarChart Stand 18.7.
