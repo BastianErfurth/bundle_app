@@ -21,4 +21,14 @@ class GetEventsFunction {
     }
     _events[key]!.add(event);
   }
+
+  Map<DateTime, List<String>> getAllEvents() {
+    return _events;
+  }
+
+  factory GetEventsFunction.fromMap(Map<DateTime, List<String>> map) {
+    final instance = GetEventsFunction();
+    instance._events.addAll(map);
+    return instance;
+  }
 }

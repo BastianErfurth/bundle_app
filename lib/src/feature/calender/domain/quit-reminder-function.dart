@@ -5,7 +5,7 @@ import 'package:bundle_app/src/feature/contracts/domain/contract_quit_interval.d
 import 'package:intl/intl.dart';
 
 class CalenderService {
-  Map<String, dynamic>? _generateQuitReminder(Contract contract) {
+  Map<String, dynamic>? generateQuitReminder(Contract contract) {
     final start = contract.contractRuntime.dt;
 
     final contractEnd = DateTime(
@@ -63,5 +63,14 @@ class CalenderService {
           "Kündigung vorbereiten für '${contract.keyword}'. Kündigung zum ${DateFormat('dd.MM.yyyy').format(contractEnd)}",
       'reminderDate': reminderDate,
     };
+  }
+
+  Map<String, dynamic>? generateQuitReminderFromMap(Map<String, dynamic> map) {
+    final contract = Contract.fromMap(map);
+    return generateQuitReminder(contract);
+  }
+
+  factory CalenderService() {
+    return CalenderService();
   }
 }
