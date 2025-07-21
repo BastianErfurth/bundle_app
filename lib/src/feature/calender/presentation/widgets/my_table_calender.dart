@@ -3,21 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class TableCalender extends StatefulWidget {
-  const TableCalender({super.key});
+class MyTableCalender extends StatelessWidget {
+  final List<String> Function(DateTime day) getEventsForDay;
 
-  @override
-  State<TableCalender> createState() => _TableCalenderState();
-}
+  const MyTableCalender({super.key, required this.getEventsForDay});
 
-class _TableCalenderState extends State<TableCalender> {
   @override
   Widget build(BuildContext context) {
     return TableCalendar(
       firstDay: DateTime.utc(2010, 10, 16),
       lastDay: DateTime.utc(2030, 3, 14),
       focusedDay: DateTime.now(),
-      eventLoader: widget.getEventsForDay,
+      eventLoader: getEventsForDay,
       daysOfWeekStyle: DaysOfWeekStyle(
         weekendStyle: TextStyle(color: Palette.textWhite),
         weekdayStyle: TextStyle(color: Palette.textWhite),
@@ -30,7 +27,7 @@ class _TableCalenderState extends State<TableCalender> {
 
       // Tag anklicken: Events anzeigen
       onDaySelected: (selectedDay, focusedDay) {
-        final events = widget.getEventsForDay(selectedDay);
+        final events = getEventsForDay(selectedDay);
         if (events.isNotEmpty) {
           showDialog(
             context: context,
@@ -67,6 +64,5 @@ class _TableCalenderState extends State<TableCalender> {
         }
       },
     );
-    ;
   }
 }
