@@ -59,11 +59,9 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
             }
 
             final contracts = snapshot.data!;
-
+            final reminderCards = <Widget>[];
             // Events Map füllen
             _events = {};
-
-            final reminderCards = <Widget>[];
 
             for (final contract in contracts) {
               // Debug: Vertragsstart ausgeben
@@ -82,18 +80,6 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
               _events[startDay]!.add("Vertragsstart: '${contract.keyword}'");
 
               // 2) Erste Zahlung als Event (wenn vorhanden)
-              final firstCostDate = contract.contractCostRoutine.firstCostDate;
-              if (firstCostDate != null) {
-                final paymentDay = DateTime(
-                  firstCostDate.year,
-                  firstCostDate.month,
-                  firstCostDate.day,
-                );
-                _events.putIfAbsent(paymentDay, () => []);
-                _events[paymentDay]!.add(
-                  "Erste Zahlung: '${contract.keyword}'",
-                );
-              }
 
               // 3) Kündigungserinnerung
               if (contract.contractQuitInterval.isQuitReminderAlertSet &&
