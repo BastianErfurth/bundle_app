@@ -187,18 +187,9 @@ class _HomeContentState extends State<HomeContent> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: TableCalendar(
+                    focusedDay: DateTime.now(),
                     firstDay: DateTime.utc(2010, 10, 16),
                     lastDay: DateTime.utc(2030, 3, 14),
-                    focusedDay: DateTime.now(),
-                    daysOfWeekStyle: DaysOfWeekStyle(
-                      weekendStyle: TextStyle(color: Palette.textWhite),
-                      weekdayStyle: TextStyle(color: Palette.textWhite),
-                    ),
-                    rowHeight: 30,
-                    headerStyle: HeaderStyle(
-                      formatButtonVisible: true,
-                      titleTextStyle: TextStyle(fontSize: 14),
-                    ),
                   ),
                 ),
               ),
