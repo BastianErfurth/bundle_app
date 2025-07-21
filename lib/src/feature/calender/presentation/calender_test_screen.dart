@@ -275,20 +275,20 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
         quitDate = DateTime(
           contractEnd.year,
           contractEnd.month,
-          contractEnd.day,
-          -7,
+          contractEnd.day -
+              contract.contractQuitInterval.howManyInQuitUnits * 7,
         );
         break;
       case QuitInterval.day:
         quitDate = DateTime(
           contractEnd.year,
           contractEnd.month,
-          contractEnd.day - 1,
+          contractEnd.day - contract.contractQuitInterval.howManyInQuitUnits,
         );
         break;
       case CostRepeatInterval.year:
         quitDate = DateTime(
-          contractEnd.year - 1,
+          contractEnd.year - contract.contractQuitInterval.howManyInQuitUnits,
           contractEnd.month,
           contractEnd.day,
         );
