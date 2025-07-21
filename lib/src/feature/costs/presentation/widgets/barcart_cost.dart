@@ -19,7 +19,7 @@ class _BarchartCostState extends State<BarchartCost> {
       future: widget.future,
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Text("Keine Daten");
+          return Center(child: Text("Keine Daten"));
         }
 
         List<CostPerMonth> costs = snapshot.data!;

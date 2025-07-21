@@ -48,8 +48,6 @@ class CalenderService {
           contractEnd.day,
         );
         break;
-      default:
-        quitDate = contractEnd;
     }
 
     final reminderDate = quitDate.subtract(

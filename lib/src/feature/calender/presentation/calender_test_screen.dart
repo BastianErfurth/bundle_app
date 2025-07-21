@@ -5,7 +5,6 @@ import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/calender/presentation/widgets/calender_info_card.dart';
 import 'package:bundle_app/src/feature/calender/presentation/widgets/my_table_calender.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
-import 'package:bundle_app/src/feature/contracts/domain/contract_cost_routine.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_quit_interval.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/view_contract_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
@@ -13,7 +12,6 @@ import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class CalenderTestScreen extends StatefulWidget {
   const CalenderTestScreen({super.key});
@@ -241,8 +239,6 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
           contractEnd.day,
         );
         break;
-      default:
-        quitDate = contractEnd;
     }
 
     final reminderDate = quitDate.subtract(

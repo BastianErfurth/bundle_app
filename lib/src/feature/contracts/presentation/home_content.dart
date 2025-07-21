@@ -177,7 +177,7 @@ class _HomeContentState extends State<HomeContent> {
               ],
             ),
             SizedBox(
-              height: 250,
+              height: 280,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Container(

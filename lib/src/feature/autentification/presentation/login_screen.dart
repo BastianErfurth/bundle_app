@@ -57,7 +57,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFormFieldWithoutIcon(
-                        autofillHints: const [AutofillHints.email],
+                        autofillHints: [AutofillHints.email],
                         keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
                         validator: (value) {
