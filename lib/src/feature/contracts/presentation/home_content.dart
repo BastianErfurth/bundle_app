@@ -1,6 +1,8 @@
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
+import 'package:bundle_app/src/feature/calender/domain/get_events_function.dart';
 import 'package:bundle_app/src/feature/calender/presentation/calender_screen.dart';
+import 'package:bundle_app/src/feature/calender/presentation/widgets/my_table_calender.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart'
     as contracts_domain;
 import 'package:bundle_app/src/feature/contracts/presentation/add_contract_screen.dart';
@@ -24,6 +26,7 @@ class HomeContent extends StatefulWidget {
 
 class _HomeContentState extends State<HomeContent> {
   late Future<List<contracts_domain.Contract>> _contractsFuture;
+  final GetEventsFunction _eventService = GetEventsFunction();
 
   @override
   void initState() {
@@ -186,10 +189,8 @@ class _HomeContentState extends State<HomeContent> {
                     color: Palette.buttonTextGreenBlue,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: TableCalendar(
-                    focusedDay: DateTime.now(),
-                    firstDay: DateTime.utc(2010, 10, 16),
-                    lastDay: DateTime.utc(2030, 3, 14),
+                  child: MyTableCalender(
+                    getEventsForDay: _eventService.getEventsForDay,
                   ),
                 ),
               ),
