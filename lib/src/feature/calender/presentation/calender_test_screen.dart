@@ -3,6 +3,7 @@
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/calender/presentation/widgets/calender_info_card.dart';
+import 'package:bundle_app/src/feature/calender/presentation/widgets/my_table_calender.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_cost_routine.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_quit_interval.dart';
@@ -157,60 +158,7 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
                         color: Palette.buttonTextGreenBlue,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: TableCalendar(
-                        firstDay: DateTime.utc(2010, 10, 16),
-                        lastDay: DateTime.utc(2030, 3, 14),
-                        focusedDay: DateTime.now(),
-                        eventLoader: _getEventsForDay,
-                        daysOfWeekStyle: DaysOfWeekStyle(
-                          weekendStyle: TextStyle(color: Palette.textWhite),
-                          weekdayStyle: TextStyle(color: Palette.textWhite),
-                        ),
-                        rowHeight: 30,
-                        headerStyle: const HeaderStyle(
-                          formatButtonVisible: true,
-                          titleTextStyle: TextStyle(fontSize: 14),
-                        ),
-
-                        // Tag anklicken: Events anzeigen
-                        onDaySelected: (selectedDay, focusedDay) {
-                          final events = _getEventsForDay(selectedDay);
-                          if (events.isNotEmpty) {
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                title: Text(
-                                  'Termine am ${DateFormat('dd.MM.yyyy').format(selectedDay)}',
-                                ),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: events
-                                      .map(
-                                        (e) => ListTile(
-                                          title: Text(
-                                            e,
-                                            style: e.startsWith("Kündigung")
-                                                ? TextStyle(
-                                                    color: Palette.textWhite,
-                                                    fontWeight: FontWeight.bold,
-                                                  )
-                                                : null,
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Schließen'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
-                      ),
+                      child: MyTableCalender(getEventsForDay: _getEventsForDay),
                     ),
                   ),
                 ),
