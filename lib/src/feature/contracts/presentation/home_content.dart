@@ -149,8 +149,11 @@ class _HomeContentState extends State<HomeContent> {
                 child: SizedBox(
                   width: 800,
                   child: BarchartCost(
-                    auswahljahr: "2025", // TODO fix Jahr dynamic
-                    future: CostService().getCostsForYear(db: db, year: "2025"),
+                    auswahljahr: DateTime.now().year.toString(),
+                    future: CostService().getCostsForYear(
+                      db: db,
+                      year: DateTime.now().year.toString(),
+                    ),
                   ),
                 ),
               ),
