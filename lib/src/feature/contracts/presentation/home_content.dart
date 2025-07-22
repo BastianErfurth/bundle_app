@@ -1,5 +1,6 @@
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
+import 'package:bundle_app/src/feature/calender/domain/calender_events.dart';
 import 'package:bundle_app/src/feature/calender/domain/get_events_function.dart';
 import 'package:bundle_app/src/feature/calender/presentation/calender_screen.dart';
 import 'package:bundle_app/src/feature/calender/presentation/widgets/my_table_calender.dart';
@@ -179,21 +180,55 @@ class _HomeContentState extends State<HomeContent> {
                 ),
               ],
             ),
-            SizedBox(
-              height: 280,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Palette.buttonTextGreenBlue,
-                    borderRadius: BorderRadius.circular(12),
+            FutureBuilder<List<contracts_domain.Contract>>(
+              future: _contractsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SizedBox(
+                    height: 280,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                if (snapshot.hasError) {
+                  return SizedBox(
+                    height: 280,
+                    child: Center(child: Text("Fehler: ${snapshot.error}")),
+                  );
+                }
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return SizedBox(
+                    height: 280,
+                    child: Center(
+                      child: Text("Keine Verträge für Kalender vorhanden"),
+                    ),
+                  );
+                }
+
+                // Events generieren
+                final events = CalendarEventService.generateEvents(
+                  snapshot.data!,
+                );
+
+                // Funktion, die die Events für einen Tag liefert
+                List<String> getEventsForDay(DateTime day) {
+                  final dayKey = DateTime(day.year, day.month, day.day);
+                  return events[dayKey] ?? [];
+                }
+
+                return SizedBox(
+                  height: 280,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Palette.buttonTextGreenBlue,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: MyTableCalender(getEventsForDay: getEventsForDay),
+                    ),
                   ),
-                  child: MyTableCalender(
-                    getEventsForDay: _eventService.getEventsForDay,
-                  ),
-                ),
-              ),
+                );
+              },
             ),
           ],
         ),
