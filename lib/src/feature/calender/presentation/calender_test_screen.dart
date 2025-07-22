@@ -1,17 +1,18 @@
-// ignore_for_file: constant_pattern_never_matches_value_type
+import 'package:bundle_app/src/feature/calender/domain/calender_events.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/calender/presentation/widgets/calender_info_card.dart';
 import 'package:bundle_app/src/feature/calender/presentation/widgets/my_table_calender.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
-import 'package:bundle_app/src/feature/contracts/domain/contract_quit_interval.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/view_contract_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/theme/palette.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+
+import 'calendar_event_service.dart'; // Dein Service importieren
 
 class CalenderTestScreen extends StatefulWidget {
   const CalenderTestScreen({super.key});
@@ -22,9 +23,7 @@ class CalenderTestScreen extends StatefulWidget {
 
 class _CalenderTestScreenState extends State<CalenderTestScreen> {
   late Future<List<Contract>> _futureContracts;
-
-  // Map von Datum zu Liste von Strings (Events)
-  late Map<DateTime, List<String>> _events;
+  Map<DateTime, List<String>> _events = {};
 
   @override
   void initState() {
@@ -42,8 +41,10 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Damit bei Änderungen neu gebaut wird
     context.watch<AuthRepository>();
     context.watch<DatabaseRepository>();
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -59,44 +60,21 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
             }
 
             final contracts = snapshot.data!;
+
+            // Events über Service generieren
+            _events = CalendarEventService.generateEvents(contracts);
+
+            // Kündigungs-Reminder als Karten bauen
             final reminderCards = <Widget>[];
-            // Events Map füllen
-            _events = {};
 
             for (final contract in contracts) {
-              // Debug: Vertragsstart ausgeben
-              debugPrint(
-                "Vertrag '${contract.keyword}' startet am ${contract.contractRuntime.dt}",
-              );
-
-              // 1) Vertragsstart als Event
-              final startDate = contract.contractRuntime.dt;
-              final startDay = DateTime(
-                startDate.year,
-                startDate.month,
-                startDate.day,
-              );
-              _events.putIfAbsent(startDay, () => []);
-              _events[startDay]!.add("Vertragsstart: '${contract.keyword}'");
-
-              // 2) Erste Zahlung als Event (wenn vorhanden)
-
-              // 3) Kündigungserinnerung
               if (contract.contractQuitInterval.isQuitReminderAlertSet &&
                   contract.contractRuntime.isAutomaticExtend) {
-                final reminder = _generateQuitReminder(contract);
+                final reminder = CalendarEventService.generateQuitReminder(
+                  contract,
+                );
                 if (reminder != null) {
                   final reminderDate = reminder['reminderDate'] as DateTime;
-                  final reminderDay = DateTime(
-                    reminderDate.year,
-                    reminderDate.month,
-                    reminderDate.day,
-                  );
-                  _events.putIfAbsent(reminderDay, () => []);
-                  _events[reminderDay]!.add(
-                    "Kündigung für '${contract.keyword}' zum ${DateFormat('dd.MM.yyyy').format(reminderDate)}",
-                  );
-
                   reminderCards.add(
                     CalenderInfoCard(
                       textTopic: reminder['title'],
@@ -117,10 +95,6 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
                       ),
                       dateText: DateFormat('dd.MM.yyyy').format(reminderDate),
                     ),
-                  );
-                } else {
-                  debugPrint(
-                    "Kein Kündigungs-Reminder für '${contract.keyword}'",
                   );
                 }
               }
@@ -159,7 +133,6 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
                           child: Text("Keine Kündigungserinnerungen"),
                         ),
                 ),
-
                 FilledButton.icon(
                   onPressed: () {},
                   label: const Padding(
@@ -180,65 +153,5 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
         ),
       ),
     );
-  }
-
-  Map<String, dynamic>? _generateQuitReminder(Contract contract) {
-    final start = contract.contractRuntime.dt;
-
-    final contractEnd = DateTime(
-      start.year + contract.contractRuntime.howManyinInterval,
-      start.month,
-      start.day,
-    ).subtract(const Duration(days: 1));
-
-    final quitInterval = contract.contractQuitInterval.quitInterval;
-
-    DateTime quitDate;
-
-    switch (quitInterval) {
-      case QuitInterval.month:
-        quitDate = DateTime(
-          contractEnd.year,
-          contractEnd.month - contract.contractQuitInterval.howManyInQuitUnits,
-          contractEnd.day,
-        );
-        break;
-      case QuitInterval.week:
-        quitDate = DateTime(
-          contractEnd.year,
-          contractEnd.month,
-          contractEnd.day -
-              contract.contractQuitInterval.howManyInQuitUnits * 7,
-        );
-        break;
-      case QuitInterval.day:
-        quitDate = DateTime(
-          contractEnd.year,
-          contractEnd.month,
-          contractEnd.day - contract.contractQuitInterval.howManyInQuitUnits,
-        );
-        break;
-      case QuitInterval.year:
-        quitDate = DateTime(
-          contractEnd.year - contract.contractQuitInterval.howManyInQuitUnits,
-          contractEnd.month,
-          contractEnd.day,
-        );
-        break;
-    }
-
-    final reminderDate = quitDate.subtract(
-      const Duration(days: 10),
-    ); // 10 Tage vor Kündigungsfrist
-
-    if (reminderDate.isBefore(DateTime.now())) {
-      return null;
-    }
-
-    return {
-      'title':
-          "Kündigung vorbereiten für '${contract.keyword}'. Kündigung zum ${DateFormat('dd.MM.yyyy').format(contractEnd)}",
-      'reminderDate': reminderDate,
-    };
   }
 }

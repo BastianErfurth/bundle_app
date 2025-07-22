@@ -28,7 +28,7 @@ class CalendarEventService {
       // Kündigungserinnerung
       if (contract.contractQuitInterval.isQuitReminderAlertSet &&
           contract.contractRuntime.isAutomaticExtend) {
-        final reminder = _generateQuitReminder(contract);
+        final reminder = generateQuitReminder(contract);
         if (reminder != null) {
           final reminderDate = reminder['reminderDate'] as DateTime;
           final reminderDay = DateTime(
@@ -45,7 +45,7 @@ class CalendarEventService {
     return events;
   }
 
-  static Map<String, dynamic>? _generateQuitReminder(Contract contract) {
+  static Map<String, dynamic>? generateQuitReminder(Contract contract) {
     final start = contract.contractRuntime.dt;
 
     final contractEnd = DateTime(

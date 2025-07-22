@@ -1,3 +1,5 @@
+import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
+
 class GetEventsFunction {
   static final GetEventsFunction _instance = GetEventsFunction._internal();
 
@@ -31,4 +33,6 @@ class GetEventsFunction {
     instance._events.addAll(map);
     return instance;
   }
+
+  void setContracts(List<Contract> contracts) {}
 }
