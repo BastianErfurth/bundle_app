@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:bundle_app/src/data/auth_repository.dart';
+import 'package:bundle_app/src/feature/settings/presentation/impressum_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
@@ -360,6 +361,21 @@ class _SettingScreenState extends State<SettingScreen> {
                       backgroundColor: Palette.textWhite,
                     ),
                     child: const Text("Partnerprofil hinzufügen"),
+                  ),
+                  SizedBox(height: 16),
+                  FilledButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ImpressumScreen(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Palette.textWhite,
+                    ),
+                    child: const Text("Impressum"),
                   ),
                 ],
               ),
