@@ -1,7 +1,5 @@
 import 'package:bundle_app/src/feature/contracts/domain/contract_quit_interval.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
-import 'package:bundle_app/src/feature/contracts/domain/contract_runtime.dart';
-import 'package:bundle_app/src/feature/contracts/domain/contract_quit_interval.dart';
 import 'package:intl/intl.dart';
 
 class CalenderService {

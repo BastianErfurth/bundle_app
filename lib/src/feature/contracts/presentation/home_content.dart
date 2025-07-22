@@ -1,7 +1,6 @@
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/calender/domain/calender_events.dart';
-import 'package:bundle_app/src/feature/calender/domain/get_events_function.dart';
 import 'package:bundle_app/src/feature/calender/presentation/calender_screen.dart';
 import 'package:bundle_app/src/feature/calender/presentation/widgets/my_table_calender.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart'
@@ -16,7 +15,6 @@ import 'package:bundle_app/src/feature/costs/presentation/widgets/barcart_cost.d
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class HomeContent extends StatefulWidget {
   const HomeContent({super.key});
@@ -27,7 +25,6 @@ class HomeContent extends StatefulWidget {
 
 class _HomeContentState extends State<HomeContent> {
   late Future<List<contracts_domain.Contract>> _contractsFuture;
-  final GetEventsFunction _eventService = GetEventsFunction();
 
   @override
   void initState() {

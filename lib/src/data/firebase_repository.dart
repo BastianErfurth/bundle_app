@@ -268,7 +268,7 @@ class FirebaseRepository implements DatabaseRepository {
   Future<Map<DateTime, List<String>>> getEvents() async {
     final List<Contract> contracts =
         await getMyContracts(); // Beispielhafte Verwendung
-    final Map<DateTime, List<String>> _events = {};
+    final Map<DateTime, List<String>> events = {};
 
     for (final contract in contracts) {
       // Debug: Vertragsstart ausgeben
@@ -279,8 +279,8 @@ class FirebaseRepository implements DatabaseRepository {
       // 1) Vertragsstart als Event
       final startDate = contract.contractRuntime.dt;
       final startDay = DateTime(startDate.year, startDate.month, startDate.day);
-      _events.putIfAbsent(startDay, () => []);
-      _events[startDay]!.add("Vertragsstart: '${contract.keyword}'");
+      events.putIfAbsent(startDay, () => []);
+      events[startDay]!.add("Vertragsstart: '${contract.keyword}'");
 
       // 2) Erste Zahlung als Event (wenn vorhanden)
       final firstCostDate = contract.contractCostRoutine.firstCostDate;
@@ -290,8 +290,8 @@ class FirebaseRepository implements DatabaseRepository {
           firstCostDate.month,
           firstCostDate.day,
         );
-        _events.putIfAbsent(paymentDay, () => []);
-        _events[paymentDay]!.add("Erste Zahlung: '${contract.keyword}'");
+        events.putIfAbsent(paymentDay, () => []);
+        events[paymentDay]!.add("Erste Zahlung: '${contract.keyword}'");
       }
 
       // 3) Kündigungserinnerung
@@ -305,8 +305,8 @@ class FirebaseRepository implements DatabaseRepository {
             reminderDate.month,
             reminderDate.day,
           );
-          _events.putIfAbsent(reminderDay, () => []);
-          _events[reminderDay]!.add(
+          events.putIfAbsent(reminderDay, () => []);
+          events[reminderDay]!.add(
             "Kündigung für '${contract.keyword}' zum ${DateFormat('dd.MM.yyyy').format(reminderDate)}",
           );
         }
@@ -315,7 +315,7 @@ class FirebaseRepository implements DatabaseRepository {
         throw UnimplementedError();
       }
     }
-    return _events;
+    return events;
   }
 
   Map<String, dynamic>? _generateQuitReminder(Contract contract) {

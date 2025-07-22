@@ -12,7 +12,7 @@ import 'package:bundle_app/src/feature/contracts/presentation/view_contract_scre
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 
-import 'calendar_event_service.dart'; // Dein Service importieren
+// Dein Service importieren
 
 class CalenderTestScreen extends StatefulWidget {
   const CalenderTestScreen({super.key});
