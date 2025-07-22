@@ -54,7 +54,7 @@ class ContractQuitInterval {
 
   factory ContractQuitInterval.fromMap(Map<String, dynamic> map) {
     return ContractQuitInterval(
-      howManyInQuitUnits: map['howManyInQuitUnits'] ?? 0,
+      howManyInQuitUnits: map['howManyInQuitUnits'] ?? '0',
       quitInterval:
           QuitInterval.fromLabel(map['quitInterval']) ?? QuitInterval.month,
       isQuitReminderAlertSet: map['isQuitReminderAlertSet'] ?? false,

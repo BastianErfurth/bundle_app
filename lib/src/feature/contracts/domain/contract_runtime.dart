@@ -53,7 +53,7 @@ class ContractRuntime {
   factory ContractRuntime.fromMap(Map<String, dynamic> map) {
     return ContractRuntime(
       dt: DateTime.parse(map['dt']),
-      howManyinInterval: map['howManyinInterval'] ?? 0,
+      howManyinInterval: map['howManyinInterval'] ?? '0',
       interval: Interval.values.firstWhere(
         (e) => e.name == map['interval'],
         orElse: () => Interval.month,

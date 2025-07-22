@@ -33,7 +33,7 @@ class ContractCostRoutine {
 
   factory ContractCostRoutine.fromMap(Map<String, dynamic> map) {
     return ContractCostRoutine(
-      costsInCents: map['costsInCents'] ?? 0,
+      costsInCents: map['costsInCents'] ?? '0',
       firstCostDate: map['firstCostDate'] != null
           ? DateTime.parse(map['firstCostDate'])
           : null,
