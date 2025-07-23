@@ -70,7 +70,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
       listen: false,
     );
     super.initState();
-    _userProfilesFuture = (db as FirebaseRepository).getUserProfiles();
+    _userProfilesFuture = db.getUserProfiles();
     _contractPartnerProfilesFuture = (db)
         .getContractors(); // Future für Vertragspartner laden
     // Future für UserProfile laden
@@ -213,8 +213,16 @@ class _AddContractScreenState extends State<AddContractScreen> {
                                     ),
                                   )
                                   .then((_) {
-                                    // Nach Rückkehr: Liste neu laden, falls nötig
-                                    setState(() {});
+                                    final db = Provider.of<DatabaseRepository>(
+                                      context,
+                                      listen: false,
+                                    );
+                                    setState(() {
+                                      _userProfilesFuture = db
+                                          .getUserProfiles();
+                                      _contractPartnerProfilesFuture = db
+                                          .getContractors();
+                                    });
                                   });
                             },
                             icon: Icon(Icons.add),
@@ -267,7 +275,16 @@ class _AddContractScreenState extends State<AddContractScreen> {
                                     ),
                                   )
                                   .then((_) {
-                                    setState(() {}); // Liste neu laden
+                                    final db = Provider.of<DatabaseRepository>(
+                                      context,
+                                      listen: false,
+                                    );
+                                    setState(() {
+                                      _userProfilesFuture = db
+                                          .getUserProfiles();
+                                      _contractPartnerProfilesFuture = db
+                                          .getContractors();
+                                    });
                                   });
                             },
                             icon: Icon(Icons.add),
