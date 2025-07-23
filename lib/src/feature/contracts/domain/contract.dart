@@ -8,6 +8,7 @@ import 'extra_contract_information.dart';
 
 class Contract {
   //Attribute
+  String? userId;
   String? id;
   ContractCategory category;
   String keyword;
@@ -22,6 +23,7 @@ class Contract {
   //Konstruktor
 
   Contract({
+    this.userId,
     this.id,
     required this.category,
     required this.keyword,
@@ -36,6 +38,7 @@ class Contract {
 
   Map<String, dynamic> toMap() {
     return {
+      'userId': userId,
       'id': id,
       'category': category.name,
       'keyword': keyword,
@@ -52,6 +55,7 @@ class Contract {
   factory Contract.fromMap(Map<String, dynamic> map, {String? id}) {
     return Contract(
       id: id,
+      userId: map['userId'],
       category: ContractCategory.values.firstWhere(
         (e) => e.name == map['category'],
         orElse: () => ContractCategory.other,

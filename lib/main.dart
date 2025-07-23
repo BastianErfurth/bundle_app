@@ -14,7 +14,7 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final AuthRepository auth = FirebaseAuthRepository();
-  final DatabaseRepository db = MockDatabaseRepository();
+  final DatabaseRepository db = FirebaseRepository();
 
   runApp(
     MultiProvider(

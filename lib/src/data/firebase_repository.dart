@@ -149,7 +149,12 @@ class FirebaseRepository implements DatabaseRepository {
 
   @override
   Future<void> addContract(Contract newContract) async {
-    await fs.collection("mycontracts").add(newContract.toMap());
+    final user = fbAuth.currentUser;
+    if (user == null) throw Exception("Kein angemeldeter Nutzer");
+
+    final data = newContract.toMap();
+    data['userId'] = user.uid;
+    await fs.collection("mycontracts").add(data);
   }
 
   @override
@@ -168,30 +173,66 @@ class FirebaseRepository implements DatabaseRepository {
     await docRef.update(updatedContract.toMap());
   }
 
-  @override
   Future<List<Contract>> getMyContracts() async {
-    final user = fbAuth.currentUser;
-    if (user == null) {
-      return [];
-    }
-    final userId = user.uid;
+    final user = FirebaseAuth.instance.currentUser;
+    //print('Aktueller User: ${user?.uid}');
 
-    final snap = await fs
-        .collection("mycontracts")
-        .where("userId", isEqualTo: userId)
+    final snapshot = await fs
+        .collection('mycontracts')
+        .where('userId', isEqualTo: user?.uid)
         .get();
 
-    return snap.docs.map((e) => Contract.fromMap(e.data(), id: e.id)).toList();
+    //print('Contracts gefunden: ${snapshot.docs.length}');
+
+    return snapshot.docs
+        .map((doc) {
+          try {
+            return Contract.fromMap(doc.data(), id: doc.id);
+          } catch (e) {
+            //print('Fehler beim Parsen: $e');
+            return null;
+          }
+        })
+        .whereType<Contract>()
+        .toList();
   }
+
+  // @override
+  // Future<List<Contract>> getMyContracts() async {
+  //   final user = fbAuth.currentUser;
+  //   if (user == null) {
+  //     return [];
+  //   }
+  //   final userId = user.uid;
+
+  //   final snap = await fs
+  //       .collection("mycontracts")
+  //       .where("userId", isEqualTo: userId)
+  //       .get();
+
+  //   return snap.docs.map((e) => Contract.fromMap(e.data(), id: e.id)).toList();
+  // }
 
   @override
   Future<void> addContractPartnerProfile(ContractPartnerProfile profile) async {
-    await fs.collection("mycontractors").add(profile.toMap());
+    final user = fbAuth.currentUser;
+    if (user == null) throw Exception("Kein angemeldeter Nutzer");
+
+    final data = profile.toMap();
+    data['userId'] = user.uid;
+
+    await fs.collection("mycontractors").add(data);
   }
 
   @override
   Future<void> addUserProfile(UserProfile profile) async {
-    await fs.collection("myuserprofiles").add(profile.toMap());
+    final user = fbAuth.currentUser;
+    if (user == null) throw Exception("Kein angemeldeter Nutzer");
+
+    final data = profile.toMap();
+    data['userId'] = user.uid; // <-- Wichtig, damit du später filtern kannst
+
+    await fs.collection("myuserprofiles").add(data);
   }
 
   @override
