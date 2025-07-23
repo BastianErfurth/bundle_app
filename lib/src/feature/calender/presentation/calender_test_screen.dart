@@ -46,6 +46,7 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
     context.watch<DatabaseRepository>();
 
     return Scaffold(
+      appBar: AppBar(backgroundColor: Palette.backgroundGreenBlue),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: FutureBuilder<List<Contract>>(
