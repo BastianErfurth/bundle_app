@@ -8,7 +8,6 @@ abstract class DatabaseRepository {
   Future<void> modifyContract(Contract contractName);
   Future<void> deleteContract(Contract docDeleteName);
   Future<List<Contract>> getMyContracts();
-  //Future<Map<DateTime, List<String>>> getEvents();
 
   // UserProfiles
   Future<List<UserProfile>> getUserProfiles();
