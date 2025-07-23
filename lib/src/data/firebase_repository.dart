@@ -173,6 +173,7 @@ class FirebaseRepository implements DatabaseRepository {
     await docRef.update(updatedContract.toMap());
   }
 
+  @override
   Future<List<Contract>> getMyContracts() async {
     final user = FirebaseAuth.instance.currentUser;
     //print('Aktueller User: ${user?.uid}');
