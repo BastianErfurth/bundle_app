@@ -2,6 +2,7 @@ import 'package:bundle_app/firebase_options.dart';
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/data/firebase_auth_repository.dart';
+import 'package:bundle_app/src/data/firebase_repository.dart';
 import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/main_app.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,7 +14,7 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final AuthRepository auth = FirebaseAuthRepository();
-  final DatabaseRepository db = MockDatabaseRepository();
+  final DatabaseRepository db = FirebaseRepository();
 
   runApp(
     MultiProvider(

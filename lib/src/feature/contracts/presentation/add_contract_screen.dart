@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:bundle_app/src/data/database_repository.dart';
+import 'package:bundle_app/src/data/firebase_repository.dart';
 import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
@@ -69,7 +70,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
       listen: false,
     );
     super.initState();
-    _userProfilesFuture = (db as MockDatabaseRepository).getUserProfiles();
+    _userProfilesFuture = (db as FirebaseRepository).getUserProfiles();
     _contractPartnerProfilesFuture = (db)
         .getContractors(); // Future für Vertragspartner laden
     // Future für UserProfile laden
