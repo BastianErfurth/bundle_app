@@ -150,9 +150,10 @@ class MockDatabaseRepository implements DatabaseRepository {
   }
 
   @override
-  Future<void> deleteContract(Contract docDeleteName) async {
+  Future<void> deleteContract(String contractId) async {
     await Future.delayed(Duration(seconds: 5));
-    myContracts.remove(docDeleteName);
+    // ignore: collection_methods_unrelated_type
+    myContracts.remove(contractId);
   }
 
   @override

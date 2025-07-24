@@ -6,7 +6,7 @@ abstract class DatabaseRepository {
   // Verträge
   Future<void> addContract(Contract newContract);
   Future<void> modifyContract(Contract contractName);
-  Future<void> deleteContract(Contract docDeleteName);
+  Future<void> deleteContract(String contractId);
   Future<List<Contract>> getMyContracts();
 
   // UserProfiles

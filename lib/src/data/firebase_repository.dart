@@ -158,8 +158,8 @@ class FirebaseRepository implements DatabaseRepository {
   }
 
   @override
-  Future<void> deleteContract(Contract docDeleteName) async {
-    await fs.collection("mycontracts").doc().delete();
+  Future<void> deleteContract(String contractId) async {
+    await fs.collection("mycontracts").doc(contractId).delete();
   }
 
   @override

@@ -67,9 +67,8 @@ class _ContractListContainerState extends State<ContractListContainer> {
               );
 
               if (confirm == true) {
-                await widget.db.deleteContract(widget.contract.contractNumber);
-
-                // Optional: Zeige Bestätigung
+                await widget.db.deleteContract(widget.contract.id!);
+                widget.onDelete?.call(); // 👉 hier Trigger
                 ScaffoldMessenger.of(
                   context,
                 ).showSnackBar(SnackBar(content: Text("Vertrag gelöscht")));
