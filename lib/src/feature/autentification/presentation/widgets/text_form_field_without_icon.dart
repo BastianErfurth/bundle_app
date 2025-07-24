@@ -7,6 +7,7 @@ class TextFormFieldWithoutIcon extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
   final List<String> autofillHints;
 
   const TextFormFieldWithoutIcon({
@@ -17,6 +18,7 @@ class TextFormFieldWithoutIcon extends StatelessWidget {
     required this.controller,
     this.keyboardType,
     required this.autofillHints,
+    this.textInputAction,
   });
 
   @override

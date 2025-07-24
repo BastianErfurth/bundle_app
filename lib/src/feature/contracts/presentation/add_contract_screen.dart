@@ -389,7 +389,8 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       labelText: "Kosten eingeben",
                       hintText: "Kosten in EUR",
                       controller: _costController,
-                      //keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Bitte Kosten eingeben";
