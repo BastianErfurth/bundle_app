@@ -198,22 +198,6 @@ class FirebaseRepository implements DatabaseRepository {
         .toList();
   }
 
-  // @override
-  // Future<List<Contract>> getMyContracts() async {
-  //   final user = fbAuth.currentUser;
-  //   if (user == null) {
-  //     return [];
-  //   }
-  //   final userId = user.uid;
-
-  //   final snap = await fs
-  //       .collection("mycontracts")
-  //       .where("userId", isEqualTo: userId)
-  //       .get();
-
-  //   return snap.docs.map((e) => Contract.fromMap(e.data(), id: e.id)).toList();
-  // }
-
   @override
   Future<void> addContractPartnerProfile(ContractPartnerProfile profile) async {
     final user = fbAuth.currentUser;

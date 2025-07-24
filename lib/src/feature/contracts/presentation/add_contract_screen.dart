@@ -1,8 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:bundle_app/src/data/database_repository.dart';
-import 'package:bundle_app/src/data/firebase_repository.dart';
-import 'package:bundle_app/src/data/mock_database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract_category.dart';
@@ -391,7 +389,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       labelText: "Kosten eingeben",
                       hintText: "Kosten in EUR",
                       controller: _costController,
-                      keyboardType: TextInputType.number,
+                      //keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Bitte Kosten eingeben";
