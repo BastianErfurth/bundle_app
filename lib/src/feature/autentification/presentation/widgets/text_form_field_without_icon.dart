@@ -11,6 +11,7 @@ class TextFormFieldWithoutIcon extends StatelessWidget {
   final TextInputAction? textInputAction;
   final List<String> autofillHints;
   final List<TextInputFormatter>? inputFormatters;
+  final ValueChanged<String>? onFieldSubmitted;
 
   const TextFormFieldWithoutIcon({
     super.key,
@@ -22,6 +23,7 @@ class TextFormFieldWithoutIcon extends StatelessWidget {
     required this.autofillHints,
     this.textInputAction,
     this.inputFormatters,
+    this.onFieldSubmitted,
   });
 
   @override
@@ -42,6 +44,9 @@ class TextFormFieldWithoutIcon extends StatelessWidget {
           validator: validator,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType: keyboardType,
+          textInputAction: textInputAction,
+          inputFormatters: inputFormatters,
+          onFieldSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
             labelText: labelText,
             isDense: true,

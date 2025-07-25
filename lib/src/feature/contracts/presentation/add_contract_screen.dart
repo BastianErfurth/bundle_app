@@ -418,24 +418,30 @@ class _AddContractScreenState extends State<AddContractScreen> {
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
                       ],
                       textInputAction: TextInputAction.done,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).unfocus(); // Tastatur schließen
+                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Bitte Kosten eingeben";
-                        } else if (double.tryParse(value) == null) {
+                        }
+                        final normalizedValue = value.replaceAll(',', '.');
+                        final parsedValue = double.tryParse(normalizedValue);
+                        if (parsedValue == null) {
                           return "Bitte eine gültige Zahl eingeben";
                         }
-                        final cost = double.parse(value);
-                        if (cost < 0) {
+                        if (parsedValue < 0) {
                           return "Kosten dürfen nicht negativ sein";
                         }
-                        if (cost > 1000000) {
+                        if (parsedValue > 1000000) {
                           return "Kosten dürfen nicht mehr als 1.000.000 EUR betragen";
                         }
-                        if (cost > 10000) {
+                        if (parsedValue > 10000) {
                           return "Kosten sollten realistisch sein";
                         }
                         return null;
                       },
+
                       autofillHints: [],
                     ),
                     SizedBox(height: 6),
