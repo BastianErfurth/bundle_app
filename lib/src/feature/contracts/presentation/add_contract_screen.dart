@@ -368,6 +368,27 @@ class _AddContractScreenState extends State<AddContractScreen> {
                         onPressed: () {
                           setState(() {
                             _kuendigungserinnerung = !_kuendigungserinnerung;
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Kündigungserinnerung'),
+                                  content: Text(
+                                    "Die Kündigungserinnerung wird 10 Tage vor der Kündigungsfrist aktiviert.",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(
+                                          context,
+                                        ).pop(); // Schließt den Dialog
+                                      },
+                                      child: Text('Schließen'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           });
                         },
                         icon: Icon(
