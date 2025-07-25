@@ -410,7 +410,9 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       labelText: "Kosten eingeben",
                       hintText: "Kosten in EUR",
                       controller: _costController,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
                       textInputAction: TextInputAction.done,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
