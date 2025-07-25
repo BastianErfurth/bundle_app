@@ -44,7 +44,7 @@ class _CostScreenState extends State<CostScreen> {
               ),
               SizedBox(height: 16),
               DropDownSelectField<ContractCategory?>(
-                labelText: "Kategorie wählen",
+                labelText: "",
                 values: [null, ...ContractCategory.values],
                 itemLabel: (ContractCategory? category) =>
                     category == null ? "Alle Kategorien" : category.label,
@@ -79,7 +79,7 @@ class _CostScreenState extends State<CostScreen> {
 
                     return DropDownSelectField<Contract?>(
                       values: filteredContracts,
-                      labelText: "Vertrag auswählen",
+                      labelText: "",
                       selectedValue: _selectedContract,
                       itemLabel: (Contract? contract) {
                         if (contract == null) return "Alle Verträge";
@@ -103,7 +103,7 @@ class _CostScreenState extends State<CostScreen> {
                   icon: Icon(Icons.expand_more),
                 ),
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 4),
               ContractAttributes(
                 textTopic: "Jahr wählen",
                 valueText: _auswahljahr.toString(),
