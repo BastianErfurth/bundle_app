@@ -45,10 +45,10 @@ class _MyTableCalenderState extends State<MyTableCalender> {
               width: 6,
               height: 6,
               decoration: BoxDecoration(
-                color: Palette.calenderAlert, // 🔴 Farbe hier ändern
+                color: Palette.calenderAlert, // Farbe hier ändern
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Palette.backgroundGreenBlue, // 🔴 Randfarbe
+                  color: Palette.backgroundGreenBlue, // Randfarbe
                   width: 0.5,
                 ),
               ),

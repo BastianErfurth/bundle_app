@@ -1,10 +1,12 @@
 import 'package:bundle_app/src/data/auth_repository.dart';
+import 'package:bundle_app/src/feature/calender/domain/calender_events.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/contracts/domain/contract.dart';
+
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart'; // für Datum
+import 'package:provider/provider.dart';
 
 class ViewContractScreen extends StatefulWidget {
   final String contractNumber;
@@ -61,6 +63,7 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
   Widget build(BuildContext context) {
     context.watch<AuthRepository>();
     context.watch<DatabaseRepository>();
+
     if (_isLoading) {
       return Scaffold(
         appBar: AppBar(title: Text('Vertrag ansehen')),
@@ -77,6 +80,11 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
 
     final contract = _contract!;
     final extraInfo = contract.extraContractInformations.toString().trim();
+
+    // Kündigungserinnerung berechnen
+    final reminderInfo = CalendarEventService.generateQuitReminder(contract);
+    final reminderDate = reminderInfo?['reminderDate'] as DateTime?;
+    final reminderTitle = reminderInfo?['title'] as String?;
 
     return Scaffold(
       appBar: AppBar(
@@ -160,16 +168,28 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
             Text(
               'Zahlungsintervall: ${contract.contractCostRoutine.costRepeatInterval.name}',
             ),
-            SizedBox(height: 8),
 
-            // Nur anzeigen, wenn Zusatzinformationen vorhanden sind
+            // Zusatzinformationen
             if (extraInfo.isNotEmpty) ...[
-              SizedBox(height: 8),
+              SizedBox(height: 16),
               Text(
                 'Zusatzinformationen:',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text(contract.extraContractInformations.toString()),
+              Text(extraInfo),
+            ],
+
+            // Kündigungserinnerung anzeigen
+            if (reminderDate != null) ...[
+              SizedBox(height: 16),
+              Divider(),
+              Text(
+                '🔔 Kündigungserinnerung',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 4),
+              Text(reminderTitle ?? 'Kündigungserinnerung vorhanden'),
+              Text('Datum: ${dateFormat.format(reminderDate)}'),
             ],
           ],
         ),
