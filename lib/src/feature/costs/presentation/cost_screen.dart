@@ -104,6 +104,15 @@ class _CostScreenState extends State<CostScreen> {
                 ),
               ),
               SizedBox(height: 8),
+              ContractAttributes(
+                textTopic: "Jahr wählen",
+                valueText: _auswahljahr.toString(),
+                trailing: IconButton(
+                  icon: Icon(Icons.expand_more),
+                  onPressed: showYearPicker,
+                ),
+              ),
+              SizedBox(height: 8),
               Container(
                 width: 250,
                 decoration: BoxDecoration(
@@ -152,15 +161,6 @@ class _CostScreenState extends State<CostScreen> {
               ),
 
               SizedBox(height: 8),
-              ContractAttributes(
-                textTopic: "Jahr wählen",
-                valueText: _auswahljahr.toString(),
-                trailing: IconButton(
-                  icon: Icon(Icons.expand_more),
-                  onPressed: showYearPicker,
-                ),
-              ),
-              SizedBox(height: 40),
               BarchartCost(auswahljahr: _auswahljahr, future: getCostList()),
 
               SizedBox(height: 24),
