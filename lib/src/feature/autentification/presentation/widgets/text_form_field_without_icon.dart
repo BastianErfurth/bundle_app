@@ -1,5 +1,6 @@
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TextFormFieldWithoutIcon extends StatelessWidget {
   final String labelText;
@@ -9,6 +10,7 @@ class TextFormFieldWithoutIcon extends StatelessWidget {
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final List<String> autofillHints;
+  final List<TextInputFormatter>? inputFormatters;
 
   const TextFormFieldWithoutIcon({
     super.key,
@@ -19,6 +21,7 @@ class TextFormFieldWithoutIcon extends StatelessWidget {
     this.keyboardType,
     required this.autofillHints,
     this.textInputAction,
+    this.inputFormatters,
   });
 
   @override

@@ -17,6 +17,7 @@ import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_head
 import 'package:bundle_app/src/feature/settings/presentation/setting_screen.dart';
 import 'package:bundle_app/src/theme/palette.dart';
 import 'package:flutter/material.dart' hide Interval;
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_picker_plus/flutter_picker_plus.dart';
 import 'package:provider/provider.dart';
@@ -413,6 +414,9 @@ class _AddContractScreenState extends State<AddContractScreen> {
                       keyboardType: TextInputType.numberWithOptions(
                         decimal: true,
                       ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+                      ],
                       textInputAction: TextInputAction.done,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
