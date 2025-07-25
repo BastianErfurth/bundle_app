@@ -33,6 +33,29 @@ class _MyTableCalenderState extends State<MyTableCalender> {
         formatButtonVisible: false,
         titleTextStyle: TextStyle(fontSize: 14),
       ),
+      calendarBuilders: CalendarBuilders(
+        markerBuilder: (context, date, events) {
+          if (events.isEmpty) return const SizedBox.shrink();
+
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: events.length,
+            itemBuilder: (context, index) => Container(
+              margin: const EdgeInsets.symmetric(horizontal: 1.5),
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(
+                color: Palette.calenderAlert, // 🔴 Farbe hier ändern
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Palette.backgroundGreenBlue, // 🔴 Randfarbe
+                  width: 1.5,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
 
       // Tag anklicken: Events anzeigen
       onDaySelected: (selectedDay, focusedDay) {

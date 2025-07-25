@@ -49,113 +49,108 @@ class _CalenderTestScreenState extends State<CalenderTestScreen> {
       appBar: AppBar(backgroundColor: Palette.backgroundGreenBlue),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: FutureBuilder<List<Contract>>(
-            future: _futureContracts,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+        child: FutureBuilder<List<Contract>>(
+          future: _futureContracts,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text("Keine Verträge gefunden"));
-              }
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text("Keine Verträge gefunden"));
+            }
 
-              final contracts = snapshot.data!;
+            final contracts = snapshot.data!;
 
-              // Events über Service generieren
-              _events = CalendarEventService.generateEvents(contracts);
+            // Events über Service generieren
+            _events = CalendarEventService.generateEvents(contracts);
 
-              // Kündigungs-Reminder als Karten bauen
-              final reminderCards = <Widget>[];
+            // Kündigungs-Reminder als Karten bauen
+            final reminderCards = <Widget>[];
 
-              for (final contract in contracts) {
-                if (contract.contractQuitInterval.isQuitReminderAlertSet &&
-                    contract.contractRuntime.isAutomaticExtend) {
-                  final reminder = CalendarEventService.generateQuitReminder(
-                    contract,
-                  );
-                  if (reminder != null) {
-                    final reminderDate = reminder['reminderDate'] as DateTime;
-                    reminderCards.add(
-                      CalenderInfoCard(
-                        textTopic: reminder['title'],
-                        iconButton: IconButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => ViewContractScreen(
-                                  contractNumber: contract.contractNumber,
-                                ),
+            for (final contract in contracts) {
+              if (contract.contractQuitInterval.isQuitReminderAlertSet &&
+                  contract.contractRuntime.isAutomaticExtend) {
+                final reminder = CalendarEventService.generateQuitReminder(
+                  contract,
+                );
+                if (reminder != null) {
+                  final reminderDate = reminder['reminderDate'] as DateTime;
+                  reminderCards.add(
+                    CalenderInfoCard(
+                      textTopic: reminder['title'],
+                      iconButton: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => ViewContractScreen(
+                                contractNumber: contract.contractNumber,
                               ),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.visibility_rounded,
-                            color: Palette.textWhite,
-                          ),
+                            ),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.visibility_rounded,
+                          color: Palette.textWhite,
                         ),
-                        dateText: DateFormat('dd.MM.yyyy').format(reminderDate),
                       ),
-                    );
-                  }
+                      dateText: DateFormat('dd.MM.yyyy').format(reminderDate),
+                    ),
+                  );
                 }
               }
+            }
 
-              return Column(
-                children: [
-                  const TopicHeadline(
-                    topicIcon: Icon(Icons.calendar_month),
-                    topicText: "Mein Kalender",
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    height: 280,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Palette.buttonTextGreenBlue,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: MyTableCalender(
-                          getEventsForDay: _getEventsForDay,
-                        ),
+            return Column(
+              children: [
+                const TopicHeadline(
+                  topicIcon: Icon(Icons.calendar_month),
+                  topicText: "Mein Kalender",
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  height: 280,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Palette.buttonTextGreenBlue,
+                        borderRadius: BorderRadius.circular(12),
                       ),
+                      child: MyTableCalender(getEventsForDay: _getEventsForDay),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: reminderCards.isNotEmpty
-                        ? ListView.separated(
-                            itemCount: reminderCards.length,
-                            itemBuilder: (context, index) =>
-                                reminderCards[index],
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: 4),
-                          )
-                        : const Center(
-                            child: Text("Keine Kündigungserinnerungen"),
-                          ),
-                  ),
-                  FilledButton.icon(
-                    onPressed: () {},
-                    label: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.send_rounded),
-                          SizedBox(width: 8),
-                          Text("Terminübersicht versenden"),
-                        ],
-                      ),
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: reminderCards.isNotEmpty
+                      ? ListView.separated(
+                          itemCount: reminderCards.length,
+                          itemBuilder: (context, index) => reminderCards[index],
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 4),
+                        )
+                      : const Center(
+                          child: Text("Keine Kündigungserinnerungen"),
+                        ),
+                ),
+                FilledButton.icon(
+                  onPressed: () {},
+                  label: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.send_rounded),
+                        SizedBox(width: 8),
+                        Text("Terminübersicht versenden"),
+                      ],
                     ),
                   ),
-                ],
-              );
-            },
-          ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
