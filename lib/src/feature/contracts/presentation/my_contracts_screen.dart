@@ -87,177 +87,173 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
     context.watch<AuthRepository>();
     final db = context.watch<DatabaseRepository>();
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    FilledButton.icon(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
-                        );
-                      },
-                      label: Row(
-                        children: [Icon(Icons.close), Text("Abbrechen")],
-                      ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FilledButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
+                    },
+                    label: Row(
+                      children: [Icon(Icons.close), Text("Abbrechen")],
                     ),
-                    FilledButton.icon(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .push(
-                              MaterialPageRoute(
-                                builder: (context) => AddContractScreen(),
-                              ),
-                            )
-                            .then((result) {
-                              if (result == true) {
-                                _applyFilters(db);
+                  ),
+                  FilledButton.icon(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(
+                            MaterialPageRoute(
+                              builder: (context) => AddContractScreen(),
+                            ),
+                          )
+                          .then((result) {
+                            if (result == true) {
+                              _applyFilters(db);
 
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Vertrag erfolgreich gespeichert',
-                                    ),
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Vertrag erfolgreich gespeichert',
                                   ),
-                                );
-                              }
-                            });
-                      },
-                      label: Row(
-                        children: [Icon(Icons.add), Text("Hinzufügen")],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                TopicHeadline(
-                  topicIcon: Icon(Icons.description),
-                  topicText: "Meine Verträge",
-                ),
-                SizedBox(height: 8),
+                                ),
+                              );
+                            }
+                          });
+                    },
+                    label: Row(children: [Icon(Icons.add), Text("Hinzufügen")]),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              TopicHeadline(
+                topicIcon: Icon(Icons.description),
+                topicText: "Meine Verträge",
+              ),
+              SizedBox(height: 8),
 
-                DropDownSelectField<UserProfile?>(
-                  labelText: "Profil wählen",
-                  values: [null, ..._userProfiles],
-                  itemLabel: (profile) => profile == null
-                      ? "Alle Profile"
-                      : '${profile.firstName} ${profile.lastName}',
-                  selectedValue: _selectedUserProfile,
-                  onChanged: (UserProfile? newValue) {
-                    setState(() {
-                      _selectedUserProfile = newValue;
-                      _applyFilters(db);
-                    });
-                  },
-                ),
-                SizedBox(height: 4),
+              DropDownSelectField<UserProfile?>(
+                labelText: "Profil wählen",
+                values: [null, ..._userProfiles],
+                itemLabel: (profile) => profile == null
+                    ? "Alle Profile"
+                    : '${profile.firstName} ${profile.lastName}',
+                selectedValue: _selectedUserProfile,
+                onChanged: (UserProfile? newValue) {
+                  setState(() {
+                    _selectedUserProfile = newValue;
+                    _applyFilters(db);
+                  });
+                },
+              ),
+              SizedBox(height: 4),
 
-                TextFormFieldWithoutIcon(
-                  labelText: "Suchbegriff eingeben",
-                  hintText: "Stichwort",
-                  controller: _searchController,
-                  validator: (_) => null,
-                  autofillHints: [],
-                ),
-                SizedBox(height: 4),
+              TextFormFieldWithoutIcon(
+                labelText: "Suchbegriff eingeben",
+                hintText: "Stichwort",
+                controller: _searchController,
+                validator: (_) => null,
+                autofillHints: [],
+              ),
+              SizedBox(height: 4),
 
-                DropDownSelectField<ContractCategory?>(
-                  labelText: "Kategorie wählen",
-                  values: [null, ...ContractCategory.values],
-                  itemLabel: (category) =>
-                      category == null ? "Alle Kategorien" : category.label,
-                  selectedValue: _selectedContractCategory,
-                  onChanged: (ContractCategory? newValue) {
-                    setState(() {
-                      _selectedContractCategory = newValue;
-                      _applyFilters(db);
-                    });
-                  },
-                ),
-                SizedBox(height: 16),
+              DropDownSelectField<ContractCategory?>(
+                labelText: "Kategorie wählen",
+                values: [null, ...ContractCategory.values],
+                itemLabel: (category) =>
+                    category == null ? "Alle Kategorien" : category.label,
+                selectedValue: _selectedContractCategory,
+                onChanged: (ContractCategory? newValue) {
+                  setState(() {
+                    _selectedContractCategory = newValue;
+                    _applyFilters(db);
+                  });
+                },
+              ),
+              SizedBox(height: 16),
 
-                FutureBuilder<List<Contract>>(
+              FutureBuilder<List<Contract>>(
+                future: _filteredContracts,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SizedBox(
+                      height: 120,
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: 150,
+                          child: ContractPieChart(contracts: snapshot.data!),
+                        ),
+                        SizedBox(height: 16),
+                      ],
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              ),
+
+              Expanded(
+                child: FutureBuilder<List<Contract>>(
                   future: _filteredContracts,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return SizedBox(
-                        height: 120,
-                        child: Center(child: CircularProgressIndicator()),
-                      );
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text("Fehler: ${snapshot.error}"));
                     } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                      return Column(
-                        children: [
-                          SizedBox(
-                            height: 150,
-                            child: ContractPieChart(contracts: snapshot.data!),
-                          ),
-                          SizedBox(height: 16),
-                        ],
+                      final contracts = snapshot.data!;
+                      return ListView.builder(
+                        itemCount: contracts.length,
+                        itemBuilder: (context, index) {
+                          final contract = contracts[index];
+                          return Column(
+                            children: [
+                              ContractListContainer(
+                                contract: contract,
+                                db: db,
+                                onDelete: () {
+                                  _applyFilters(db);
+                                },
+                              ),
+                              SizedBox(height: 4),
+                            ],
+                          );
+                        },
                       );
                     } else {
-                      return SizedBox.shrink();
+                      return Center(child: Text("Keine Verträge gefunden"));
                     }
                   },
                 ),
+              ),
 
-                Expanded(
-                  child: FutureBuilder<List<Contract>>(
-                    future: _filteredContracts,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text("Fehler: ${snapshot.error}"));
-                      } else if (snapshot.hasData &&
-                          snapshot.data!.isNotEmpty) {
-                        final contracts = snapshot.data!;
-                        return ListView.builder(
-                          itemCount: contracts.length,
-                          itemBuilder: (context, index) {
-                            final contract = contracts[index];
-                            return Column(
-                              children: [
-                                ContractListContainer(
-                                  contract: contract,
-                                  db: db,
-                                  onDelete: () {
-                                    _applyFilters(db);
-                                  },
-                                ),
-                                SizedBox(height: 4),
-                              ],
-                            );
-                          },
-                        );
-                      } else {
-                        return Center(child: Text("Keine Verträge gefunden"));
-                      }
-                    },
+              FilledButton.icon(
+                onPressed: () {},
+                label: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.send_rounded),
+                      SizedBox(width: 4),
+                      Text("Vertragsübersicht versenden"),
+                    ],
                   ),
                 ),
-
-                FilledButton.icon(
-                  onPressed: () {},
-                  label: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.send_rounded),
-                        SizedBox(width: 4),
-                        Text("Vertragsübersicht versenden"),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
