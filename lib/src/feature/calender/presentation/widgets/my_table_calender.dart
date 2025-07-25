@@ -49,7 +49,7 @@ class _MyTableCalenderState extends State<MyTableCalender> {
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: Palette.backgroundGreenBlue, // 🔴 Randfarbe
-                  width: 1.5,
+                  width: 0.5,
                 ),
               ),
             ),
