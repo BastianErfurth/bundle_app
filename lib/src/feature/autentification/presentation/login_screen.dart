@@ -2,6 +2,7 @@
 
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
+import 'package:bundle_app/src/feature/autentification/presentation/password_recovery_screen.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/registration_screen.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
@@ -115,7 +116,14 @@ class _LogInScreenState extends State<LogInScreen> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PasswordRecoveryScreen(),
+                              ),
+                            );
+                          },
                           child: Text("Passwort vergessen?"),
                         ),
                       ),

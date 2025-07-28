@@ -49,8 +49,8 @@ class _HomeContentState extends State<HomeContent> {
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 child: Image.asset(
                   "assets/images/appicon.png",
-                  height: 75,
-                  width: 75,
+                  height: MediaQuery.of(context).size.width * 0.3,
+                  width: MediaQuery.of(context).size.width * 0.3,
                   fit: BoxFit.cover,
                 ),
               ),

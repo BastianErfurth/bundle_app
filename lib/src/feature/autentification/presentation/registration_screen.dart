@@ -1,8 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
+import 'package:bundle_app/src/feature/autentification/presentation/login_screen.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/theme/palette.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -162,11 +166,62 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     width: double.infinity,
                     child: FilledButton(
                       onPressed: () async {
-                        await auth.createUserWithEmailAndPassword(
-                          _emailController.text,
-                          _passwordController.text,
-                        );
+                        try {
+                          // Registrierung (User wird direkt angemeldet)
+                          await auth.createUserWithEmailAndPassword(
+                            _emailController.text.trim(),
+                            _passwordController.text,
+                          );
+
+                          // Aktuellen User holen
+                          final user = FirebaseAuth.instance.currentUser;
+
+                          if (user != null && !user.emailVerified) {
+                            // Verifikationsmail senden
+                            await user.sendEmailVerification();
+
+                            // Snackbar mit Hinweis
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "Bitte bestätige deine E-Mail-Adresse. "
+                                  "Ein Link wurde an ${_emailController.text.trim()} gesendet.",
+                                ),
+                              ),
+                            );
+
+                            // User ausloggen, damit er sich nach Verifikation neu einloggen muss
+                            await auth.signOut();
+
+                            if (mounted) {
+                              // Navigation zum LoginScreen oder einem VerificationScreen
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (_) => LogInScreen(),
+                                ),
+                              );
+                            }
+                          } else {
+                            // Falls User schon verifiziert ist (sehr unwahrscheinlich hier)
+                            if (mounted) {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (_) => LogInScreen(),
+                                ),
+                              );
+                            }
+                          }
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "Registrierung fehlgeschlagen: ${e.toString()}",
+                              ),
+                            ),
+                          );
+                        }
                       },
+
                       child: Text("Registrieren"),
                     ),
                   ),
@@ -243,7 +298,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _repeatPasswordController.dispose(); // _TODO: implement dispose
+    _repeatPasswordController.dispose();
     super.dispose();
   }
 }
