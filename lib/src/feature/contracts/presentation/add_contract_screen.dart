@@ -418,9 +418,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
                       ],
                       textInputAction: TextInputAction.done,
-                      onFieldSubmitted: (_) {
-                        FocusScope.of(context).unfocus(); // Tastatur schließen
-                      },
+
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Bitte Kosten eingeben";

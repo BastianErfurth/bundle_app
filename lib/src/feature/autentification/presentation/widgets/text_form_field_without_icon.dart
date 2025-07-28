@@ -40,6 +40,9 @@ class TextFormFieldWithoutIcon extends StatelessWidget {
           ),
         ),
         TextFormField(
+          onTapOutside: (event) {
+            FocusScope.of(context).unfocus();
+          },
           controller: controller,
           validator: validator,
           autovalidateMode: AutovalidateMode.onUserInteraction,
