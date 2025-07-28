@@ -76,6 +76,10 @@ class _CostScreenState extends State<CostScreen> {
                               (c) => c.category == _selectedContractCategory,
                             ),
                           ];
+                    if (_selectedContract != null &&
+                        !filteredContracts.contains(_selectedContract)) {
+                      filteredContracts.add(_selectedContract!);
+                    }
 
                     return DropDownSelectField<Contract?>(
                       values: filteredContracts,
@@ -335,7 +339,7 @@ class _CostScreenState extends State<CostScreen> {
           contract.category != _selectedContractCategory) {
         continue;
       }
-      if (_selectedContract != null && contract != _selectedContract) {
+      if (_selectedContract != null && contract.id != _selectedContract!.id) {
         continue;
       }
 

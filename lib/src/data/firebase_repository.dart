@@ -234,7 +234,7 @@ class FirebaseRepository implements DatabaseRepository {
         .get();
 
     return snap.docs
-        .map((e) => ContractPartnerProfile.fromMap(e.data()))
+        .map((e) => ContractPartnerProfile.fromMap(e.data(), id: e.id))
         .toList();
   }
 
@@ -251,7 +251,9 @@ class FirebaseRepository implements DatabaseRepository {
         .where("userId", isEqualTo: userId)
         .get();
 
-    return snap.docs.map((e) => UserProfile.fromMap(e.data())).toList();
+    return snap.docs
+        .map((e) => UserProfile.fromMap(e.data(), id: e.id))
+        .toList();
   }
 
   @override

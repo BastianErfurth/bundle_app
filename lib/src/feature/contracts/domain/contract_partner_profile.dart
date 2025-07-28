@@ -2,7 +2,7 @@ import 'profile.dart';
 
 class ContractPartnerProfile extends Profile {
   //Attribute
-  String? id;
+  final String? id;
   final String companyName;
   final String contactPersonName;
   final bool isInContractList;
@@ -51,6 +51,7 @@ class ContractPartnerProfile extends Profile {
   String toString() => companyName;
 
   ContractPartnerProfile copyWith({
+    String? id,
     String? companyName,
     String? contactPersonName,
     String? street,
@@ -60,6 +61,7 @@ class ContractPartnerProfile extends Profile {
     bool? isInContractList,
   }) {
     return ContractPartnerProfile(
+      id: id ?? this.id,
       companyName: companyName ?? this.companyName,
       contactPersonName: contactPersonName ?? this.contactPersonName,
       street: street ?? this.street,

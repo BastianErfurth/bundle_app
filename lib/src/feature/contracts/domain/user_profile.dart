@@ -57,6 +57,7 @@ class UserProfile extends Profile {
       super(street: '', houseNumber: '', zipCode: '', city: '');
 
   UserProfile copyWith({
+    String? id,
     String? firstName,
     String? lastName,
     String? street,
@@ -66,6 +67,7 @@ class UserProfile extends Profile {
     bool? isPrivate,
   }) {
     return UserProfile(
+      id: id ?? this.id,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       street: street ?? this.street,
