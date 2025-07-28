@@ -254,6 +254,7 @@ class _SettingScreenState extends State<SettingScreen> {
             Form(
               key: _userFormKey,
               child: Column(
+                spacing: 2,
                 children: [
                   const SizedBox(height: 16),
                   _buildTextField(
@@ -318,6 +319,7 @@ class _SettingScreenState extends State<SettingScreen> {
             Form(
               key: _partnerFormKey,
               child: Column(
+                spacing: 2,
                 children: [
                   const SizedBox(height: 16),
                   _buildTextField(
@@ -391,18 +393,31 @@ class _SettingScreenState extends State<SettingScreen> {
     Function(String) onSaved, {
     String? initialValue,
   }) {
-    return TextFormField(
-      decoration: InputDecoration(labelText: label),
-      initialValue: initialValue,
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return '$label darf nicht leer sein';
-        }
-        return null;
-      },
-      onSaved: (newValue) {
-        if (newValue != null) onSaved(newValue);
-      },
+    return Container(
+      height: 48,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Palette.lightGreenBlue, Palette.darkGreenblue],
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TextFormField(
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Palette.textWhite),
+        ),
+        style: TextStyle(color: Palette.textWhite),
+        initialValue: initialValue,
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return '$label darf nicht leer sein';
+          }
+          return null;
+        },
+        onSaved: (newValue) {
+          if (newValue != null) onSaved(newValue);
+        },
+      ),
     );
   }
 }
