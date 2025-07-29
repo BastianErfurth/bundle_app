@@ -237,12 +237,12 @@ class _CostScreenState extends State<CostScreen> {
 
   void showpayIntervalPicker() {
     final List<String> laufzeitOptionen = [
-      'täglich',
-      'wöchentlich',
+      // 'täglich',
+      // 'wöchentlich',
       'monatlich',
-      'vierteljährlich',
-      'halbjährlich',
-      'jährlich',
+      // 'vierteljährlich',
+      // 'halbjährlich',
+      // 'jährlich',
     ];
 
     Picker picker = Picker(
