@@ -299,7 +299,7 @@ class _SettingScreenState extends State<SettingScreen> {
               ),
             ),
 
-            const Divider(height: 40),
+            Divider(height: 40, color: Palette.textWhite),
 
             const Text(
               "Vertragspartnerprofile",
@@ -364,7 +364,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                     child: const Text("Partnerprofil hinzufügen"),
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 6),
+                  Divider(height: 24, color: Palette.textWhite),
                   FilledButton(
                     onPressed: () {
                       Navigator.push(
