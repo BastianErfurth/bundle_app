@@ -6,7 +6,9 @@ import 'package:bundle_app/src/feature/autentification/presentation/password_rec
 import 'package:bundle_app/src/feature/autentification/presentation/registration_screen.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
+import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/theme/palette.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +23,45 @@ class _LogInScreenState extends State<LogInScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isObscured = true;
+  final _formKey = GlobalKey<FormState>();
+
+  void _showAuthError(dynamic error) {
+    String errorMessage = _getErrorMessage(error);
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 4),
+        ),
+      );
+    }
+  }
+
+  String _getErrorMessage(dynamic error) {
+    if (error is FirebaseAuthException) {
+      switch (error.code) {
+        case 'user-not-found':
+          return 'Kein Benutzer mit dieser Email gefunden';
+        case 'wrong-password':
+        case 'invalid-credential':
+          return 'Ungültige Email oder Passwort';
+        case 'invalid-email':
+          return 'Ungültige Email-Adresse';
+        case 'user-disabled':
+          return 'Dieser Account wurde deaktiviert';
+        case 'too-many-requests':
+          return 'Zu viele Anmeldeversuche. Versuche es später erneut';
+        case 'network-request-failed':
+          return 'Netzwerkfehler. Überprüfe deine Internetverbindung';
+        default:
+          return 'Unbekannter Fehler: ${error.message}';
+      }
+    }
+    return 'Unbekannter Fehler ist aufgetreten';
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthRepository>();
@@ -54,92 +95,111 @@ class _LogInScreenState extends State<LogInScreen> {
               SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
-                child: AutofillGroup(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFormFieldWithoutIcon(
-                        autofillHints: [AutofillHints.email],
-                        keyboardType: TextInputType.emailAddress,
-                        controller: _emailController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Bitte gib eine Emailadresse ein";
-                          } else if (!RegExp(
-                            r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
-                          ).hasMatch(value)) {
-                            return "Bitte gib eine gültige Emailadresse ein";
-                          } else if (value.length < 5) {
-                            return "Emailadresse muss mindestens 5 Zeichen lang sein";
-                          } else if (value.length > 50) {
-                            return "Emailadresse darf maximal 50 Zeichen lang sein";
-                          }
-                          return null;
-                        },
-                        labelText: "Email",
-                        hintText: "Emailadresse eingeben",
-                      ),
-                      SizedBox(height: 24),
-                      TextFieldWithIcon(
-                        keyboardType: TextInputType.visiblePassword,
-                        autofillHints: const [AutofillHints.password],
-                        controller: _passwordController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Bitte gib ein Passwort ein";
-                          } else if (value.length < 6) {
-                            return "Passwort muss mindestens 6 Zeichen lang sein";
-                          } else if (value.length > 10) {
-                            return "Passwort darf maximal 10 Zeichen lang sein";
-                          } else if (value.contains(" ")) {
-                            return "Passwort darf keine Leerzeichen enthalten";
-                          } else
+                child: Form(
+                  key: _formKey,
+                  child: AutofillGroup(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextFormFieldWithoutIcon(
+                          autofillHints: [AutofillHints.email],
+                          keyboardType: TextInputType.emailAddress,
+                          controller: _emailController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Bitte gib eine Emailadresse ein";
+                            } else if (!RegExp(
+                              r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+                            ).hasMatch(value)) {
+                              return "Bitte gib eine gültige Emailadresse ein";
+                            } else if (value.length < 5) {
+                              return "Emailadresse muss mindestens 5 Zeichen lang sein";
+                            } else if (value.length > 50) {
+                              return "Emailadresse darf maximal 50 Zeichen lang sein";
+                            }
                             return null;
-                        },
-
-                        labelText: "Passwort",
-                        hintText: "Passwort eingeben",
-                        iconButton: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _isObscured = !_isObscured;
-                            });
                           },
-                          icon: Icon(
-                            _isObscured
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                          labelText: "Email",
+                          hintText: "Emailadresse eingeben",
+                        ),
+                        SizedBox(height: 24),
+                        TextFieldWithIcon(
+                          keyboardType: TextInputType.visiblePassword,
+                          autofillHints: const [AutofillHints.password],
+                          controller: _passwordController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Bitte gib ein Passwort ein";
+                            } else if (value.length < 6) {
+                              return "Passwort muss mindestens 6 Zeichen lang sein";
+                            } else if (value.length > 10) {
+                              return "Passwort darf maximal 10 Zeichen lang sein";
+                            } else if (value.contains(" ")) {
+                              return "Passwort darf keine Leerzeichen enthalten";
+                            } else
+                              return null;
+                          },
+
+                          labelText: "Passwort",
+                          hintText: "Passwort eingeben",
+                          iconButton: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isObscured = !_isObscured;
+                              });
+                            },
+                            icon: Icon(
+                              _isObscured
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                          ),
+                          obscureText: _isObscured,
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      PasswordRecoveryScreen(),
+                                ),
+                              );
+                            },
+                            child: Text("Passwort vergessen?"),
                           ),
                         ),
-                        obscureText: _isObscured,
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PasswordRecoveryScreen(),
-                              ),
-                            );
-                          },
-                          child: Text("Passwort vergessen?"),
+                        SizedBox(
+                          width: double.infinity,
+                          child: FilledButton(
+                            onPressed: () async {
+                              if (!_formKey.currentState!.validate()) return;
+
+                              try {
+                                await auth.signInWithEmailAndPassword(
+                                  _emailController.text,
+                                  _passwordController.text,
+                                );
+                                if (mounted) {
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => HomeScreen(),
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                _showAuthError(e);
+                              }
+                            },
+
+                            child: Text("Login"),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: FilledButton(
-                          onPressed: () async {
-                            await auth.signInWithEmailAndPassword(
-                              _emailController.text,
-                              _passwordController.text,
-                            );
-                          },
-                          child: Text("Login"),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
