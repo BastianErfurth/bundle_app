@@ -732,7 +732,12 @@ class _AddContractScreenState extends State<AddContractScreen> {
     }
 
     // Kosten prüfen
-    final cost = double.tryParse(_costController.text.trim());
+    // Kosten prüfen (inkl. Komma-Ersetzung)
+    final normalizedCostString = _costController.text.trim().replaceAll(
+      ',',
+      '.',
+    );
+    final cost = double.tryParse(normalizedCostString);
     if (cost == null || cost < 0 || cost > 1000000) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
