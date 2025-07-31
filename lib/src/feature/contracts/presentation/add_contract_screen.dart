@@ -375,7 +375,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                                 return AlertDialog(
                                   title: Text('Kündigungserinnerung'),
                                   content: Text(
-                                    "Die Kündigungserinnerung wird 10 Tage vor der Kündigungsfrist aktiviert.",
+                                    "Die Kündigungserinnerung wird 14 Tage vor der Kündigungsfrist aktiviert.",
                                   ),
                                   actions: [
                                     TextButton(

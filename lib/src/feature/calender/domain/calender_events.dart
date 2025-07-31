@@ -90,7 +90,7 @@ class CalendarEventService {
         break;
     }
 
-    final reminderDate = quitDate.subtract(const Duration(days: 10));
+    final reminderDate = quitDate.subtract(const Duration(days: 14));
 
     if (reminderDate.isBefore(DateTime.now())) {
       return null;
