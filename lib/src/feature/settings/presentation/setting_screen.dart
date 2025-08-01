@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:bundle_app/src/data/auth_repository.dart';
+import 'package:bundle_app/src/feature/autentification/presentation/widgets/language_service.dart';
 import 'package:bundle_app/src/feature/settings/presentation/impressum_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:bundle_app/src/theme/palette.dart';
@@ -233,7 +234,17 @@ class _SettingScreenState extends State<SettingScreen> {
               ),
             ),
             SizedBox(height: 16),
-
+            Consumer<LanguageService>(
+              builder: (context, languageService, child) {
+                return Column(
+                  children: [
+                    const SizedBox(height: 16),
+                    LanguageSelector(languageService: languageService),
+                    const SizedBox(height: 16),
+                  ],
+                );
+              },
+            ),
             const Text(
               "Deine Profile",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),

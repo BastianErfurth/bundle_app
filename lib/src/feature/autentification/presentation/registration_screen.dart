@@ -3,6 +3,7 @@
 import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/login_screen.dart';
+import 'package:bundle_app/src/feature/autentification/presentation/widgets/language_service.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/theme/palette.dart';
@@ -38,20 +39,44 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               child: Column(
                 spacing: 8,
                 children: [
-                  Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      child: Image.asset(
-                        "assets/images/appicon.png",
-                        height: 100,
-                        width: 100,
-                        fit: BoxFit.cover,
+                  // ERSETZE DIESEN TEIL:
+
+                  // MIT DIESEM:
+                  Row(
+                    children: [
+                      // Linke Seite: App Icon + Text zentriert
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Center(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                                child: Image.asset(
+                                  "assets/images/appicon.png",
+                                  height: 100,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              "Bundle",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                  Text(
-                    "Bundle",
-                    style: Theme.of(context).textTheme.titleMedium,
+                      // Rechte Seite: Language Button
+                      Consumer<LanguageService>(
+                        builder: (context, languageService, child) {
+                          return MiniLanguageButton(
+                            languageService: languageService,
+                          );
+                        },
+                      ),
+                    ],
                   ),
                   SizedBox(height: 10),
                   Text(
