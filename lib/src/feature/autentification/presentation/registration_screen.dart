@@ -6,7 +6,6 @@ import 'package:bundle_app/src/feature/autentification/presentation/login_screen
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/language_service.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
-import 'package:bundle_app/src/theme/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -253,49 +252,48 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                   ),
 
-                  Row(
-                    spacing: 16,
-                    children: [
-                      Expanded(child: Divider(color: Palette.textWhite)),
-                      Text("Oder mit"),
-                      Expanded(child: Divider(color: Palette.textWhite)),
-                    ],
-                  ),
+                  // Row(
+                  //   spacing: 16,
+                  //   children: [
+                  //     Expanded(child: Divider(color: Palette.textWhite)),
+                  //     Text("Oder mit"),
+                  //     Expanded(child: Divider(color: Palette.textWhite)),
+                  //   ],
+                  // ),
 
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      FilledButton.icon(
-                        onPressed: () {},
-                        label: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.apple),
-                              Text("Login with Apple"),
-                            ],
-                          ),
-                        ),
-                      ),
-                      FilledButton(
-                        onPressed: () {},
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            spacing: 4,
-                            children: [
-                              Image.asset(
-                                "assets/images/google.png",
-                                height: 24,
-                              ),
-                              Text("Login with Google"),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
+                  // Column(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  //   children: [
+                  //     FilledButton.icon(
+                  //       onPressed: () {},
+                  //       label: Center(
+                  //         child: Row(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           children: [
+                  //             Icon(Icons.apple),
+                  //             Text("Login with Apple"),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     FilledButton(
+                  //       onPressed: () {},
+                  //       child: Center(
+                  //         child: Row(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           spacing: 4,
+                  //           children: [
+                  //             Image.asset(
+                  //               "assets/images/google.png",
+                  //               height: 24,
+                  //             ),
+                  //             Text("Login with Google"),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     spacing: 8,

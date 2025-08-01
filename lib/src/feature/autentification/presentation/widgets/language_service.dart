@@ -144,9 +144,8 @@ class MiniLanguageButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: Palette.textWhite.withAlpha(20), // DEINE FARBE
+          color: Palette.textWhite, // DEINE FARBE
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white.withAlpha(120), width: 1),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -156,7 +155,7 @@ class MiniLanguageButton extends StatelessWidget {
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(width: 4),
-            Icon(Icons.expand_more, color: Colors.white, size: 16),
+            Icon(Icons.expand_more, color: Palette.darkGreenblue, size: 16),
           ],
         ),
       ),
@@ -254,72 +253,3 @@ class MiniLanguageButton extends StatelessWidget {
     );
   }
 }
-
-// 4. Integration in deinen Registration Screen
-// Ersetze die Header-Section (App Icon + Titel) mit diesem Code:
-
-/*
-// In deinem Registration Screen Column, ersetze den Header-Bereich:
-Row(
-  children: [
-    // Linke Seite: App Icon + Text zentriert
-    Expanded(
-      child: Column(
-        children: [
-          Center(
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              child: Image.asset(
-                "assets/images/appicon.png",
-                height: 100,
-                width: 100,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Text(
-            "Bundle",
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-        ],
-      ),
-    ),
-    // Rechte Seite: Language Button
-    Consumer<LanguageService>(
-      builder: (context, languageService, child) {
-        return MiniLanguageButton(languageService: languageService);
-      },
-    ),
-  ],
-),
-*/
-
-// 5. Integration in deinen Settings Screen
-// Füge das in deinen SettingScreen nach dem Logout-Button hinzu:
-
-/*
-// Nach dem Logout-Button in deinem build() method:
-Consumer<LanguageService>(
-  builder: (context, languageService, child) {
-    return Column(
-      children: [
-        const SizedBox(height: 16),
-        LanguageSelector(languageService: languageService),
-        const SizedBox(height: 16),
-      ],
-    );
-  },
-),
-*/
-
-// 5. Provider Setup (in main.dart):
-/*
-MultiProvider(
-  providers: [
-    ChangeNotifierProvider(create: (_) => AuthRepository()),
-    ChangeNotifierProvider(create: (_) => DatabaseRepository()),
-    ChangeNotifierProvider(create: (_) => LanguageService()..loadSavedLanguage()),
-  ],
-  child: MyApp(),
-)
-*/

@@ -4,6 +4,7 @@ import 'package:bundle_app/src/data/auth_repository.dart';
 import 'package:bundle_app/src/data/database_repository.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/password_recovery_screen.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/registration_screen.dart';
+import 'package:bundle_app/src/feature/autentification/presentation/widgets/language_service.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_field_with_icon.dart';
 import 'package:bundle_app/src/feature/autentification/presentation/widgets/text_form_field_without_icon.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
@@ -91,6 +92,19 @@ class _LogInScreenState extends State<LogInScreen> {
                 style: Theme.of(
                   context,
                 ).textTheme.displaySmall!.copyWith(fontWeight: FontWeight.w600),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16, right: 16),
+                  child: Consumer<LanguageService>(
+                    builder: (context, languageService, child) {
+                      return MiniLanguageButton(
+                        languageService: languageService,
+                      );
+                    },
+                  ),
+                ),
               ),
               SizedBox(height: 20),
               SizedBox(
