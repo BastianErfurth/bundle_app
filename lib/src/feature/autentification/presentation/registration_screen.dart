@@ -39,9 +39,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               child: Column(
                 spacing: 8,
                 children: [
-                  // ERSETZE DIESEN TEIL:
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16, right: 16),
+                      child: Consumer<LanguageService>(
+                        builder: (context, languageService, child) {
+                          return MiniLanguageButton(
+                            languageService: languageService,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
 
-                  // MIT DIESEM:
                   Row(
                     children: [
                       // Linke Seite: App Icon + Text zentriert
@@ -68,24 +79,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ],
                         ),
                       ),
-                      // Rechte Seite: Language Button
-                      Consumer<LanguageService>(
-                        builder: (context, languageService, child) {
-                          return MiniLanguageButton(
-                            languageService: languageService,
-                          );
-                        },
-                      ),
                     ],
                   ),
-                  SizedBox(height: 10),
+
                   Text(
                     "Nur kurz registrieren, dann gehts los...",
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 4),
 
                   TextFormFieldWithoutIcon(
                     autofillHints: [AutofillHints.username],
