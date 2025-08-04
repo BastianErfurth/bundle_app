@@ -233,18 +233,30 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
-            Consumer<LanguageService>(
-              builder: (context, languageService, child) {
-                return Column(
-                  children: [
-                    const SizedBox(height: 16),
-                    LanguageSelector(languageService: languageService),
-                    const SizedBox(height: 16),
-                  ],
-                );
-              },
+            //SizedBox(height: 16),
+            // Consumer<LanguageService>(
+            //   builder: (context, languageService, child) {
+            //     return Column(
+            //       children: [
+            //         const SizedBox(height: 16),
+            //         LanguageSelector(languageService: languageService),
+            //         const SizedBox(height: 16),
+            //       ],
+            //     );
+            //   },
+            // ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16, right: 16),
+                child: Consumer<LanguageService>(
+                  builder: (context, languageService, child) {
+                    return MiniLanguageButton(languageService: languageService);
+                  },
+                ),
+              ),
             ),
+
             const Text(
               "Deine Profile",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
