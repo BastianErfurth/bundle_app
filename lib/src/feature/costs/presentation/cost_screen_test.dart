@@ -91,7 +91,7 @@ class _CostScreenTestState extends State<CostScreenTest> {
                 future: widget.db.getMyContracts(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return CircularProgressIndicator.adaptive();
                   } else if (snapshot.hasError) {
                     return Text('Fehler beim Laden der Verträge');
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
