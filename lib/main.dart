@@ -7,12 +7,16 @@ import 'package:bundle_app/src/feature/autentification/presentation/widgets/lang
 import 'package:bundle_app/src/main_app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   final AuthRepository auth = FirebaseAuthRepository();
   final DatabaseRepository db = FirebaseRepository();
 
