@@ -45,7 +45,7 @@ class _ContractListContainerState extends State<ContractListContainer> {
                 ),
               );
             },
-            icon: Icon(Icons.visibility),
+            icon: Icon(Icons.visibility, color: Palette.textWhite),
           ),
           // ✏️ Edit Button (NEU!)
           IconButton(
@@ -67,7 +67,7 @@ class _ContractListContainerState extends State<ContractListContainer> {
                 );
               }
             },
-            icon: Icon(Icons.edit, color: Palette.lightGreenBlue),
+            icon: Icon(Icons.edit, color: Palette.textWhite),
           ),
           // 🗑️ Delete Button
           IconButton(
@@ -86,7 +86,7 @@ class _ContractListContainerState extends State<ContractListContainer> {
                       onPressed: () => Navigator.pop(context, true),
                       child: Text(
                         "Löschen",
-                        style: TextStyle(color: Palette.lightGreenBlue),
+                        style: TextStyle(color: Palette.textWhite),
                       ),
                     ),
                   ],
@@ -101,7 +101,7 @@ class _ContractListContainerState extends State<ContractListContainer> {
                 ).showSnackBar(SnackBar(content: Text("Vertrag gelöscht")));
               }
             },
-            icon: Icon(Icons.delete, color: Palette.lightGreenBlue),
+            icon: Icon(Icons.delete, color: Palette.textWhite),
           ),
         ],
       ),
