@@ -733,9 +733,7 @@ class _UpdateContractScreenState extends State<UpdateContractScreen> {
     // ExtraContractInformation zusammenbauen
     final extraContractInformation = ExtraContractInformation(
       _extraInformationController.text.trim(),
-      _extraInformationController.text.trim().isEmpty
-          ? ''
-          : _extraInformationController.text.trim(),
+      '', // oder null, je nach Datenmodell
     );
 
     // Aktualisiertes Contract-Objekt erstellen
