@@ -10,7 +10,6 @@ import 'package:bundle_app/src/feature/contracts/domain/contract_quit_interval.d
 import 'package:bundle_app/src/feature/contracts/domain/contract_runtime.dart';
 import 'package:bundle_app/src/feature/contracts/domain/extra_contract_information.dart';
 import 'package:bundle_app/src/feature/contracts/domain/user_profile.dart';
-import 'package:bundle_app/src/feature/contracts/presentation/home_screen.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/contract_attributes.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/dropdown_select_field.dart';
 import 'package:bundle_app/src/feature/contracts/presentation/widgets/topic_headline.dart';
@@ -91,26 +90,25 @@ class _UpdateContractScreenState extends State<UpdateContractScreen> {
     final contract = widget.contract;
 
     // TextController mit bestehenden Daten füllen
-    _keywordcontroller.text = contract.keyword ?? '';
-    _contractNumberController.text = contract.contractNumber ?? '';
+    _keywordcontroller.text = contract.keyword;
+    _contractNumberController.text = contract.contractNumber;
 
     // Kosten von Cents zu Euro umrechnen
-    if (contract.contractCostRoutine?.costsInCents != null) {
-      _costController.text = (contract.contractCostRoutine!.costsInCents / 100)
-          .toString();
-    }
+    _costController.text = (contract.contractCostRoutine.costsInCents / 100)
+        .toString();
 
-    _extraInformationController.text =
-        contract.extraContractInformations.toString().trim() ?? '';
+    _extraInformationController.text = contract.extraContractInformations
+        .toString()
+        .trim();
 
     // Datum-Felder setzen
-    _startDate = contract.contractRuntime?.dt;
-    _firstPaymentDate = contract.contractCostRoutine?.firstCostDate;
+    _startDate = contract.contractRuntime.dt;
+    _firstPaymentDate = contract.contractCostRoutine.firstCostDate;
 
     // Boolean-Felder setzen
-    _autoVerlaengerung = contract.contractRuntime?.isAutomaticExtend ?? false;
+    _autoVerlaengerung = contract.contractRuntime.isAutomaticExtend;
     _kuendigungserinnerung =
-        contract.contractQuitInterval?.isQuitReminderAlertSet ?? false;
+        contract.contractQuitInterval.isQuitReminderAlertSet;
 
     // ✅ WICHTIG: Alle Dropdown-Werte bereits hier setzen
     _selectedContractCategory = contract.category;
@@ -118,25 +116,18 @@ class _UpdateContractScreenState extends State<UpdateContractScreen> {
     _selectedContractPartnerProfile = contract.contractPartnerProfile;
 
     // Labels aus Contract-Daten rekonstruieren
-    if (contract.contractRuntime != null) {
-      final runtime = contract.contractRuntime!;
-      if (runtime.howManyinInterval == 0) {
-        _laufzeit = "unbegrenzt";
-      } else {
-        _laufzeit = "${runtime.howManyinInterval} ${runtime.interval.label}";
-      }
+    final runtime = contract.contractRuntime;
+    if (runtime.howManyinInterval == 0) {
+      _laufzeit = "unbegrenzt";
+    } else {
+      _laufzeit = "${runtime.howManyinInterval} ${runtime.interval.label}";
     }
 
-    if (contract.contractQuitInterval != null) {
-      final quitInterval = contract.contractQuitInterval!;
-      _kuendigungsfrist =
-          "${quitInterval.howManyInQuitUnits} ${quitInterval.quitInterval.label}";
-    }
+    final quitInterval = contract.contractQuitInterval;
+    _kuendigungsfrist =
+        "${quitInterval.howManyInQuitUnits} ${quitInterval.quitInterval.label}";
 
-    if (contract.contractCostRoutine != null) {
-      _zahlungsintervall =
-          contract.contractCostRoutine!.costRepeatInterval.label;
-    }
+    _zahlungsintervall = contract.contractCostRoutine.costRepeatInterval.label;
   }
 
   @override
