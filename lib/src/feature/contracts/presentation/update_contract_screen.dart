@@ -310,36 +310,48 @@ class _UpdateContractScreenState extends State<UpdateContractScreen> {
                                 ConnectionState.waiting) {
                               return Center(child: CircularProgressIndicator());
                             } else if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
+                              return Text('Fehler: ${snapshot.error}');
                             } else if (snapshot.hasData) {
-                              if (_selectedContractPartnerProfile != null) {
-                                final foundPartner = snapshot.data!.firstWhere(
-                                  (profile) =>
-                                      profile.id ==
-                                      _selectedContractPartnerProfile!.id,
-                                  orElse: () =>
-                                      _selectedContractPartnerProfile!,
+                              final profileList = snapshot.data!;
+
+                              // Setze selectedContractPartnerProfile, wenn noch nicht gesetzt ODER nicht in Liste
+                              if (_selectedContractPartnerProfile != null &&
+                                  !profileList.any(
+                                    (p) =>
+                                        p.id ==
+                                        _selectedContractPartnerProfile!.id,
+                                  )) {
+                                // Vertragspartner im Contract wurde nicht in DB gefunden
+                                profileList.add(
+                                  _selectedContractPartnerProfile!,
                                 );
-                                if (_selectedContractPartnerProfile !=
-                                    foundPartner) {
-                                  WidgetsBinding.instance.addPostFrameCallback((
-                                    _,
-                                  ) {
-                                    if (mounted) {
-                                      setState(() {
-                                        _selectedContractPartnerProfile =
-                                            foundPartner;
-                                      });
-                                    }
-                                  });
-                                }
+                              }
+
+                              final matchedProfile = profileList.firstWhere(
+                                (p) =>
+                                    p.id == _selectedContractPartnerProfile?.id,
+                                orElse: () => _selectedContractPartnerProfile!,
+                              );
+
+                              if (_selectedContractPartnerProfile !=
+                                  matchedProfile) {
+                                WidgetsBinding.instance.addPostFrameCallback((
+                                  _,
+                                ) {
+                                  if (mounted) {
+                                    setState(() {
+                                      _selectedContractPartnerProfile =
+                                          matchedProfile;
+                                    });
+                                  }
+                                });
                               }
 
                               return DropDownSelectField<
                                 ContractPartnerProfile
                               >(
                                 labelText: "Vertragspartner wählen",
-                                values: snapshot.data!,
+                                values: profileList,
                                 itemLabel: (ContractPartnerProfile profile) =>
                                     profile.companyName,
                                 selectedValue: _selectedContractPartnerProfile,
