@@ -170,7 +170,22 @@ class FirebaseRepository implements DatabaseRepository {
 
     final docRef = fs.collection("mycontracts").doc(updatedContract.id);
 
-    await docRef.update(updatedContract.toMap());
+    // Alte Daten laden, um die userId beizubehalten
+    final existingDoc = await docRef.get();
+    final existingData = existingDoc.data();
+
+    if (existingData == null) {
+      throw Exception("Vertrag nicht gefunden");
+    }
+
+    final existingUserId = existingData['userId'];
+
+    final updatedData = updatedContract.toMap();
+
+    // userId beibehalten
+    updatedData['userId'] = existingUserId;
+
+    await docRef.update(updatedData);
   }
 
   @override

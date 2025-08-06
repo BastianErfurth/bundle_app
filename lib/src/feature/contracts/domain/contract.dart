@@ -37,8 +37,7 @@ class Contract {
   });
 
   Map<String, dynamic> toMap() {
-    return {
-      'userId': userId,
+    final map = {
       'id': id,
       'category': category.name,
       'keyword': keyword,
@@ -50,6 +49,12 @@ class Contract {
       'contractCostRoutine': contractCostRoutine.toMap(),
       'extraContractInformations': extraContractInformations.toMap(),
     };
+
+    if (userId != null) {
+      map['userId'] = userId;
+    }
+
+    return map;
   }
 
   factory Contract.fromMap(Map<String, dynamic> map, {String? id}) {
