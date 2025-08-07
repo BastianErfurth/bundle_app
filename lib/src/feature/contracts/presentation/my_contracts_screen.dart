@@ -120,6 +120,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                           .then((result) {
                             if (result == true) {
                               _applyFilters(db);
+                              // ignore: use_build_context_synchronously
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
