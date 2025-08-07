@@ -9,18 +9,19 @@ enum Interval {
 
   const Interval(this.label);
 
+  // Deutsche Beschriftung für Anzeige
   String get labelname {
     switch (this) {
       case Interval.day:
-        return 'Day';
+        return 'Tag(e)';
       case Interval.week:
-        return 'Week';
+        return 'Woche(n)';
       case Interval.month:
-        return 'Month';
+        return 'Monat(e)';
       case Interval.year:
-        return 'Year';
+        return 'Jahr(e)';
       case Interval.unlimited:
-        return 'Unlimited';
+        return 'Unbegrenzt';
     }
   }
 }

@@ -138,7 +138,7 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
             Text(
               'Startdatum: ${dateFormat.format(contract.contractRuntime.dt)}',
             ),
-            Text('Intervall: ${contract.contractRuntime.interval.name}'),
+            Text('Intervall: ${contract.contractRuntime.intervalLabel}'),
             Text(
               'Intervallanzahl: ${contract.contractRuntime.howManyinInterval}',
             ),
@@ -151,7 +151,7 @@ class _ViewContractScreenState extends State<ViewContractScreen> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
-              'Intervall: ${contract.contractQuitInterval.quitInterval.name}',
+              'Intervall: ${contract.contractQuitInterval.quitInterval.labelname}',
             ),
             Text('Anzahl: ${contract.contractQuitInterval.howManyInQuitUnits}'),
             Text(

@@ -688,6 +688,23 @@ class _AddContractScreenState extends State<AddContractScreen> {
     );
   }
 
+  Interval intervalFromGermanLabel(String label) {
+    switch (label.toLowerCase()) {
+      case 'tag(e)':
+        return Interval.day;
+      case 'woche(n)':
+        return Interval.week;
+      case 'monat(e)':
+        return Interval.month;
+      case 'jahr(e)':
+        return Interval.year;
+      case 'unbegrenzt':
+        return Interval.unlimited;
+      default:
+        return Interval.month; // Fallback
+    }
+  }
+
   void _addContract() async {
     // Validierung der Eingaben
     if (_selectedContractCategory == null ||
@@ -731,7 +748,6 @@ class _AddContractScreenState extends State<AddContractScreen> {
       return;
     }
 
-    // Kosten prüfen
     // Kosten prüfen (inkl. Komma-Ersetzung)
     final normalizedCostString = _costController.text.trim().replaceAll(
       ',',
@@ -747,8 +763,8 @@ class _AddContractScreenState extends State<AddContractScreen> {
       return;
     }
 
-    // Zahlungsintervall prüfen
-    try {} catch (e) {
+    // Zahlungsintervall prüfen - hier ggf. erweiterte Prüfung einbauen
+    if (_zahlungsintervall == "Zahlungsintervall") {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Bitte ein gültiges Zahlungsintervall wählen.')),
       );
@@ -756,12 +772,11 @@ class _AddContractScreenState extends State<AddContractScreen> {
     }
 
     // ContractRuntime zusammenbauen
-
     final contractRuntime = _laufzeit.toLowerCase().trim() == "unbegrenzt"
         ? ContractRuntime(
             dt: _startDate!,
             howManyinInterval: 0,
-            interval: Interval.month,
+            interval: Interval.unlimited,
             isAutomaticExtend: _autoVerlaengerung,
           )
         : () {
@@ -769,10 +784,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
             return ContractRuntime(
               dt: _startDate!,
               howManyinInterval: int.parse(laufzeitParts[0]),
-              interval: Interval.values.firstWhere(
-                (e) => e.label == laufzeitParts[1],
-                orElse: () => Interval.month,
-              ),
+              interval: intervalFromGermanLabel(laufzeitParts[1]),
               isAutomaticExtend: _autoVerlaengerung,
             );
           }();
