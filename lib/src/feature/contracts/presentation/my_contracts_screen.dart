@@ -86,13 +86,16 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
   Widget build(BuildContext context) {
     context.watch<AuthRepository>();
     final db = context.watch<DatabaseRepository>();
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              /// Header mit Buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -117,8 +120,6 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                           .then((result) {
                             if (result == true) {
                               _applyFilters(db);
-
-                              // ignore: use_build_context_synchronously
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
@@ -133,13 +134,18 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                   ),
                 ],
               ),
+
               SizedBox(height: 16),
+
+              /// Titel
               TopicHeadline(
                 topicIcon: Icon(Icons.description),
                 topicText: "Meine Verträge",
               ),
+
               SizedBox(height: 8),
 
+              /// Filter Dropdowns
               DropDownSelectField<UserProfile?>(
                 labelText: "Profil wählen",
                 values: [null, ..._userProfiles],
@@ -154,6 +160,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                   });
                 },
               ),
+
               SizedBox(height: 4),
 
               TextFormFieldWithoutIcon(
@@ -163,6 +170,7 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                 validator: (_) => null,
                 autofillHints: [],
               ),
+
               SizedBox(height: 4),
 
               DropDownSelectField<ContractCategory?>(
@@ -178,8 +186,10 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                   });
                 },
               ),
+
               SizedBox(height: 16),
 
+              /// PieChart (optional)
               FutureBuilder<List<Contract>>(
                 future: _filteredContracts,
                 builder: (context, snapshot) {
@@ -204,55 +214,59 @@ class _MyContractsScreenState extends State<MyContractsScreen> {
                 },
               ),
 
-              Expanded(
-                child: FutureBuilder<List<Contract>>(
-                  future: _filteredContracts,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text("Fehler: ${snapshot.error}"));
-                    } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                      final contracts = snapshot.data!;
-                      return ListView.builder(
-                        itemCount: contracts.length,
-                        itemBuilder: (context, index) {
-                          final contract = contracts[index];
-                          return Column(
-                            children: [
-                              ContractListContainer(
-                                contract: contract,
-                                db: db,
-                                onDelete: () {
-                                  _applyFilters(db);
-                                },
-                              ),
-                              SizedBox(height: 4),
-                            ],
-                          );
-                        },
-                      );
-                    } else {
-                      return Center(child: Text("Keine Verträge gefunden"));
-                    }
-                  },
-                ),
+              /// Vertragsliste
+              FutureBuilder<List<Contract>>(
+                future: _filteredContracts,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("Fehler: ${snapshot.error}"));
+                  } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    final contracts = snapshot.data!;
+                    return Column(
+                      children: contracts.map((contract) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: ContractListContainer(
+                            contract: contract,
+                            db: db,
+                            onDelete: () {
+                              _applyFilters(db);
+                            },
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  } else {
+                    return Center(child: Text("Keine Verträge gefunden"));
+                  }
+                },
               ),
 
-              FilledButton.icon(
-                onPressed: () {},
-                label: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.send_rounded),
-                      SizedBox(width: 4),
-                      Text("Vertragsübersicht versenden"),
-                    ],
+              SizedBox(height: 24),
+
+              /// Button am Ende
+              Center(
+                child: FilledButton.icon(
+                  onPressed: () {
+                    // Funktion zum Versenden der Vertragsübersicht
+                  },
+                  label: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.send_rounded),
+                        SizedBox(width: 4),
+                        Text("Vertragsübersicht versenden"),
+                      ],
+                    ),
                   ),
                 ),
               ),
+
+              SizedBox(height: 24),
             ],
           ),
         ),
