@@ -147,8 +147,8 @@ class _LogInScreenState extends State<LogInScreen> {
                                 return "Bitte gib ein Passwort ein";
                               } else if (value.length < 6) {
                                 return "Passwort muss mindestens 6 Zeichen lang sein";
-                              } else if (value.length > 10) {
-                                return "Passwort darf maximal 10 Zeichen lang sein";
+                              } else if (value.length > 20) {
+                                return "Passwort darf maximal 20 Zeichen lang sein";
                               } else if (value.contains(" ")) {
                                 return "Passwort darf keine Leerzeichen enthalten";
                               } else
