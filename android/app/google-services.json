@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:70388021902:android:5f18fedccc2945ab5967df",
+        "mobilesdk_app_id": "1:70388021902:android:69a9d0b0202e09c95967df",
         "android_client_info": {
-          "package_name": "com.example.bundle_app"
+          "package_name": "com.appakademie.bundle_app"
         }
       },
       "oauth_client": [],
