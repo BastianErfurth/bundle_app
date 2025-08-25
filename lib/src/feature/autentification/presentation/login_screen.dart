@@ -219,46 +219,46 @@ class _LogInScreenState extends State<LogInScreen> {
                   ),
                 ),
                 SizedBox(height: 20),
-                Row(
-                  spacing: 16,
-                  children: [
-                    Expanded(child: Divider(color: Palette.textWhite)),
-                    Text("Oder mit"),
-                    Expanded(child: Divider(color: Palette.textWhite)),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    FilledButton.icon(
-                      onPressed: () {},
-                      label: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.apple),
-                            Text("Login with Apple"),
-                          ],
-                        ),
-                      ),
-                    ),
-                    FilledButton(
-                      onPressed: () {},
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 4,
-                          children: [
-                            Image.asset("assets/images/google.png", height: 24),
-                            Text("Login with Google"),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
 
+                // Row(
+                //   spacing: 16,
+                //   children: [
+                //     Expanded(child: Divider(color: Palette.textWhite)),
+                //     Text("Oder mit"),
+                //     Expanded(child: Divider(color: Palette.textWhite)),
+                //   ],
+                // ),
+                // SizedBox(height: 20),
+                // Column(
+                //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //   children: [
+                //     FilledButton.icon(
+                //       onPressed: () {},
+                //       label: Center(
+                //         child: Row(
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           children: [
+                //             Icon(Icons.apple),
+                //             Text("Login with Apple"),
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //     FilledButton(
+                //       onPressed: () {},
+                //       child: Center(
+                //         child: Row(
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           spacing: 4,
+                //           children: [
+                //             Image.asset("assets/images/google.png", height: 24),
+                //             Text("Login with Google"),
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                //),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 8,
